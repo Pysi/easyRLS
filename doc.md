@@ -2,15 +2,20 @@
 
 ## Install Matlab programs
 
-First, you can clone the code by doing 
+### Install dependencies
+
+Install NeuroTools :
 
     git clone https://github.com/LaboJeanPerrin/NeuroTools.git
+    
+In Matlab, do "add with subfolders" for the 'Neurotools/Matlab' folder.
 
-it will create a folder 'Neurotools' in the current directory. Then, because easyRLS is not the master branch yet, go in the Neurotools directory (`cd Neurotools`) and switch to the 'easyRLS' branch :
+### Install easyRLS
+First, clone the code by doing 
 
-    git checkout easyRLS
+    git clone https://github.com/LaboJeanPerrin/easyRLS.git
 
-Once you have the right code, open the `script.m` in 'Matlab/Utils'. In Matlab, do "add with subfolders" for the 'Neurotools/Matlab' folder.
+it will create a folder 'easyRLS' in the current directory. Once you have the code, open the `script.m` in 'Matlab/Utils'. Do "add with subfolders" for the 'esayRLS/Matlab' folder.
 
 ## Run the code section after section
 
