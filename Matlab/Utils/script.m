@@ -11,7 +11,7 @@ param.cwd = pwd;
 param.date = '2018-01-11';
 param.run_number = 5;
 param.Layers = 3:12; 
-F = NT.Focus({param.cwd, param.date, param.run_number});
+F = NT.Focus({param.cwd, '', param.date, param.run_number});
 %% create binary file from Tif
 tifToMmap(F, {'z', param.Layers});
 %% view hyperstack
@@ -36,7 +36,7 @@ stackViewer(F, 'corrected')
 %% define focus on reference stack and take its ROI if existing
 %{
 param.run_number = 6;
-Fref = NT.Focus({param.cwd, param.date, param.run_number});
+Fref = NT.Focus({param.cwd, '', param.date, param.run_number});
 % create defMap
 mapToReferenceBrain(F, Fref, param.RefIndex);
 % finds ROI using reference brain mask
