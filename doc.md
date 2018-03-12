@@ -15,11 +15,11 @@ First, clone the code by doing
 
     git clone https://github.com/LaboJeanPerrin/easyRLS.git
 
-it will create a folder 'easyRLS' in the current directory. Once you have the code, open the `script.m` in 'Matlab/Utils'. Do "add with subfolders" for the 'esayRLS/Matlab' folder.
+In Matlab, do "add with subfolders" for the 'easyRLS/Matlab' folder.
 
 ## Run the code section after section
 
-The benchmarks have been performed on 'Dream' for the run 2018-01-11/Run 05 on the layers 3 to 12.
+Once you have the code, open the `script.m` in 'easyRLS/Matlab/Utils'. You will run this script section by section. For each section, the approximative time is given. The benchmarks have been performed on 'Dream' for the run 2018-01-11/Run 05 on the layers 3 to 12 (10 layers) for 1500 time frames.
 
 ### Set working directory
 
@@ -67,13 +67,35 @@ You can use a reference stack which already has a mask and use this mask after a
 
 ### Computing baseline (2313 s)
 
-To compute baseline, we use the '[runquantile](https://www.rdocumentation.org/packages/caTools/versions/1.17.1/topics/runquantile)' function of '[caTools](https://www.rdocumentation.org/packages/caTools/versions/1.17.1)', a R plugin coded in C.
+To compute baseline, we use the '[runquantile](https://www.rdocumentation.org/packages/caTools/versions/1.17.1/topics/runquantile)' function of '[caTools](https://www.rdocumentation.org/packages/caTools/versions/1.17.1)', a R plugin coded in C. You need to install this before use.
 
-To use it with matlab, you only have to run `loadlibrary` with the path of the `.so` and the `.h`. They are in 'Neurotools/Tools', an example is given in the script.
+#### Installing R and caTools plugin
+
+To install R
+
+    sudo apt install r-base
+
+Then start R
+
+    R
+
+In the command prompt, install package with
+
+    install.packages("caTools")
+
+If it is the first time, your `/usr/local/lib/R` will probably not be accessible with write permissions. Run
+
+    sudo chown -R ljp:ljp /usr/local/lib/R
+
+to correct this. Run again the install package command, it will let you select a mirror, and will download the package and install it.
+
+#### Using it from Matlab
+
+To use it with matlab, you only have to run `loadlibrary` with the path of the `.so` and the `.h`. They are in 'easyRLS/Tools/caTools', an example is given in the script.
 
 Then you can run `caToolsRunquantile` which reads the signal in the 'corrected.bin' file and creates a folder 'baseline' in the 'IP' folder. In this folder, there will be a `.bin` and a `.mat` file by layer.
 
-/!\ THIS IS NOT A GOOD WAY TO DO
+/!\ THIS IS NOT A GOOD WAY TO DO BECAUSE OF ABSOLUTE PATH IN MMAP
 
 Example of time taken from layer 3 to layer 12. The time depends on the number of pixels in ROI.
 
@@ -96,7 +118,7 @@ $$ \frac{\Delta f}{f} = \frac{\text{Signal} - \text{Baseline}}{\text{Baseline} -
 
 ![equation](https://latex.codecogs.com/svg.latex?%5Cfrac%7B%5CDelta%7Ef%7D%7Bf%7D%3D%5Cfrac%7B%5Ctext%7BSignal%7D-%5Ctext%7BBaseline%7D%7D%7B%5Ctext%7BBaseline%7D-%5Ctext%7BBackground%7D%7D)
 
-It is quite fast to compute with `dff` matlab function.
+Then it is quite fast to compute with the `dff` function.
 
     Elapsed time is 11.994007 seconds.
     Elapsed time is 55.649569 seconds.
