@@ -95,7 +95,9 @@ To use it with matlab, you only have to run `loadlibrary` with the path of the `
 
 Then you can run `caToolsRunquantile` which reads the signal in the 'corrected.bin' file and creates a folder 'baseline' in the 'IP' folder. In this folder, there will be a `.bin` and a `.mat` file by layer.
 
-/!\ THIS IS NOT A GOOD WAY TO DO BECAUSE OF ABSOLUTE PATH IN MMAP
+/!\ THIS IS NOT A GOOD WAY TO DO : 
+- BECAUSE OF ABSOLUTE PATH IN MMAP
+- BECAUSE MATLAB STORES THE OUTPUT IN MEMORY BEFORE WRITING IT
 
 Example of time taken from layer 3 to layer 12. The time depends on the number of pixels in ROI.
 
@@ -109,6 +111,16 @@ Example of time taken from layer 3 to layer 12. The time depends on the number o
     286021    Elapsed time is 255.703843 seconds.
     294492    Elapsed time is 255.595885 seconds.
     295021    Elapsed time is 258.743297 seconds.
+
+If you get an 'out of memory', due to matlab putting the output in memory, you can use `caToolsRunquantileLin`, which is a bit slower (20% slower), but does the same job.
+
+Time taken for the three first layers as before :
+
+    Elapsed time is 172.569686 seconds.
+    Elapsed time is 196.399570 seconds.
+    Elapsed time is 209.400558 seconds.
+
+Seems quite good though...
 
 ### Computing DFF (647 s)
 
