@@ -30,7 +30,7 @@ T = p.Results.t;
 output = fullfile(F.dir.files, 'raw.bin');
 outputInfo = fullfile(F.dir.files, 'raw.mat');
 
-w = waitbar(0, 'Converting TIF to mmap');
+w = waitbar(0, 'Converting TIF to bin');
 
 % write the binary file
 fid = fopen(output, 'wb');
@@ -39,7 +39,7 @@ for t = T % along t
         F.select(F.sets(z).id);
         tmp = F.imageLoad(t);
 %         tmp = tmp.crop(X,Y); % crop image TODO could be done with region ?
-        fwrite(fid,tmp.pix','uint16');
+        fwrite(fid,tmp.pix','uint16'); % /!\ imageLoad transpose the image
         waitbar(t/T(end))
     end
 end
