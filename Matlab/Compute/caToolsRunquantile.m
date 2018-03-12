@@ -3,10 +3,12 @@ function caToolsRunquantile(F, Layers)
 
     baselinePath = fullfile(F.dir.IP, 'baseline');
     disp('creating ''baseline'' directory'); mkdir(baselinePath);
+        
+    m = Mmap(F, 'corrected');
     
     for z = Layers
         
-        m = Mmap(F, 'corrected');
+        fprintf('computing baseline for layer %d\n', z)
         
         output = fullfile(baselinePath, [num2str(z, '%02d') '.bin']);
         outputInfo = fullfile(baselinePath, [num2str(z, '%02d') '.mat']);
