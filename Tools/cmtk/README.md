@@ -39,7 +39,7 @@ To get help :
 
 Example :
 
-    cmtk registration -o transformation.xform ReferenceImage.nrrd FloatingImage.nhdr
+    cmtk registration -o transformation.xform --dofs 3,6,9 ReferenceImage.nrrd FloatingImage.nhdr
 
 ### apply transformation
 
