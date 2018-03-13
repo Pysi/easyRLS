@@ -112,7 +112,7 @@ Example of time taken from layer 3 to layer 12. The time depends on the number o
     294492    Elapsed time is 255.595885 seconds.
     295021    Elapsed time is 258.743297 seconds.
 
-If you get an 'out of memory', due to matlab putting the output in memory, you can use `caToolsRunquantileLin`, which is a bit slower (20% slower), but does the same job.
+If you get an 'out of memory', due to matlab putting the output in memory, you can use `caToolsRunquantileLin`, which is a bit slower (about 20% slower), but does the same job.
 
 Time taken for the three first layers as before :
 
