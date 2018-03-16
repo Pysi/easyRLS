@@ -15,12 +15,9 @@ classdef Mmap < handle
         T % times concerned
     end
     methods
-        function self = Mmap(F, tag)
-        %Mmap constructor takes a tag to know which mmap to load
-            self.tag = tag;
-            self.binFile = [tag '.bin'];
-            binFile = fullfile(F.dir.files, self.binFile); % TODO know automatically location thanks to tag 
-            inputInfo = fullfile(F.dir.files, [tag '.mat']); % TODO know automatically location thanks to tag
+        function self = Mmap(binFile, inputInfo)
+        %Mmap constructor takes the bin file and the info file
+            
             load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T');
             self.mmap = ...
                 memmapfile(binFile,'Format',{'uint16',[x,y,z,t],'bit'});
