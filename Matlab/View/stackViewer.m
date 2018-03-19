@@ -7,7 +7,7 @@ function stackViewer(F, tag)
 
     f = figure('Visible','off'); 
 
-    z = m.Z(1);
+    z = max(m.Z);
     t = m.T(1);
 
     img = m(:,:,z,t)';
