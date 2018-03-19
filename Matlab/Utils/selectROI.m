@@ -4,7 +4,7 @@ function selectROI(F, RefIndex)
 % F focus
 % RefIndex index of reference stack
 
-    m = Mmap(F, 'corrected');
+    m = Focused.Mmap(F, 'corrected');
 
     mask = false(m.x, m.y, 20);
     for z = m.Z

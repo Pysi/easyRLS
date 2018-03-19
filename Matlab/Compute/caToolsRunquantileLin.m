@@ -6,7 +6,7 @@ function caToolsRunquantileLin(F, Layers)
     baselinePath = fullfile(F.dir.IP, 'baseline');
     disp('creating ''baseline'' directory'); mkdir(baselinePath);
         
-    m = Mmap(F, 'corrected');
+    m = Focused.Mmap(F, 'corrected');
     
     for z = Layers
         

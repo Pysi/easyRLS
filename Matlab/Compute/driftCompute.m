@@ -12,7 +12,7 @@ function driftCompute(F, kwargs)
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 % create wrapper object
-m = Mmap(F, 'raw');
+m = Focused.Mmap(F, 'raw');
 
 % parse input to change reference stack TODO write validation function
 in = inputParser;

@@ -1,7 +1,7 @@
 function maskViewer(F)
 %maskViewer shows the mask contour on the brain
 
-    m = Mmap(F, 'corrected');
+    m = Focused.Mmap(F, 'corrected');
 
     maskPath = fullfile(F.dir.IP, 'mask.mat');
     load(maskPath, 'mask');
