@@ -2,7 +2,7 @@ function stackViewer2D(F, tag, Layers)
 %stackViewer2D aims to produce the same result as stackViewer, but for 2D mmaps
 
 m = {};
-mgray = Mmap(F, 'IP/graystack');
+mgray = Focused.Mmap(F, 'IP/graystack');
 
     for z = Layers %#ok<*FXUP>
         m{z} = struct(); %#ok<*AGROW>

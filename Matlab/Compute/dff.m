@@ -7,7 +7,7 @@ disp('creating ''dff'' directory'); mkdir(dffPath);
     for z = Layers
         
         % sigstack (x,y,z,t) ((xy,z,t))
-        msig = Mmap(F, 'corrected');
+        msig = Focused.Mmap(F, 'corrected');
         m = msig;
         % basestack (t, xy)
         basePath = fullfile(F.dir.IP, 'baseline', [num2str(z, '%02d') '.mat']);

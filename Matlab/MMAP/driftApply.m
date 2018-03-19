@@ -6,7 +6,7 @@ function driftApply(F)
     load(driftPath, 'dx', 'dy')
 
     % load mmap info
-    m = Mmap(F, 'raw');
+    m = Focused.Mmap(F, 'raw');
 
     % define output files
     output = fullfile(F.dir.files, 'corrected.bin');

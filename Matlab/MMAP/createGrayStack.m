@@ -1,7 +1,7 @@
 function createGrayStack(F)
 %createGrayStack creates a gray stack (mean along t)
 
-    m = Mmap(F, 'corrected');
+    m = Focused.Mmap(F, 'corrected');
 
     output = fullfile(F.dir.IP, 'graystack.bin');
     outputInfo = fullfile(F.dir.IP, 'graystack.mat');

@@ -70,11 +70,4 @@ toc(t)
 %% view DFF
 sigViewer2D(F, 'dff', param.Layers)
 
-
-%% utilities
-% different utilities to run when necessary
-%% rename images
-% i.e. : Images_5_000001 → Image0_000000
-rename(param.date,param.run_number);
-
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 

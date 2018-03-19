@@ -2,7 +2,7 @@ function stackViewer(F, tag)
 %stackViewer is analog to imageJ hyperstack
 % it allows to visualize the brain and browse z and t directions
 
-    m = Mmap(F, tag);
+    m = Focused.Mmap(F, tag);
 
     f = figure('Visible','off'); 
 

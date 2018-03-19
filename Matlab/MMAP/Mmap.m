@@ -3,8 +3,6 @@ classdef Mmap < handle
 % and redefine layers index when called as subscript
 % allows to call by linear subscript thanks to mmaplin
     properties
-        tag % name of the mmap (ex raw, corrected)
-        binFile % relative path of the binary file (from / = Files)
         mmap % 4D mmap (x,y,z,t)
         mmaplin % 3D mmap of *the same* binary file (xy, z, t)
         x % width

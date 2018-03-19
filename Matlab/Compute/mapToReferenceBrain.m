@@ -1,8 +1,8 @@
 function mapToReferenceBrain(F, Fref, RefIndex)
 %mapToReferenceBrain saves the deformation field to the reference brain
 
-    m = Mmap(F, 'corrected');
-    mref = Mmap(Fref, 'corrected');
+    m = Focused.Mmap(F, 'corrected');
+    mref = Focused.Mmap(Fref, 'corrected');
 
     % x and y deformation map for each layer
     defMap=zeros(m.x, m.y, 2, 20);

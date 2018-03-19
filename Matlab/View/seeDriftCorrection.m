@@ -4,7 +4,7 @@ function seeDriftCorrection(F)
     driftPath = fullfile(F.dir.IP, 'Drifts.mat');
     load(driftPath, 'dx', 'dy')
     
-    m = Mmap(F, 'raw');
+    m = Focused.Mmap(F, 'raw');
     
     figure
     h = imshow(equalize_histogram(m(:,:,m.Z(1),1)'));
