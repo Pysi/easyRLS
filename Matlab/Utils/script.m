@@ -9,13 +9,17 @@ cd /home/ljp/Science/Projects/easyRLS/
 param.cwd = pwd;
 %% get focus
 param.date = '2018-01-11';
-param.run_number = 5;
+param.run = 'Run05';
 param.Layers = 3:12; 
-F = NT.Focus({param.cwd, '', param.date, param.run_number});
+F = NT.Focus({param.cwd, '', param.date, param.run});
 %% create binary file from Tif
 tifToMmap(F, {'z', param.Layers});
 %% view hyperstack
 stackViewer(F, 'raw')
+%% transpose to RAS
+Focused.transposeMmap(F, 'yxzrai', 'xyzras')
+%% view hyperstack
+stackViewer(F, 'rawRAS')
 %% compute drift on mmap
 param.RefLayers = 8:10;
 param.RefIndex = 10; 
@@ -35,8 +39,8 @@ stackViewer(F, 'corrected')
 
 %% define focus on reference stack and take its ROI if existing
 %{
-param.run_number = 6;
-Fref = NT.Focus({param.cwd, '', param.date, param.run_number});
+param.run = 6;
+Fref = NT.Focus({param.cwd, '', param.date, param.run});
 % create defMap
 mapToReferenceBrain(F, Fref, param.RefIndex);
 % finds ROI using reference brain mask

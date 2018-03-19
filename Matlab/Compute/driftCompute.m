@@ -12,7 +12,7 @@ function driftCompute(F, kwargs)
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 % create wrapper object
-m = Focused.Mmap(F, 'raw');
+m = Focused.Mmap(F, 'rawRAS');
 
 % parse input to change reference stack TODO write validation function
 in = inputParser;
@@ -29,12 +29,12 @@ RefLayers = in.Results.RefLayers;
 % the reference image we take is the maximum of the selected layers along
 % the 3rd dimension
 
-bbox = [ 45 914 53 566 ]; % define bounding box to look into
+bbox = [ 53 566 45 914 ]; % define bounding box to look into
 X = bbox(1):bbox(2);
 Y = bbox(3):bbox(4);
 
 % compute reference image with max
-Ref = NT.Image(max(m(X,Y,RefLayers, RefIndex),[],3));
+Ref = NT.Image(max(m(X,Y, RefLayers, RefIndex),[],3));
 
 % --- Drift correction ---
 % creates a figure to plot the drift correction
@@ -47,7 +47,7 @@ dy = zeros(1,m.t);
 
 for t = m.T % run across the times
     % compute the image to compare with the ref image
-    Img = NT.Image(max(m(X,Y,RefLayers, t),[],3));
+    Img = NT.Image( max( m(X,Y,RefLayers,t) ,[],3) );
     
     % compute the DX and DY with the Fourier transform
     [dx(t), dy(t)] = Ref.fcorr(Img);

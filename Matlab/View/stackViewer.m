@@ -1,6 +1,7 @@
 function stackViewer(F, tag)
 %stackViewer is analog to imageJ hyperstack
 % it allows to visualize the brain and browse z and t directions
+% it realises a permutation permute(m,[2,1]) before printing thanks 
 
     m = Focused.Mmap(F, tag);
 
@@ -12,13 +13,14 @@ function stackViewer(F, tag)
     img = m(:,:,z,t)';
 
     h = imshow(img, [400 700]);
-    title(['z=' num2str(z) '   t=' num2str(t)]);
+    title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]);
+    set(gca,'Ydir','normal')
 
     % z slider
     uicontrol('Style', 'slider',...
-        'Min',m.Z(1),'Max',m.Z(end),...
-        'SliderStep', [1/(m.Z(end)-m.Z(1)) 1/(m.Z(end)-m.Z(1))], 'Value',z,...
-        'Position', [1160 300 20 200],...
+        'Min',min(m.Z),'Max',max(m.Z),...
+        'SliderStep', [1/(max(m.Z)-min(m.Z)) 1/(max(m.Z)-min(m.Z))], 'Value',z,...
+        'Position', [20 20 300 20],...
         'Callback', @actualize_z);
 
     if m.t > 1
@@ -26,18 +28,18 @@ function stackViewer(F, tag)
         uicontrol('Style', 'slider',...
             'Min',m.T(1),'Max',m.T(end),...
             'SliderStep', [1/(m.T(end)-m.T(1)) 1/(m.T(end)-m.T(1))], 'Value',t,...
-            'Position', [20 40 1100 20],...
+            'Position', [20 40 550 20],...
             'Callback', @actualize_t);
     end
 
         f.Visible = 'on';
-        set(f, 'Position',[200 200 1280 900]);
+        set(f, 'Position',[0 0 600 1080]);
     
     function actualize_z(source, ~)
         z = floor(source.Value);
         img = m(:,:,z,t)';
         set(h, 'Cdata', img);
-        title(['z=' num2str(z) '   t=' num2str(t)]);
+        title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]);
         drawnow;
     end
 
@@ -45,7 +47,7 @@ function stackViewer(F, tag)
         t = floor(source.Value);
         img = m(:,:,z,t)';
         set(h, 'Cdata', img);
-        title(['z=' num2str(z) '   t=' num2str(t)]);
+        title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]);
         drawnow;
     end
 end

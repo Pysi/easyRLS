@@ -20,8 +20,8 @@ function driftApply(F)
         for z = m.Z % along z
             fwrite(fid,...
                 imtranslate(m(:,:,z,t),...
-                [-dy(t), -dx(t)]),... %  x of image is y for matlab
-                'uint16');
+                [-dy(t), -dx(t)]),... %  'x' of a matlab image is 'y'
+                'uint16'); % apply dy on rows (y) and dx on columns (x)
         end
         waitbar(t/m.t)
     end
