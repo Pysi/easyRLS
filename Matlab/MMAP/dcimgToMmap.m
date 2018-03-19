@@ -9,8 +9,7 @@ function mmap = dcimgToMmap(inputFile, outputDir, x, y, z, t, byteskip, clockski
 % t
 % byteskip = header size (byte)
 % clockskip = clock size (byte)
-% do = either true or false if you want to create a bin file
-
+% doIt = either true or false. true if you want to create a bin file
 
 % create mmap
 mmap = memmapfile(inputFile, ...
@@ -29,9 +28,9 @@ if doIt % if the user asks to create the file
     % write the binary file
     fid = fopen(output, 'wb');
     for i_t = T % along t
+        waitbar(i_t/t)
         for i_z = Z % along z
             fwrite(fid, mmap.Data.bit(1:x*y, i_z, i_t),'uint16');
-            waitbar(i_t/t)
         end
     end
     fclose(fid);
