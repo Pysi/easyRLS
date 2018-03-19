@@ -143,4 +143,50 @@ Then it is quite fast to compute with the `dff` function.
     Elapsed time is 71.309378 seconds.
     Elapsed time is 72.151579 seconds.
 
-... ...
+## Defining folder architecture and file formats
+
+### Project organisation
+
+A project is organised as follows :
+
+> Project/Data/Study/Date/Run/
+
+In a run, there is :
+- an 'Image' folder with well named tif images or a dcimg file
+- a 'Parameter.txt'
+
+After analysis, there is a 'Files' folder with :
+- a Config.mat config file
+- the raw or corrected stack
+- an IP folder
+
+The stack contains :
+- a binary file, RAST, uint16
+- a mat file with dimensions (x,y,z,t,Z,T)
+- a nhdr file to drag and drop in imageJ for instance
+
+x, y, z, t, Z, T are :
+- the x,y,z,t sizes
+- Z : list of layers recorded in stack (useful ?)
+- T : list of times concerned (useful ?)
+- (could add) orientation (i.e. RAS)
+- (could add) type (i.e. uint16)
+
+The IP folder contains :
+- drift info : Drifts.mat, DriftBox.mat, driftCorrection.fig
+- image registration info : defMap.mat (could change to a xform)
+- a graystack stack (bin, mat, nhdr), (t,T are here just for Mmap)
+- a mask (now .mat, should become stack)
+- baseline folder
+- dff folder
+
+The baseline folder contains :
+- a bin and mat file for each layer
+- bin is a 2D t×index (double, should become uint16)
+- mat contains x,y,z,t,Z,T,indices,numindex,mmap (mmap, z and T should disappear)
+(mmap should be reconstructed, z = 1 always, is T useful ?)
+
+The dff folder contains :
+- a bin and mat file for each layer
+- bin is 2D t×index (double, should become single)
+- mat is the same as before
