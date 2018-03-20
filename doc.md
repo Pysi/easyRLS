@@ -185,6 +185,7 @@ The baseline folder contains :
 - bin is a 2D t×index (double, should become uint16)
 - mat contains x,y,z,t,Z,T,indices,numindex,mmap (mmap, z and T should disappear)
 (mmap should be reconstructed, z = 1 always, is T useful ?)
+- indices are accessible via matfile if you do not want to load it
 
 The dff folder contains :
 - a bin and mat file for each layer

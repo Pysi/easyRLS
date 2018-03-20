@@ -1,24 +1,25 @@
 function stackViewer2D(F, tag, Layers)
 %stackViewer2D aims to produce the same result as stackViewer, but for 2D mmaps
+% problem : necessity to 'load' indices (even matfile is not good)
 
-m = {};
+warning('this data visualizer is slow due to linear indexing');
+
+m = cell(1,20); % cell array for all possible layers
 mgray = Focused.Mmap(F, 'IP/graystack');
 
-    for z = Layers %#ok<*FXUP>
-        m{z} = struct(); %#ok<*AGROW>
+    for z = Layers
         inputInfo = fullfile(F.dir.IP, tag, [num2str(z, '%02d') '.mat']);
-        load(inputInfo, 'mmap', 'indices', 'T');
-        m{z}.indices = indices;
-        m{z}.mmap = mmap;
+        m{z}.matfile = matfile(inputInfo); % readable matfile (prevents from loading all indices at the same time)
+        m{z}.mmap = m{z}.matfile.mmap; % TODO reconstruct
     end
 
-    f = figure('Visible','off'); 
-
     z = Layers(1);
+    T = m{z}.matfile.T; % take time (they should be the same for all)
     t = T(1);
 
+    f = figure('Visible','off'); 
     img = mgray(:,:,z,1);
-    img(m{z}.indices) = m{z}.mmap.Data.bit(t,:);
+    img(m{z}.matfile.indices) = m{z}.mmap.Data.bit(t,:);
     imgh = img';
 
     h = imshow(imgh, [400 700]);
@@ -46,7 +47,7 @@ mgray = Focused.Mmap(F, 'IP/graystack');
     function actualize_z(source, ~)
         z = floor(source.Value);
         img = mgray(:,:,z,1);
-        img(m{z}.indices) = m{z}.mmap.Data.bit(t,:);
+        img(m{z}.matfile.indices) = m{z}.mmap.Data.bit(t,:);
         imgh = img';
         set(h, 'Cdata', imgh);
         title(['z=' num2str(z) '   t=' num2str(t)]);
@@ -56,7 +57,7 @@ mgray = Focused.Mmap(F, 'IP/graystack');
     function actualize_t(source, ~)
         t = floor(source.Value);
         img = mgray(:,:,z,1);
-        img(m{z}.indices) = m{z}.mmap.Data.bit(t,:);
+        img(m{z}.matfile.indices) = m{z}.mmap.Data.bit(t,:);
         imgh = img';
         set(h, 'Cdata', imgh);
         title(['z=' num2str(z) '   t=' num2str(t)]);
