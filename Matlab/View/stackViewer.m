@@ -23,6 +23,7 @@ function stackViewer(F, tag)
     title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]);
     set(gca,'Ydir','normal')
 
+    % ----- SLIDERS -----
     % z slider
     uicontrol('Style', 'slider',...
         'Min',min(m.Z),'Max',max(m.Z),...
@@ -38,11 +39,14 @@ function stackViewer(F, tag)
             'Position', [20 40 550 20],...
             'Callback', @actualize_t);
     end
-
+    % ----- ----- -----
+    
         f.Visible = 'on';
         set(f, 'Position',[20 -20 600 1080]);
         if viewMask; hold on; [~,cont] = contour(mask(:,:,z),'r'); end
+        
     
+    % ----- FUNCTIONS -----
     function actualize_z(source, ~)
         z = floor(source.Value); % round the value
         img = m(:,:,z,t)'; % get the transposed image
@@ -59,4 +63,5 @@ function stackViewer(F, tag)
         title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]);
         drawnow;
     end
+    % ----- ----- -----
 end

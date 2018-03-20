@@ -1,4 +1,5 @@
 function stackViewerMat(mask)
+% stackViewerMat lets you see a 3D matrix
 
 Z = size(mask,3);
 
