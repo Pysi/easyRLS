@@ -1,5 +1,6 @@
 function mmap = dcimgToMmap(F, tag, kwargs)
 % focused dcimgToMmap parse kwargs and calls dcimgToMmap
+% the kwargs could be guessed from focus
 
 	% define default values
 	byteskip = 808;
