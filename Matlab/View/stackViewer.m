@@ -3,7 +3,7 @@ function stackViewer(F, tag)
 % it allows to visualize the brain and browse z and t directions
 % it realises a permutation permute(m,[2,1]) before printing thanks 
 
-
+    viewMask = false;
     
     if strcmp(tag, 'ROImask') % particular case to view mask contour
         viewMask = true;
