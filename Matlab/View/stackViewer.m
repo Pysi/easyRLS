@@ -3,15 +3,22 @@ function stackViewer(F, tag)
 % it allows to visualize the brain and browse z and t directions
 % it realises a permutation permute(m,[2,1]) before printing thanks 
 
-    m = Focused.Mmap(F, tag);
 
-    f = figure('Visible','off'); 
+    
+    if strcmp(tag, 'ROImask') % particular case to view mask contour
+        viewMask = true;
+        tag = 'corrected';
+        load(fullfile(F.dir.IP, 'mask.mat'), 'mask');
+        mask = permute(mask, [2 1 3]); % permute mask to fit image
+    end
 
+    m = Focused.Mmap(F, tag); % get memory map
     z = max(m.Z);
     t = m.T(1);
-
-    img = m(:,:,z,t)';
-
+    if viewMask; t = 10; end % TODO : pass reference stack
+    
+    f = figure('Visible','off'); % create invisible figure
+    img = m(:,:,z,t)'; % load transposed image
     h = imshow(img, [400 700]);
     title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]);
     set(gca,'Ydir','normal')
@@ -23,7 +30,7 @@ function stackViewer(F, tag)
         'Position', [20 20 300 20],...
         'Callback', @actualize_z);
 
-    if m.t > 1
+    if m.t > 1 && ~viewMask % no time slider if not necessary
         % t slider
         uicontrol('Style', 'slider',...
             'Min',m.T(1),'Max',m.T(end),...
@@ -33,14 +40,16 @@ function stackViewer(F, tag)
     end
 
         f.Visible = 'on';
-        set(f, 'Position',[0 0 600 1080]);
+        set(f, 'Position',[20 -20 600 1080]);
+        if viewMask; hold on; [~,cont] = contour(mask(:,:,z),'r'); end
     
     function actualize_z(source, ~)
-        z = floor(source.Value);
-        img = m(:,:,z,t)';
-        set(h, 'Cdata', img);
-        title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]);
-        drawnow;
+        z = floor(source.Value); % round the value
+        img = m(:,:,z,t)'; % get the transposed image
+        set(h, 'Cdata', img); % replaces the image
+        if viewMask; delete(cont); [~,cont] = contour(mask(:,:,z),'r'); end % replaces the contour
+        title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]); % replaces the title
+        drawnow; % actualizes the figure
     end
 
     function actualize_t(source, ~)
