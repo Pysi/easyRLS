@@ -54,8 +54,9 @@ stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROIm
 
 
 %% load library to compute baseline
-[~,~] = loadlibrary('/home/ljp/Science/Projects/easyRLS/Programs/easyRLS/Tools/caTools/caTools.so',...
-                    '/home/ljp/Science/Projects/easyRLS/Programs/easyRLS/Tools/caTools/caTools.h');
+cd /home/ljp/Science/Projects/easyRLS/
+[~,~] = loadlibrary('Programs/easyRLS/Tools/caTools/caTools.so',...
+                    'Programs/easyRLS/Tools/caTools/caTools.h');
 %% compute baseline using caTools library
 caToolsRunquantileLin(F, param.Layers)
 %% view baseline
@@ -70,6 +71,6 @@ t=tic;
 dff(F, param.Layers, param.background);
 toc(t)
 %% view DFF
-sigViewer2D(F, 'dff', param.Layers)
+stackViewer2D(F, 'dff', param.Layers); % plots differently
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
