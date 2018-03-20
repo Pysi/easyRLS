@@ -36,6 +36,10 @@ for z = Z % for each layer of concern
 
     % get new contour
     tmp2 = editContour(tmp2);
+    if strcmp(tmp2, 'exit') % if exit
+        fprintf('layer %d was not saved\n', z);
+        return
+    end
     
     % stores it in 'mask' variable and saves it
     mask(:,:,z) = tmp2;
@@ -66,6 +70,11 @@ function newContour = editContour(oldContour)
 
 
     boundary_2 = poly.wait;
+    if isempty(boundary_2)
+       fprintf('EXIT\n');
+       newContour = 'exit';
+       return
+    end
     BW = poly2mask(boundary_2(:,1), boundary_2(:,2), size(tmp2,1), size(tmp2,2));
 
     contour(BW)
