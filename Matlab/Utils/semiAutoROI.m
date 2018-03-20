@@ -10,7 +10,7 @@ catch % if no mask variable to load, initialize to NaN
     disp('creating new mask file')
     mask = NaN(m.x,m.y,20); % default total number of layers
 end
-
+    
 for z = Z % for each layer of concern
     
     img = m(:,:,z,t); % load image
@@ -29,6 +29,8 @@ for z = Z % for each layer of concern
         tmp2 = img*0;
         tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
         tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);  
+        
+%         sliderize(z, img, tmp2); % TODO make this work
     end
     
     % plot contour over this
@@ -80,5 +82,37 @@ function newContour = editContour(oldContour)
     contour(BW)
 
     newContour = BW;
+
+end
+
+%%% TODO make this function work
+
+function sliderize(z, img, tmp2)
+    % show layer
+    f = gcf;
+    f.Visible = 'off';
+    
+    % adds slider
+    uicontrol('Style', 'slider',...
+        'Min',0,'Max',1,...
+        'SliderStep', [1/100 1/100], 'Value',1-(0.005*z),...
+        'Position', [20 20 300 20],...
+        'Callback', @recomputesFilter);
+    
+    % show image
+    f.Visible = 'on'; 
+    hold on; contour(tmp2);
+    
+    % TODO find a way to stop execution since the value is not ok
+    
+    function recomputesFilter(source, ~)
+        bg_img = mean2(img);
+        H = fspecial('disk',20);
+        tmp1 = imfilter(img,H,'replicate');
+        tmp2 = img*0;
+        tmp2(tmp1>bg_img*(source.Value)) = 1;
+        tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);
+  
+    end
 
 end
