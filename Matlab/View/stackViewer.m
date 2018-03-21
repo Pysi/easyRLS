@@ -1,18 +1,15 @@
-function stackViewer(F, tag)
+function stackViewer(m, titleFig, mask)
 %stackViewer is analog to imageJ hyperstack
 % it allows to visualize the brain and browse z and t directions
 % it realises a permutation permute(m,[2,1]) before printing thanks 
 
     viewMask = false;
     
-    if strcmp(tag, 'ROImask') % particular case to view mask contour
+    if ~isempty(mask) % particular case to view mask contour
         viewMask = true;
-        tag = 'corrected';
-        load(fullfile(F.dir.IP, 'mask.mat'), 'mask');
-        mask = permute(mask, [2 1 3]); % permute mask to fit image
+        mask = permute(mask, [2 1 3]); % permute mask to fit image (transposition)
     end
-
-    m = Focused.Mmap(F, tag); % get memory map
+    
     z = max(m.Z);
     t = m.T(1);
     if viewMask; t = 10; end % TODO : pass reference stack
@@ -20,7 +17,7 @@ function stackViewer(F, tag)
     f = figure('Visible','off'); % create invisible figure
     img = m(:,:,z,t)'; % load transposed image
     h = imshow(img, [400 700]);
-    title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]);
+    title([titleFig '   ' 'z=' num2str(z) '   t=' num2str(t)]);
     set(gca,'Ydir','normal')
 
     % ----- SLIDERS -----
@@ -52,7 +49,7 @@ function stackViewer(F, tag)
         img = m(:,:,z,t)'; % get the transposed image
         set(h, 'Cdata', img); % replaces the image
         if viewMask; delete(cont); [~,cont] = contour(mask(:,:,z),'r'); end % replaces the contour
-        title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]); % replaces the title
+        title([titleFig '   ' 'z=' num2str(z) '   t=' num2str(t)]); % replaces the title
         drawnow; % actualizes the figure
     end
 
@@ -60,7 +57,7 @@ function stackViewer(F, tag)
         t = floor(source.Value);
         img = m(:,:,z,t)';
         set(h, 'Cdata', img);
-        title([F.name '   ' 'z=' num2str(z) '   t=' num2str(t)]);
+        title([titleFig '   ' 'z=' num2str(z) '   t=' num2str(t)]);
         drawnow;
     end
     % ----- ----- -----
