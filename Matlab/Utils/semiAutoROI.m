@@ -7,6 +7,8 @@ try % try to load existing mask.mat
     disp('found mask file, loading it')
     load(fullfile(F.dir.IP, 'mask.mat'), 'mask'); % get the mask
 catch % if no mask variable to load, initialize to NaN
+    disp('creating ''IP'' directory')
+    mkdir(F.dir.IP);
     disp('creating new mask file')
     mask = NaN(m.x,m.y,20); % default total number of layers
 end
@@ -17,7 +19,7 @@ for z = Z % for each layer of concern
     tmp2 = mask(:,:,z); % load mask layer
     
     % show layer
-    hold off; imshow(equalize_histogram(img));
+    hold off; imshow(img, [400 1500]);
     
     if isnan( max(max( tmp2 )) ) % if mask layer is not yet defined 
         % autocompute mask (TODO add slider)

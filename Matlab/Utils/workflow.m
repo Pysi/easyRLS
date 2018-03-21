@@ -10,16 +10,18 @@ cd /home/ljp/Science/Projects/easyRLS/
 %% workflow preparation
 
 % preliminary work : set ROI on raw RAS stack on each run you want to work on
-cd /home/ljp/Science/Projects/easyRLS/
+cd /home/ljp/Science/Projects/RLS/
 param.cwd = pwd;
-param.date = '2018-01-11';
-param.run = 'Run05';
-param.Layers = 3:12; 
+param.date = '2018-03-19';
+param.run = 2;
+param.Layers = 3:20; 
 param.RefLayers = 8:10;
 param.RefIndex = 10; 
 F = NT.Focus({param.cwd, '', param.date, param.run});
-tifToMmap(F, {'z', param.Layers});
-Focused.transposeMmap(F, 'yxzrai', 'xyzras');
+tifToMmap(F, {'z', param.Layers}); % raw.bin
+Focused.transposeMmap(F, 'yxzrai', 'xyzras'); %rawRAS.bin
+
+%%
 
 % semi auto ROI
 semiAutoROI(F, param.Layers, param.RefIndex); % let you adjust automatic ROI
@@ -38,9 +40,10 @@ start_time = tic;
     driftApply(F);
     caToolsRunquantileLin(F, param.Layers)
     createGrayStack(F)
-    param.background = 400;
+    param.background = 450;
     dff(F, param.Layers, param.background);
 
+disp('Time elapsed for drift computation, baseline computation, graystack computation, dff computation');
 toc(start_time);
 
 

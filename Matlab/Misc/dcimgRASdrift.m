@@ -15,7 +15,7 @@ function dcimgRASdrift(F, tag, kwargs)
 
 % ------------------ RAS parameters -----------------------
     % TODO add the focused way to find RASification
-    inMode = 'yxzrai'; 
+    inMode = 'xyzrai'; 
     outMode = 'xyzras';
     % default values
     invertXY = false;
@@ -161,6 +161,7 @@ function dcimgRASdrift(F, tag, kwargs)
 	
 	close(w)
 	fclose(fid);
+    close gcf
     
     % --- Save drift parameters ---
     % save bbox and drifts

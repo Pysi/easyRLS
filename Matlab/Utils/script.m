@@ -8,7 +8,7 @@ clc
 cd /home/ljp/Science/Projects/easyRLS/
 param.cwd = pwd;
 param.date = '2018-01-11';
-param.run = 'Run05';
+param.run = 2;
 param.Layers = 3:12; 
 param.RefLayers = 8:10;
 param.RefIndex = 10; 
@@ -22,7 +22,7 @@ stackViewer(F, 'raw');
 %% transpose to RAS
 Focused.transposeMmap(F, 'yxzrai', 'xyzras'); % TODO know automatically from parameters
 %% view hyperstack
-stackViewer(F, 'rawRAS');
+Focused.stackViewer(F, 'rawRAS');
 %% compute drift on mmap
 driftCompute(F,{...
     'RefLayers', param.RefLayers, ...
@@ -34,7 +34,7 @@ seeDriftCorrection(F); % plays a movie
 %% applies drift if it is ok
 driftApply(F);
 %% view corrected hyperstack
-stackViewer(F, 'corrected'); % similar to | m=Focused.Mmap(F, 'corrected'); imshow(m(:,:,3,10),[300 800]);
+Focused.stackViewer(F, 'corrected'); % similar to | m=Focused.Mmap(F, 'corrected'); imshow(m(:,:,3,10),[300 800]);
 %% semi auto ROI
 semiAutoROI(F, param.Layers, param.RefIndex); % let you adjust automatic ROI
 
@@ -50,7 +50,7 @@ mapToReferenceBrain(F, Fref, param.RefIndex);
 autoROI(F, Fref)
 %}
 %% check if ROI is ok (useful if autoguessed, you can then modify again)
-stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
+Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
 
 
 %% load library to compute baseline
@@ -63,7 +63,7 @@ caToolsRunquantileLin(F, param.Layers)
 stackViewer2D(F, 'baseline', param.Layers)
 %% compute gray stack and view it
 createGrayStack(F)
-stackViewer(F, 'IP/graystack')
+Focused.stackViewer(F, 'IP/graystack')
 %% compute background
 param.background = 400;
 %% compute DFF
