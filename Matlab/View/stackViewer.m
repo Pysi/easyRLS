@@ -7,7 +7,7 @@ function stackViewer(m, titleFig, mask)
     
     if ~isempty(mask) % particular case to view mask contour
         viewMask = true;
-        mask = permute(mask, [2 1 3]); % permute mask to fit image (transposition)
+        mask = rot90(mask); % permute(mask, [2 1 3]); % permute mask (NO) (transposition)
     end
     
     z = max(m.Z);
@@ -15,10 +15,10 @@ function stackViewer(m, titleFig, mask)
     if viewMask; t = 10; end % TODO : pass reference stack
     
     f = figure('Visible','off'); % create invisible figure
-    img = m(:,:,z,t)'; % load transposed image
-    h = imshow(img, [400 700]);
+    img = rot90(m(:,:,z,t)); % load transposed image
+    h = imshow(img, [400 1500]);
     title([titleFig '   ' 'z=' num2str(z) '   t=' num2str(t)]);
-    set(gca,'Ydir','normal')
+    % set(gca,'Ydir','normal') (reverse)
 
     % ----- SLIDERS -----
     % z slider
@@ -46,7 +46,7 @@ function stackViewer(m, titleFig, mask)
     % ----- FUNCTIONS -----
     function actualize_z(source, ~)
         z = floor(source.Value); % round the value
-        img = m(:,:,z,t)'; % get the transposed image
+        img = rot90(m(:,:,z,t)); % get the transposed image
         set(h, 'Cdata', img); % replaces the image
         if viewMask; delete(cont); [~,cont] = contour(mask(:,:,z),'r'); end % replaces the contour
         title([titleFig '   ' 'z=' num2str(z) '   t=' num2str(t)]); % replaces the title
@@ -55,7 +55,7 @@ function stackViewer(m, titleFig, mask)
 
     function actualize_t(source, ~)
         t = floor(source.Value);
-        img = m(:,:,z,t)';
+        img = rot90(m(:,:,z,t));
         set(h, 'Cdata', img);
         title([titleFig '   ' 'z=' num2str(z) '   t=' num2str(t)]);
         drawnow;
