@@ -14,7 +14,8 @@ function mmap = dcimgToMmap(inputFile, outputDir, x, y, z, t, byteskip, clockski
 % create mmap
 mmap = memmapfile(inputFile, ...
     'Format', {'uint16', [x*y+clockskip, z, t], 'bit'},...
-    'Offset', byteskip);
+    'Offset', byteskip,...
+    'Repeat', 1);
 
 if doIt % if the user asks to create the file
     output = fullfile(outputDir, 'raw.bin');

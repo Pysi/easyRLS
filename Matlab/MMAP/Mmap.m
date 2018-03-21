@@ -22,9 +22,11 @@ classdef Mmap < handle
             
             load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T');
             self.mmap = ...
-                memmapfile(binFile,'Format',{'uint16',[x,y,z,t],'bit'});
+                memmapfile(binFile,'Format',{'uint16',[x,y,z,t],'bit'}, ...
+                    'Repeat', 1); % repeat option might prevent from detecting errors (such on t)
             self.mmaplin = ...
-                memmapfile(binFile,'Format',{'uint16',[x*y,z,t],'bit'});
+                memmapfile(binFile,'Format',{'uint16',[x*y,z,t],'bit'}, ...
+                    'Repeat', 1);
             self.x = x; 
             self.y = y; 
             self.z = z; 
