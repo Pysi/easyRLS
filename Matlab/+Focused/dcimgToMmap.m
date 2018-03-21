@@ -35,6 +35,6 @@ function mmap = dcimgToMmap(F, tag, kwargs)
 	outputDir = F.dir.files;
 	
 	% call dcimg
-	mmap = dcimgToMmap(inputFile, outputDir, x, y, z, t, byteskip, clockskip, doIt)
+	mmap = dcimgToMmap(inputFile, outputDir, x, y, z, t, byteskip, clockskip, doIt);
     
 end
