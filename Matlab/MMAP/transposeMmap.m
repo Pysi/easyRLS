@@ -20,6 +20,14 @@ function transposeMmap(inputFile, outputFile, invertXY, invertX, invertY, invert
     else
         Z = m.Z; 
     end
+    % defines x and y
+    if invertXY
+        x = m.y;
+        y = m.x;
+    else
+        x = m.x;
+        y = m.y;
+    end
     T = m.T;
 		    
 	% open in write binary mode
@@ -27,21 +35,16 @@ function transposeMmap(inputFile, outputFile, invertXY, invertX, invertY, invert
     w = waitbar(0, 'transposing file to RAS');
     
 	% loop over images
-	for t = T % along time
+    for t = T % along time
         waitbar(t/m.t)
-	    for z = Z % along z
+        for z = Z % along z
 	        Img = m(:,:,z,t);
 	        
-	        if invertXY
+            if invertXY
 	            Img = Img';
-	            x = m.y;
-	            y = m.x;
-            else
-                x = m.x;
-                y = m.y;
             end
-	        if invertX
-	            Img = flip(Img, 1);
+            if invertX
+                Img = flip(Img, 1);
             end
             if invertY
                 Img = flip(Img, 2);
@@ -54,7 +57,7 @@ function transposeMmap(inputFile, outputFile, invertXY, invertX, invertY, invert
 	close(w)
 	fclose(fid);
 
-    z = m.z;
+    z = m.z; %#ok<*NASGU>
     t = m.t; % (could be useless)
     
     save([outputFile '.mat'], 'x', 'y', 'z', 't', 'Z', 'T');
