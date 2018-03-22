@@ -1,4 +1,10 @@
-# Mini doc to use easyRLS
+# Mini doc for easyRLS
+
+"easyRLS" is intended to provide a stable and efficient code base for RLS computations
+- correct drift
+- map to ref brain 
+- compute baseline
+- compute DFF
 
 ## Install Matlab programs
 
@@ -191,3 +197,66 @@ The dff folder contains :
 - a bin and mat file for each layer
 - bin is 2D t×index (double, should become single)
 - mat is the same as before
+
+## Benchmark
+
+This benchmark has been computed for 18 layers (3 → 20) of 3000 time frames.
+
+    creating 'baseline' directory
+    computing baseline for layer 3
+    Elapsed time is 666.037684 seconds.
+    computing baseline for layer 4
+    Elapsed time is 430.974213 seconds.
+    computing baseline for layer 5
+    Elapsed time is 457.901151 seconds.
+    computing baseline for layer 6
+    Elapsed time is 476.981205 seconds.
+    computing baseline for layer 7
+    Elapsed time is 492.908462 seconds.
+    computing baseline for layer 8
+    Elapsed time is 503.302138 seconds.
+    computing baseline for layer 9
+    Elapsed time is 539.941323 seconds.
+    computing baseline for layer 10
+    Elapsed time is 563.164443 seconds.
+    computing baseline for layer 11
+    Elapsed time is 589.400313 seconds.
+    computing baseline for layer 12
+    Elapsed time is 619.239420 seconds.
+    computing baseline for layer 13
+    Elapsed time is 616.485916 seconds.
+    computing baseline for layer 14
+    Elapsed time is 632.351206 seconds.
+    computing baseline for layer 15
+    Elapsed time is 635.598164 seconds.
+    computing baseline for layer 16
+    Elapsed time is 651.299828 seconds.
+    computing baseline for layer 17
+    Elapsed time is 616.103178 seconds.
+    computing baseline for layer 18
+    Elapsed time is 596.929938 seconds.
+    computing baseline for layer 19
+    Elapsed time is 607.170558 seconds.
+    computing baseline for layer 20
+    Elapsed time is 596.004071 seconds.
+    creating 'dff' directory
+    Elapsed time is 134.996219 seconds.
+    Elapsed time is 149.832010 seconds.
+    Elapsed time is 144.765864 seconds.
+    Elapsed time is 161.145919 seconds.
+    Elapsed time is 177.627739 seconds.
+    Elapsed time is 178.335567 seconds.
+    Elapsed time is 163.284241 seconds.
+    Elapsed time is 149.934031 seconds.
+    Elapsed time is 151.228832 seconds.
+    Elapsed time is 178.686603 seconds.
+    Elapsed time is 178.841415 seconds.
+    Elapsed time is 155.352043 seconds.
+    Elapsed time is 163.606614 seconds.
+    Elapsed time is 167.015503 seconds.
+    Elapsed time is 153.724379 seconds.
+    Elapsed time is 150.455047 seconds.
+    Elapsed time is 148.272154 seconds.
+    Elapsed time is 142.306286 seconds.
+    Time elapsed for drift computation, baseline computation, graystack computation, dff computation
+    Elapsed time is 14120.873724 seconds.
