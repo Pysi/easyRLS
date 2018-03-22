@@ -10,13 +10,13 @@ function caToolsRunquantileLin(F, Layers)
     
     for z = Layers
         
-        fprintf('computing baseline for layer %d\n', z)
-        
         output = fullfile(baselinePath, [num2str(z, '%02d') '.bin']);
         outputInfo = fullfile(baselinePath, [num2str(z, '%02d') '.mat']);
 
         indices = maskToIndex(F, z);
         numIndex = length(indices);
+        
+        fprintf('computing baseline for layer %d (%d points)\n', z, numIndex)
         
         OUT = NaN(m.t, 1);
         fid = fopen(output, 'wb');
