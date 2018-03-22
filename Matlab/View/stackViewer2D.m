@@ -2,7 +2,7 @@ function stackViewer2D(F, tag, Layers)
 %stackViewer2D aims to produce the same result as stackViewer, but for 2D mmaps
 % problem : necessity to 'load' indices (even matfile is not good)
 
-warning('this data visualizer is slow due to linear indexing');
+warning('This data visualizer is slow due to indexes loading. Changing layer might be 30 s long');
 
 viewDFF = false;
 if strcmp(tag, 'dff')
@@ -31,13 +31,12 @@ mgray = Focused.Mmap(F, 'IP/graystack');
     
     % fill image
     img(m{z}.matfile.indices) = m{z}.mmap.Data.bit(t,:);
-    imgh = img';
 
     % show image
-    if viewDFF; h = imshow(imgh, [-.5 2]);
-    else; h = imshow(imgh, [400 700]);
+    if viewDFF; h = imshow(rot90(img), [-.5 2]);
+    else; h = imshow(rot90(img), [400 1500]);
     end
-    title(['z=' num2str(z) '   t=' num2str(t)]);
+    title([F.name '   z=' num2str(z) '   t=' num2str(t)]);
     % -----
 
     % ----- SLIDERS -----
@@ -64,12 +63,12 @@ mgray = Focused.Mmap(F, 'IP/graystack');
     % ----- FUNCTIONS -----
     function actualize_z(source, ~)
         z = floor(source.Value);
-        drawImage()
+        drawImage();
     end
 
     function actualize_t(source, ~)
         t = floor(source.Value);
-        drawImage()
+        drawImage();
     end
 
     function drawImage()       
@@ -77,10 +76,9 @@ mgray = Focused.Mmap(F, 'IP/graystack');
         if viewDFF; img = NaN(mgray.x, mgray.y);
         else; img = mgray(:,:,z,1);
         end
-        img(m{z}.matfile.indices) = m{z}.mmap.Data.bit(t,:);
-        imgh = img';
-        set(h, 'Cdata', imgh);
-        title(['z=' num2str(z) '   t=' num2str(t)]);
+        fprintf('filling: ');tic;img(m{z}.matfile.indices) = m{z}.mmap.Data.bit(t,:);toc;
+        set(h, 'Cdata', rot90(img));
+        title([F.name '   z=' num2str(z) '   t=' num2str(t)]);
         drawnow;
     end
     
