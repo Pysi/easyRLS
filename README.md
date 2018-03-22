@@ -202,6 +202,25 @@ The dff folder contains :
 
 This benchmark has been computed for 18 layers (3 → 20) of 3000 time frames.
 
+    layer 3, numIndex 197480
+    layer 4, numIndex 218788
+    layer 5, numIndex 234647
+    layer 6, numIndex 256632
+    layer 7, numIndex 271762
+    layer 8, numIndex 284101
+    layer 9, numIndex 300836
+    layer 10, numIndex 325213
+    layer 11, numIndex 339521
+    layer 12, numIndex 349962
+    layer 13, numIndex 353243
+    layer 14, numIndex 360801
+    layer 15, numIndex 358265
+    layer 16, numIndex 354024
+    layer 17, numIndex 335077
+    layer 18, numIndex 325625
+    layer 19, numIndex 320476
+    layer 20, numIndex 322100
+
     creating 'baseline' directory
     computing baseline for layer 3
     Elapsed time is 666.037684 seconds.
