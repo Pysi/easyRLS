@@ -3,6 +3,10 @@
 % please make sure you have Neurotools to your path
 clear
 clc
+%% add path
+cd /home/ljp/Science/Projects/easyRLS/
+addpath(genpath('Programs/easyRLS/Matlab'))
+addpath(genpath('Programs/NeuroTools/Matlab'))
 
 %% go to project folder, set parameters, and get focus
 cd /home/ljp/Science/Projects/easyRLS/
