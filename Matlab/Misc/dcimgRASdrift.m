@@ -46,7 +46,7 @@ function dcimgRASdrift(F, tag, kwargs)
     in = inputParser;
     in.addParameter('RefIndex', 10);        % by default 10th stack
     in.addParameter('RefLayers', 8:10);     % by default stacks 8, 9, 10
-    in.addParameter('Layers', 3:12); % by default all
+    in.addParameter('Layers', 3:12); % default all
     in.parse(kwargs{:})
 
     % Layers = in.Results.Layers;
