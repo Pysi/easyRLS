@@ -27,9 +27,9 @@ background = uint16(background); %#ok<NODEF>
         tic
         % compute dff
         fwrite(fid,...
-            (double(squeeze(msig(indices, z, :))') - mbas.Data.bit(:,:)) ./ ...
+            (single(squeeze(msig(indices, z, :))') - mbas.Data.bit(:,:)) ./ ...
                 ((mbas.Data.bit(:,:) - background(z))),...
-            'double');
+            'single');
         
         toc
 
@@ -45,7 +45,7 @@ background = uint16(background); %#ok<NODEF>
 
         % create corresponding mmap info
         mmap = memmapfile(output,...
-            'Format',{'double', [t, numIndex],'bit'});
+            'Format',{'single', [t, numIndex],'bit'});
         save(outputInfo, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
 
     end
