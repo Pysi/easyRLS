@@ -24,7 +24,7 @@ Focused.transposeMmap(F, 'yxzrai', 'xyzras'); %rawRAS.bin
 %%
 
 % semi auto ROI
-semiAutoROI(F, param.Layers, param.RefIndex); % let you adjust automatic ROI
+semiAutoROI(F, param.Layers, param.RefIndex, 'rawRAS'); % let you adjust automatic ROI
 
 
 %% workflow 

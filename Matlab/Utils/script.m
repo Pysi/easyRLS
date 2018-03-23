@@ -54,7 +54,7 @@ Focused.stackViewer(F, 'corrected'); % similar to | m=Focused.Mmap(F, 'corrected
 %% compute background
 computeBackground(F, 'corrected', param.RefIndex);
 %% semi auto ROI
-semiAutoROI(F, param.Layers, param.RefIndex); % let you adjust automatic ROI
+semiAutoROI(F, param.Layers, param.RefIndex, 'corrected'); % let you adjust automatic ROI
 %% do imregdemons on an other similar brain with a mask
 %{
 param.run = 6;

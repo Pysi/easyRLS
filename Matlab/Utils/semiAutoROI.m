@@ -1,7 +1,7 @@
-function semiAutoROI(F, Z, t)
+function semiAutoROI(F, Z, t, tag)
 % semiAutoROI lets you modify an automatic ROI
 
-m = Focused.Mmap(F, 'rawRAS'); % get the memory map
+m = Focused.Mmap(F, tag); % get the memory map
 
 try % try to load existing mask.mat
     disp('found mask file, loading it')
