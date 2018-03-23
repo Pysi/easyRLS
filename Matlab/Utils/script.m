@@ -27,7 +27,7 @@ param.RefLayers = 8:10;
 param.RefIndex = 10; 
 F = NT.Focus({param.cwd, '', param.date, param.run});
 %% dcimgRASdrift
-dcimgRASdrift(F, 'Run00', {})
+dcimgRASdrift(F, 'Run00', {}) % this works
 %}
 %% create binary file from Tif
 tifToMmap(F, {'z', param.Layers});
@@ -91,5 +91,8 @@ dff(F, param.Layers);
 toc(t)
 %% view DFF
 stackViewer2D(F, 'dff', param.Layers);
+%% delete unecessary files
+clean(F);
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
