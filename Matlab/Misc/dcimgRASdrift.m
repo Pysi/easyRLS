@@ -15,7 +15,7 @@ function dcimgRASdrift(F, tag, kwargs)
 
 % ------------------ RAS parameters -----------------------
     % TODO add the focused way to find RASification
-    inMode = 'xyzrai'; 
+    inMode = 'yxzrai'; 
     outMode = 'xyzras';
     % default values
     invertXY = false;
