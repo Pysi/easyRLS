@@ -7,22 +7,34 @@ clc
 cd /home/ljp/Science/Projects/easyRLS/
 addpath(genpath('Programs/easyRLS/Matlab'))
 addpath(genpath('Programs/NeuroTools/Matlab'))
-
 %% go to project folder, set parameters, and get focus
+cd /home/ljp/Science/Projects/RLS/
+param.cwd = pwd;
+param.date = '2018-03-19';
+param.run = 2;
+param.Layers = 3:20; 
+param.RefLayers = 8:10;
+param.RefIndex = 10; 
+F = NT.Focus({param.cwd, '', param.date, param.run});
+%% other focus
+%{
 cd /home/ljp/Science/Projects/easyRLS/
 param.cwd = pwd;
 param.date = '2018-01-11';
-param.run = 2;
+param.run = 'Run00';
 param.Layers = 3:12; 
 param.RefLayers = 8:10;
 param.RefIndex = 10; 
 F = NT.Focus({param.cwd, '', param.date, param.run});
+%% dcimgRASdrift
+dcimgRASdrift(F, 'Run00', {})
+%}
 %% create binary file from Tif
 tifToMmap(F, {'z', param.Layers});
 %% or create binary file from DCIMG
 % TODO get info from image or mex header reader
 %% view hyperstack
-stackViewer(F, 'raw');
+Focused.stackViewer(F, 'raw');
 %% transpose to RAS
 Focused.transposeMmap(F, 'yxzrai', 'xyzras'); % TODO know automatically from parameters
 %% view hyperstack
@@ -39,9 +51,10 @@ seeDriftCorrection(F); % plays a movie
 driftApply(F);
 %% view corrected hyperstack
 Focused.stackViewer(F, 'corrected'); % similar to | m=Focused.Mmap(F, 'corrected'); imshow(m(:,:,3,10),[300 800]);
+%% compute background
+computeBackground(F, 'corrected', param.RefIndex);
 %% semi auto ROI
 semiAutoROI(F, param.Layers, param.RefIndex); % let you adjust automatic ROI
-
 %% do imregdemons on an other similar brain with a mask
 %{
 param.run = 6;
@@ -63,18 +76,20 @@ cd /home/ljp/Science/Projects/easyRLS/
                     'Programs/easyRLS/Tools/caTools/caTools.h');
 %% compute baseline using caTools library
 caToolsRunquantileLin(F, param.Layers)
+%% benchmark
+% global COMPUTING
+% global WRITING
+% caToolsRunquantileLin_BENCHMARK(F, 3)
 %% view baseline
 stackViewer2D(F, 'baseline', param.Layers)
 %% compute gray stack and view it
 createGrayStack(F)
 Focused.stackViewer(F, 'IP/graystack')
-%% compute background
-param.background = 400;
 %% compute DFF
 t=tic;
-dff(F, param.Layers, param.background);
+dff(F, param.Layers);
 toc(t)
 %% view DFF
-stackViewer2D(F, 'dff', param.Layers); % plots differently
+stackViewer2D(F, 'dff', param.Layers);
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 

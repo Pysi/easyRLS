@@ -38,12 +38,12 @@ start_time = tic;
         'Layers', param.Layers, ...
         });
     driftApply(F);
+    computeBackground(F, 'corrected', param.RefIndex);
     caToolsRunquantileLin(F, param.Layers)
     createGrayStack(F)
-    param.background = 450;
-    dff(F, param.Layers, param.background);
+    dff(F, param.Layers);
 
-disp('Time elapsed for drift computation, baseline computation, graystack computation, dff computation');
+disp('Time elapsed for [drift background baseline graystack dff] computation');
 toc(start_time);
 
 
