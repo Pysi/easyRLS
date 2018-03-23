@@ -14,8 +14,8 @@ function caToolsRunquantileLin_BENCHMARK(F, Layers)
     
     for z = Layers
         
-        output = fullfile(baselinePath, [num2str(z, '%.03d') '.bin']);
-        outputInfo = fullfile(baselinePath, [num2str(z, '%.03d') '.mat']);
+        output = fullfile(baselinePath, [num2str(z, '%.02d') '.bin']);
+        outputInfo = fullfile(baselinePath, [num2str(z, '%.02d') '.mat']);
 
         tic;indices = maskToIndex(F, z);fprintf('creating indexes from mask: %.02f s\n', toc);
         numIndex = length(indices);
@@ -44,7 +44,7 @@ function caToolsRunquantileLin_BENCHMARK(F, Layers)
             % write baseline to binary file (seems that cast to double is operated by matlab)
             tic; fwrite(fid,...
                 OUT,...
-                'single'); WRITING(i) = toc;
+                'uint16'); WRITING(i) = toc;
         end
         
         toc(start_time)
@@ -60,7 +60,7 @@ function caToolsRunquantileLin_BENCHMARK(F, Layers)
 
         % create corresponding mmap info
         mmap = memmapfile(output,...
-            'Format',{'single', [t, numIndex],'bit'});
+            'Format',{'uint16', [t, numIndex],'bit'});
         save(outputInfo, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
     end
 end
