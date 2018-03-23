@@ -53,9 +53,10 @@ classdef MmapOnDCIMG < handle
                             [X,Y] = meshgrid(x, y);
                             xy = sub2ind([self.x self.y], X, Y);
                             
-                            newS(1).subs{1} = xy; % xy
+                            newS(1).subs{1} = xy'; % (matlab inverses x and y)
                             
-                            askedSize = [size(xy), length(newS(1).subs{2}), length(newS(1).subs{3})]; % weak point !
+                            % we want to return a [x,y,z,t] sized matrix
+                            askedSize = [length(x), length(y), length(newS(1).subs{2}), length(newS(1).subs{3})];
                             out = reshape(subsref(self.mmaplin.Data.bit, newS), askedSize);
                         case 3 % 3D with xy as index
                             xy = S(1).subs{1}; 
