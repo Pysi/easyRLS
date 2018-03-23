@@ -4,11 +4,11 @@ function computeBackground(F, tag, RefIndex)
     % loads mmap
     m = Focused.Mmap(F, tag);
 
-    background = NaN(1, 20);
+    background = single(NaN(1, 20));
 
     for z = m.Z
         Img = NT.Image(double(m(:,:,z,RefIndex)));
-        background(z) = Img.background ;
+        background(z) = single(Img.background);
     end
 
     save(fullfile(F.dir.IP, 'background.mat'), 'background');

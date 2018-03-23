@@ -16,15 +16,16 @@ function caToolsRunquantileLin(F, Layers)
         indices = maskToIndex(F, z);
         numIndex = length(indices);
         
-        fprintf('computing baseline for layer %d (%d points)\n', z, numIndex)
+        fprintf('computing baseline for layer %d (%d points, %d timeframes)\n', z, numIndex, m.t)
         
         OUT = NaN(m.t, 1);
         fid = fopen(output, 'wb');
         tic
             
         for i = indices' % loop for each index
+            IN = squeeze(m(i, z, :));
             [~, OUT] = calllib('caTools', 'runquantile',...
-                    squeeze(m(i, z, :)),... input matrix (t, index)
+                    IN,... input matrix (t, index)
                     OUT,... output variable
                     m.t,... size of input matrix
                     100,... window
@@ -36,7 +37,7 @@ function caToolsRunquantileLin(F, Layers)
             % write baseline to binary file (seems that cast to double is operated by matlab)
             fwrite(fid,...
                 OUT,...
-                'double');
+                'uint16');
         end
             
         toc
@@ -52,7 +53,7 @@ function caToolsRunquantileLin(F, Layers)
 
         % create corresponding mmap info
         mmap = memmapfile(output,...
-            'Format',{'double', [t, numIndex],'bit'});
+            'Format',{'uint16', [t, numIndex],'bit'});
         save(outputInfo, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
     end
 end
