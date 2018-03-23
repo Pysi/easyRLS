@@ -20,7 +20,7 @@ function caToolsRunquantileLin(F, Layers)
         
         OUT = NaN(m.t, 1);
         fid = fopen(output, 'wb');
-        tic
+        start_time = tic;
             
         for i = indices' % loop for each index
             IN = squeeze(m(i, z, :));
@@ -40,7 +40,7 @@ function caToolsRunquantileLin(F, Layers)
                 'uint16');
         end
             
-        toc
+        toc(start_time)
         fclose(fid);
         
         % get values

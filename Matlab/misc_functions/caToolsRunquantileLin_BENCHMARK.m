@@ -24,12 +24,13 @@ function caToolsRunquantileLin_BENCHMARK(F, Layers)
         
         OUT = NaN(m.t, 1);
         fid = fopen(output, 'wb');
+        start_time = tic;
         
         COMPUTING = NaN(size(indices'));
         WRITING = NaN(size(indices'));
             
         for i = indices' % loop for each index
-            tic; IN = squeeze(m(i, z, :)); LOADING = toc;
+            tic; IN = squeeze(m(i, z, :)); LOADING(i) = toc;
             tic; [~, OUT] = calllib('caTools', 'runquantile',...
                     IN,... input matrix (t, index)
                     OUT,... output variable
@@ -45,6 +46,8 @@ function caToolsRunquantileLin_BENCHMARK(F, Layers)
                 OUT,...
                 'single'); WRITING(i) = toc;
         end
+        
+        toc(start_time)
         fclose(fid);
         
         % get values
