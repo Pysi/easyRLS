@@ -7,13 +7,12 @@ disp('creating ''dff'' directory'); mkdir(dffPath);
 
 % load background and convert to uint16
 load(fullfile(F.dir.IP, 'background.mat'), 'background');
-background = uint16(background); %#ok<NODEF>
 
     for z = Layers
         
         % sigstack (x,y,z,t) ((xy,z,t))
         msig = Focused.Mmap(F, 'corrected');
-        m = msig;
+        m = msig; % just an alias for getting values
         % basestack (t, xy)
         basePath = fullfile(F.dir.IP, 'baseline', [num2str(z, '%02d') '.mat']);
         load(basePath, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
@@ -26,12 +25,14 @@ background = uint16(background); %#ok<NODEF>
         
         tic
         % compute dff
+        % (signal - baseline) / (baseline - background)
+        % single( uint16 - uint16 ) / (single(uint16) - single)
         fwrite(fid,...
-            (single(squeeze(msig(indices, z, :))') - mbas.Data.bit(:,:)) ./ ...
-                ((mbas.Data.bit(:,:) - background(z))),...
+            single( squeeze(msig(indices, z, :))' - mbas.Data.bit(:,:) ) ./ ...
+                ( single(mbas.Data.bit(:,:)) - background(z) ),...
             'single');
         
-        toc
+        fprintf('computing dff for layer %d: %.02f s\n', z, toc)
 
         fclose(fid);
         
