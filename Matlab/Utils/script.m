@@ -8,7 +8,7 @@ cd /home/ljp/Science/Projects/easyRLS/
 addpath(genpath('Programs/easyRLS/Matlab'))
 addpath(genpath('Programs/NeuroTools/Matlab'))
 %% go to project folder, set parameters, and get focus
-cd /home/ljp/Science/Projects/RLS/
+cd /home/ljp/Science/Projects/easyRLS/
 param.cwd = pwd;
 param.date = '2018-03-19';
 param.run = 2;
@@ -77,18 +77,26 @@ cd /home/ljp/Science/Projects/easyRLS/
 %% compute baseline using caTools library
 caToolsRunquantileLin(F, param.Layers)
 %% benchmark
-% global COMPUTING
-% global WRITING
-% caToolsRunquantileLin_BENCHMARK(F, 3)
+%{
+global LOADING
+global COMPUTING
+global WRITING
+caToolsRunquantileLin_BENCHMARK(F, 3)
+figure; hold on;
+plot(LOADING)
+plot(COMPUTING)
+plot(WRITING)
+legend('LOADING', 'COMPUTING', 'WRITING');
+title('uint16')
+%}
+%% compute gray stack
+createGrayStack(F)
+%% view gray stack
+Focused.stackViewer(F, 'IP/graystack')
 %% view baseline
 stackViewer2D(F, 'baseline', param.Layers)
-%% compute gray stack and view it
-createGrayStack(F)
-Focused.stackViewer(F, 'IP/graystack')
 %% compute DFF
-t=tic;
 dff(F, param.Layers);
-toc(t)
 %% view DFF
 stackViewer2D(F, 'dff', param.Layers);
 %% delete unecessary files
