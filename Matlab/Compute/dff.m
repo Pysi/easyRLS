@@ -1,8 +1,13 @@
-function dff(F, Layers, background)
+function dff(F, Layers)
 %dff computes dff for current brain
 
+% create dff directory
 dffPath = fullfile(F.dir.IP, 'dff');
 disp('creating ''dff'' directory'); mkdir(dffPath);
+
+% load background and convert to uint16
+load(fullfile(F.dir.IP, 'background.mat'), 'background');
+background = uint16(background); %#ok<NODEF>
 
     for z = Layers
         
@@ -23,7 +28,7 @@ disp('creating ''dff'' directory'); mkdir(dffPath);
         % compute dff
         fwrite(fid,...
             (double(squeeze(msig(indices, z, :))') - mbas.Data.bit(:,:)) ./ ...
-                ((mbas.Data.bit(:,:) - background)),...
+                ((mbas.Data.bit(:,:) - background(z))),...
             'double');
         
         toc
