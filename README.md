@@ -6,6 +6,12 @@
 - compute baseline
 - compute DFF
 
+You will find :
+- [how to install the programs](https://github.com/LaboJeanPerrin/easyRLS#install-matlab-programs)
+- [how to run the main script to understand how it works](https://github.com/LaboJeanPerrin/easyRLS#run-the-code-section-after-section)
+- [a definition of the standard document architecure](https://github.com/LaboJeanPerrin/easyRLS#defining-folder-architecture-and-file-formats)
+- [benchmarks on diffents computers](https://github.com/LaboJeanPerrin/easyRLS#benchmark)
+
 ## Install Matlab programs
 
 ### Install dependencies
@@ -23,6 +29,10 @@ First, clone the code by doing
 
 In Matlab, do "add with subfolders" for the 'easyRLS/Matlab' folder.
 
+## Update programs
+
+Just go in the concerned directory and do `git pull`. You will have to manage changes made on the code. Gitkraken could be useful in such a case.
+
 ## Run the code section after section
 
 Once you have the code, open the `script.m` in 'easyRLS/Matlab/Utils'. You will run this script section by section. For each section, the approximative time is given. The benchmarks have been performed on 'Dream' for the run 2018-01-11/Run 05 on the layers 3 to 12 (10 layers) for 1500 time frames.
@@ -38,6 +48,10 @@ The 'get focus' section loads the parameters and create a config file.
 `tifToMmap` creates a 'raw.bin' binary file directly from the tif images. This file can be accessed with memory mapping in matlab thanks to the class `Mmap` and the info in the 'raw.mat' file. It can also be accessed from imageJ with the bioformats plugin by writing the appropriate NRRD header.
 
 `stackViewer` allows to view the binary stack in a matlab figure with gui control thanks to memory mapping (like virtual stack in imageJ).
+
+### Working on dcimg
+
+Alternatively, you can work on dcimg. x and y still have to be found. The function `dcimgRASdrift` is a shortcut for `dcimgToMmap`, `transposeMmap`, `driftCorrect`.
 
 ### Correct drift 
 
@@ -200,7 +214,7 @@ The dff folder contains :
 
 ## Benchmark
 
-This benchmark has been computed for 18 layers (3 → 20) of 3000 time frames.
+This benchmark has been computed for 18 layers (3 → 20) of 3000 time frames on computer 'Dream' (Intel® Core™ i7-6700K CPU @ 4.00GHz × 8, but not parallelized)
 
     layer 3, numIndex 197480
     layer 4, numIndex 218788
