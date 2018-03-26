@@ -9,25 +9,23 @@ if strcmp(tag, 'dff')
     viewDFF = true;
 end
 
-m = cell(1,20); % cell array for all possible layers
-% Volker test
-Data = cell(1,20);
-% Indices = cell(1,20);
+m = cell(1,20); % cell array for matfiles
+% Data = cell(1,20); % easyer access to data
 
 mgray = Focused.Mmap(F, 'IP/graystack');
 
     for z = Layers
         inputInfo = fullfile(F.dir.IP, tag, [num2str(z, '%02d') '.mat']);
         m{z}.matfile = matfile(inputInfo); % readable matfile (prevents from loading all indices at the same time)
-        m{z}.mmap = m{z}.matfile.mmap; % TODO reconstruct
-        % Volker test
-        Data{z} = m{z}.mmap.Data; % loads reference on bit
-%         Indices{z} = m{z}.matfile.indices; % loads reference on indices
+%         Data{z} = m{z}.mmap.Data; % loads reference on bit
     end
 
     z = Layers(1);
     T = m{z}.matfile.T; % take time (they should be the same for all)
     t = T(1);
+    
+    indices = m{z}.matfile.indices; % loads indices, will be actualized when z changes
+    mmap = recreateMmap(F,m{z}.matfile.mmap); % recreates mmap, will be actualized when z changes
 
     % ----- 
     f = figure('Visible','off'); 
@@ -37,8 +35,7 @@ mgray = Focused.Mmap(F, 'IP/graystack');
     end
     
     % fill image
-%     img(m{z}.matfile.indices) = m{z}.mmap.Data.bit(t,:);
-    img(m{z}.matfile.indices) = Data{z}.bit(t,:);
+    img(indices) = mmap.Data.bit(t,:);
 
     % show image
     if viewDFF; h = imshow(rot90(img), [-.5 2]);
@@ -71,6 +68,10 @@ mgray = Focused.Mmap(F, 'IP/graystack');
     % ----- FUNCTIONS -----
     function actualize_z(source, ~)
         z = floor(source.Value);
+        clear('indices');
+        clear('mmap');
+        tic; indices = m{z}.matfile.indices; fprintf('loading indices: %.03f s\n', toc); % actualises indices
+        tic; mmap = recreateMmap(F,m{z}.matfile.mmap); fprintf('creating mmap: %.03f s\n', toc); % actualises mmap
         drawImage();
     end
 
@@ -84,8 +85,7 @@ mgray = Focused.Mmap(F, 'IP/graystack');
         if viewDFF; img = NaN(mgray.x, mgray.y);
         else; img = mgray(:,:,z,1);
         end
-%         fprintf('filling: ');tic;img(m{z}.matfile.indices) = m{z}.mmap.Data.bit(t,:);toc;
-        tic;img(m{z}.matfile.indices) = Data{z}.bit(t,:);fprintf('filling: %.03f s\n', toc);
+        tic;img(indices) = mmap.Data.bit(t,:);fprintf('filling: %.03f s\n', toc);
         set(h, 'Cdata', rot90(img));
         title([F.name '   z=' num2str(z) '   t=' num2str(t)]);
         drawnow;
