@@ -17,36 +17,14 @@ function dcimgRASdrift(F, tag, kwargs)
     % TODO add the focused way to find RASification
     inMode = 'yxzrai'; 
     outMode = 'xyzras';
-    % default values
-    invertXY = false;
-    invertX = false;
-    invertY = false;
-    invertZ = false;
-    % finds right values
-    if strcmp(inMode(1:2), 'yx') && strcmp(outMode(1:2), 'xy')
-        invertXY = true;
-        fprintf('x-y transposition\n');
-    end
-
-    if inMode(4) ~= outMode(4)
-        invertX = true;
-        fprintf('x inversion\n');
-    end
-    if inMode(5) ~= outMode(5)
-        invertY = true;
-        fprintf('y inversion\n');
-    end
-    if inMode(6) ~= outMode(6)
-        invertZ = true;
-        fprintf('z inversion\n');
-    end
+    [invertXY, invertX, invertY, invertZ] = defineInversions(inMode, outMode);
     
 % -------------------- drift parameters --------------------
     % parse input to change reference stack TODO write validation function
     in = inputParser;
     in.addParameter('RefIndex', 10);        % by default 10th stack
     in.addParameter('RefLayers', 8:10);     % by default stacks 8, 9, 10
-    in.addParameter('Layers', 3:12); % default all
+    in.addParameter('Layers', 3:12); % default
     in.parse(kwargs{:})
 
     % Layers = in.Results.Layers;
@@ -75,17 +53,7 @@ function dcimgRASdrift(F, tag, kwargs)
     
     % compute reference image with max
     Ref = max(m(X,Y, RefLayers, RefIndex),[],3);
-    
-    % transpose ref image
-    if invertXY
-        Ref = Ref';
-    end
-    if invertX
-        Ref = flip(Ref, 1);
-    end
-    if invertY
-        Ref = flip(Ref, 2);
-    end
+    Ref = transposeImage(Ref, invertXY, invertX, invertY);
     
     NTRef = NT.Image(Ref); % @image version of ref image
     
@@ -110,17 +78,7 @@ function dcimgRASdrift(F, tag, kwargs)
         
         % compute the image to compare with the ref image
         Img = max( m(X,Y,RefLayers,t) ,[],3);
-
-        % transpose image
-        if invertXY
-            Img = Img';
-        end
-        if invertX
-            Img = flip(Img, 1);
-        end
-        if invertY
-            Img = flip(Img, 2);
-        end
+        Img = transposeImage(Img, invertXY, invertX, invertY);
         
         NTImg = NT.Image( Img ); % @image version of image
 
@@ -139,17 +97,7 @@ function dcimgRASdrift(F, tag, kwargs)
             
             % get image
             Img = m(:,:,z,t);
-            
-            % transpose image
-            if invertXY
-                Img = Img';
-            end
-            if invertX
-                Img = flip(Img, 1);
-            end
-            if invertY
-                Img = flip(Img, 2);
-            end
+            Img = transposeImage(Img, invertXY, invertX, invertY);
             
             % translate image
             Img = imtranslate(Img, [-dy(t), -dx(t)]);
