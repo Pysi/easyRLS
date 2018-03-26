@@ -28,8 +28,19 @@ param.RefIndex = 10;
 F = NT.Focus({param.cwd, '', param.date, param.run});
 %% dcimgRASdrift
 dcimgRASdrift(F, 'Run00', {}) % this works
+
+% not enough place to test on system drive, seems a bit better, not sure
+cd /home/ljp/SPEED_TEST/
+param.cwd = pwd;
+param.date = '2018-00-00';
+param.run = 'Run00';
+param.Layers = 3:12; 
+param.RefLayers = 8:10;
+param.RefIndex = 10; 
+F = NT.Focus({param.cwd, '', param.date, param.run});
 %}
 %% create binary file from Tif
+%{
 tifToMmap(F, {'z', param.Layers});
 %% or create binary file from DCIMG
 % TODO get info from image or mex header reader
@@ -37,6 +48,9 @@ tifToMmap(F, {'z', param.Layers});
 Focused.stackViewer(F, 'raw');
 %% transpose to RAS
 Focused.transposeMmap(F, 'yxzrai', 'xyzras'); % TODO know automatically from parameters
+%}
+%% shortcut Tif to RAS
+tifToRAS(F, param.Layers);
 %% view hyperstack
 Focused.stackViewer(F, 'rawRAS');
 %% compute drift on mmap

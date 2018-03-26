@@ -15,7 +15,6 @@ You will find :
 ## Install Matlab programs
 
 ### Install dependencies
-
 Install NeuroTools :
 
     git clone https://github.com/LaboJeanPerrin/NeuroTools.git
@@ -28,6 +27,13 @@ First, clone the code by doing
     git clone https://github.com/LaboJeanPerrin/easyRLS.git
 
 In Matlab, do "add with subfolders" for the 'easyRLS/Matlab' folder.
+
+### Install R runquantile
+You need to install R because of the shared library.
+
+	sudo apt install r-base
+
+It is *not* necessary to install the package for runquantile (it is in the library) but if you want, run `R` and then `install.packages("caTools")`
 
 ## Update programs
 
@@ -216,6 +222,7 @@ The dff folder contains :
 
 ## Benchmark
 
+### Dream
 This benchmark has been computed for 18 layers (3 → 20) of 3000 time frames on computer 'Dream' (Intel® Core™ i7-6700K CPU @ 4.00GHz × 8, but not parallelized)
 
     layer 3, numIndex 197480
@@ -295,3 +302,22 @@ This benchmark has been computed for 18 layers (3 → 20) of 3000 time frames on
     Elapsed time is 142.306286 seconds.
     Time elapsed for drift computation, baseline computation, graystack computation, dff computation
     Elapsed time is 14120.873724 seconds.
+
+### Redstar
+
+1500 tframes, layers 3:12
+
+dcimgRASdrift
+
+	Elapsed time is 593.834627 seconds.
+
+baseline
+
+    computing baseline for layer 3 (231721 points, 1500 timeframes)
+    Elapsed time is 468.451551 seconds.
+    computing baseline for layer 4 (255636 points, 1500 timeframes)
+    Elapsed time is 542.108043 seconds.
+    computing baseline for layer 5 (267917 points, 1500 timeframes)
+    Elapsed time is 584.353121 seconds.
+    computing baseline for layer 6 (278355 points, 1500 timeframes)
+    Elapsed time is 605.411876 seconds.

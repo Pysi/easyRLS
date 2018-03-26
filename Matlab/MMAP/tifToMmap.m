@@ -39,7 +39,7 @@ for t = T % along t
         F.select(F.sets(z).id);
         tmp = F.imageLoad(t);
 %         tmp = tmp.crop(X,Y); % crop image TODO could be done with region ?
-        fwrite(fid,tmp.pix','uint16'); % /!\ imageLoad transpose the image
+        fwrite(fid,tmp.pix','uint16'); % /!\ fwrite writes along columns !!
         waitbar(t/T(end))
     end
 end
