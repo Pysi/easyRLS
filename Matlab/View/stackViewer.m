@@ -16,7 +16,7 @@ function stackViewer(m, titleFig, mask)
     
     f = figure('Visible','off'); % create invisible figure
     img = rot90(m(:,:,z,t)); % load transposed image
-    h = imshow(img, [400 1500]);
+    h = imshow(img, [400 1200]);
     title([titleFig '   ' 'z=' num2str(z) '   t=' num2str(t)]);
     % set(gca,'Ydir','normal') (reverse)
 

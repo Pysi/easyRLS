@@ -1,7 +1,12 @@
-function caToolsRunquantileLin(F, Layers)
+function caToolsRunquantileLin(F, Layers, window)
 %caToolsRunquantile computes running quantile using caTools
 % loop for each index
 % takes less memory (but more time ?)
+
+% window is the window span in seconds (ex 50 sec)
+    dt = F.dt / 1000 * F.param.NLayers ; % time between two frames of one layer in seconds (ex 0.02 * 20)
+    % ignores the delay long
+    w = floor(window / dt) ; % number of frames of the window (ex 125 frames)
 
     baselinePath = fullfile(F.dir.IP, 'baseline');
     disp('creating ''baseline'' directory'); mkdir(baselinePath);
@@ -28,7 +33,7 @@ function caToolsRunquantileLin(F, Layers)
                     IN,... input matrix (t, index)
                     OUT,... output variable
                     m.t,... size of input matrix
-                    100,... window
+                    w,... window
                     0.1,... quantile
                     1,... lenght of quantile vector (here only one)
                     1 ... type of quantile calculation

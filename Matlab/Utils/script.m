@@ -4,11 +4,11 @@
 clear
 clc
 %% add path
-cd /home/ljp/Science/Projects/easyRLS/
+cd /home/ljp/Science/Hugo/easyRLS/
 addpath(genpath('Programs/easyRLS/Matlab'))
 addpath(genpath('Programs/NeuroTools/Matlab'))
 %% go to project folder, set parameters, and get focus
-cd /home/ljp/Science/Projects/easyRLS/
+cd /home/ljp/Science/Hugo/easyRLS/
 param.cwd = pwd;
 param.date = '2018-03-19';
 param.run = 2;
@@ -18,7 +18,7 @@ param.RefIndex = 10;
 F = NT.Focus({param.cwd, '', param.date, param.run});
 %% other focus
 %{
-cd /home/ljp/Science/Projects/easyRLS/
+cd /home/ljp/Science/Hugo/easyRLS/
 param.cwd = pwd;
 param.date = '2018-01-11';
 param.run = 'Run00';
@@ -71,11 +71,11 @@ Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argume
 
 
 %% load library to compute baseline
-cd /home/ljp/Science/Projects/easyRLS/
+cd /home/ljp/Science/Hugo/easyRLS/
 [~,~] = loadlibrary('Programs/easyRLS/Tools/caTools/caTools.so',...
                     'Programs/easyRLS/Tools/caTools/caTools.h');
 %% compute baseline using caTools library
-caToolsRunquantileLin(F, param.Layers)
+caToolsRunquantileLin(F, param.Layers, 50)
 %% benchmark
 %{
 global LOADING
