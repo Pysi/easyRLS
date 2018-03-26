@@ -173,12 +173,13 @@ A project is organised as follows :
 
 In a run, there is :
 - an 'Image' folder with well named tif images or a dcimg file
+- or a 'dcimg' raw data.
 - a 'Parameter.txt'
 
 After analysis, there is a 'Files' folder with :
-- a Config.mat config file
-- the raw or corrected stack
-- an IP folder
+- a 'Config.mat' config file
+- the raw or corrected stack (uint16)
+- an 'IP' folder
 
 The stack contains :
 - a binary file, RAST, uint16
@@ -197,19 +198,20 @@ The IP folder contains :
 - image registration info : defMap.mat (could change to a xform)
 - a graystack stack (bin, mat, nhdr), (t,T are here just for Mmap)
 - a mask (now .mat, should become stack)
+- the 'background.mat' values (single)
 - baseline folder
 - dff folder
 
 The baseline folder contains :
 - a bin and mat file for each layer
-- bin is a 2D t×index (double, should become uint16)
+- bin is a 2D t×index (uint16)
 - mat contains x,y,z,t,Z,T,indices,numindex,mmap (mmap, z and T should disappear)
 (mmap should be reconstructed, z = 1 always, is T useful ?)
 - indices are accessible via matfile if you do not want to load it
 
 The dff folder contains :
 - a bin and mat file for each layer
-- bin is 2D t×index (double, should become single)
+- bin is 2D t×index (single)
 - mat is the same as before
 
 ## Benchmark

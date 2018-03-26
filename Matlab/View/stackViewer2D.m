@@ -39,7 +39,7 @@ mgray = Focused.Mmap(F, 'IP/graystack');
 
     % show image
     if viewDFF; h = imshow(rot90(img), [-.5 2]);
-    else; h = imshow(rot90(img), [400 1500]);
+    else; h = imshow(rot90(img), [400 1200]);
     end
     title([F.name '   z=' num2str(z) '   t=' num2str(t)]);
     % -----
