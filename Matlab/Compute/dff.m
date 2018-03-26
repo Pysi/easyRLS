@@ -16,7 +16,7 @@ load(fullfile(F.dir.IP, 'background.mat'), 'background');
         % basestack (t, xy)
         basePath = fullfile(F.dir.IP, 'baseline', [num2str(z, '%02d') '.mat']);
         load(basePath, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
-        mbas = mmap;
+        mbas = recreateMmap(F,mmap);
                 
         output = fullfile(dffPath, [num2str(z, '%02d') '.bin']);
         outputInfo = fullfile(dffPath, [num2str(z, '%02d') '.mat']);
