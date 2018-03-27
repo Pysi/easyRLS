@@ -1,5 +1,7 @@
 function dff(F, Layers)
-%dff computes dff for current brain
+%dff computes delta f over f
+% F focus object
+% Layers layers you want to compute dff on (ex [3 4 6])
 
 % create dff directory
 dffPath = fullfile(F.dir.IP, 'dff');

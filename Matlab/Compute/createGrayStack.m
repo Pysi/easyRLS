@@ -1,5 +1,5 @@
 function createGrayStack(F)
-%createGrayStack creates a gray stack (mean along t)
+%createGrayStack creates a gray stack (mean along t all 77 frames)
 
     m = Focused.Mmap(F, 'corrected');
 
@@ -9,7 +9,7 @@ function createGrayStack(F)
     fid = fopen(output, 'wb');
 
     for z = m.Z
-        fwrite(fid, mean(m(:,:,z,1:77:1500), 4), 'uint16');
+        fwrite(fid, mean(m(:,:,z,1:77:m.t), 4), 'uint16');
     end
 
     fclose(fid);

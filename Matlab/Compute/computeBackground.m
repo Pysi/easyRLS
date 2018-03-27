@@ -1,5 +1,7 @@
 function computeBackground(F, tag, RefIndex)
-%computeBackground computes the background
+%computeBackground computes the background using Raphael's function
+% tag might be 'corrected'
+% RefIndex is the reference index used for drift correction
 
     % loads mmap
     m = Focused.Mmap(F, tag);

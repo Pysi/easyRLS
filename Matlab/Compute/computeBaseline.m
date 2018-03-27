@@ -1,9 +1,9 @@
 function computeBaseline(F, Layers, window)
-%computeBaseline computes running quantile using caTools
-% loop for each index
-% takes less memory (but more time ?)
-
+%computeBaseline computes running quantile using caTools runquantile
+% Layers are the layers you want to compute the baseline on
 % window is the window span in seconds (ex 50 sec)
+
+    % window
     dt = F.dt / 1000 * F.param.NLayers ; % time between two frames of one layer in seconds (ex 0.02 * 20)
     % ignores the delay long
     w = floor(window / dt) ; % number of frames of the window (ex 125 frames)
