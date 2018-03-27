@@ -1,5 +1,6 @@
 function dcimgRASdrift(F, tag, kwargs)
 %dcimgRASdrift takes dcimg stack, corrects orientation, computes drift, and records corrected stack
+% it is a shortcut function to perform several tasks, so it contains redundant code
 
 % cette fonction est longue car elle combine plusieurs fonctions en une seule
 

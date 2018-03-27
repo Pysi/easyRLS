@@ -18,7 +18,6 @@ function mmap = dcimgToMmap(F, tag, kwargs)
 	in.addParameter('y', y);
 	in.addParameter('z', z);
 	in.addParameter('t', t);
-	in.addParameter('do', false);
 	in.parse(kwargs{:})
 
 	% get results
@@ -28,13 +27,11 @@ function mmap = dcimgToMmap(F, tag, kwargs)
 	y = in.Results.y;
 	z = in.Results.z;
 	t = in.Results.t;
-	doIt = in.Results.do;
 
 	% set directories
 	inputFile = fullfile(F.dir.data, [tag '.dcimg']);
-	outputDir = F.dir.files;
 	
 	% call dcimg
-	mmap = dcimgToMmap(inputFile, outputDir, x, y, z, t, byteskip, clockskip, doIt);
+	mmap = dcimgToMmap(inputFile, x, y, z, t, byteskip, clockskip);
     
 end
