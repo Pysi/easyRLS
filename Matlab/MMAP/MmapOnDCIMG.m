@@ -5,6 +5,7 @@ classdef MmapOnDCIMG < handle
 % it makes possible to use a dcimg as a standard stack
     properties
         mmaplin % 3D mmap of the dcimage (xy+clockskip, z, t)
+        space % ALI for instance
         x % width
         y % height
         z % number of layers
@@ -12,6 +13,10 @@ classdef MmapOnDCIMG < handle
         Z % layers concerned
         T % times concerned
     end
+    properties (Hidden)
+        invert % no need to see this
+    end
+    
     methods
         function self = MmapOnDCIMG(inputPathTag)
         %Mmap constructor takes the bin file and the info file
@@ -20,18 +25,28 @@ classdef MmapOnDCIMG < handle
             binFile = [inputPathTag '.dcimg'];
             inputInfo = [inputPathTag '.mat'];
             
-            load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'byteskip', 'clockskip');
+            load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'byteskip', 'clockskip','space');
             self.mmaplin = dcimgToMmap(binFile, '', x, y, z, t, byteskip, clockskip, false);
+            self.space = space;
+            %#ok<*PROPLC>
             self.x = x; 
             self.y = y; 
             self.z = z; 
             self.t = t; 
             self.Z = Z; 
             self.T = T; 
+            
+            warning('this mmap will return RAS stacks even dcimg is %s', self.space);
+            [invertXY, invertX, invertY, invertZ] = defInvert(self.space, 'RAS');
+            self.invert.iXY = invertXY;
+            self.invert.iX = invertX;
+            self.invert.iY = invertY;
+            self.invert.iZ = invertZ;            
         end
         
         function out = subsref(self, S)
         %subsref calls the mmap with the correct z index
+            
             switch S(1).type
                 case '()'
                     newS = S;
@@ -58,6 +73,7 @@ classdef MmapOnDCIMG < handle
                             % we want to return a [x,y,z,t] sized matrix
                             askedSize = [length(x), length(y), length(newS(1).subs{2}), length(newS(1).subs{3})];
                             out = reshape(subsref(self.mmaplin.Data.bit, newS), askedSize);
+                            out = transposeStack(out, self.invert.iXY, self.invert.iX, self.invert.iY, self.invert.iZ);
                         case 3 % 3D with xy as index
                             xy = S(1).subs{1}; 
                             
@@ -68,6 +84,9 @@ classdef MmapOnDCIMG < handle
                             newS(1).subs{1} = xy; % xy
                             
                             out = subsref(self.mmaplin.Data.bit, newS);
+                            warning('space is %s', self.space);
+                        otherwise
+                            error('not implemented');
                     end
                 case '.'
                     out = builtin('subsref', self, S);

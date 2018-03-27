@@ -15,9 +15,9 @@ function dcimgRASdrift(F, tag, kwargs)
 
 % ------------------ RAS parameters -----------------------
     % TODO add the focused way to find RASification
-    inMode = 'yxzrai'; 
-    outMode = 'xyzras';
-    [invertXY, invertX, invertY, invertZ] = defineInversions(inMode, outMode);
+    inMode = 'ali'; 
+    outMode = 'ras';
+    [invertXY, invertX, invertY, invertZ] = defInvert(inMode, outMode);
     
 % -------------------- drift parameters --------------------
     % parse input to change reference stack TODO write validation function
