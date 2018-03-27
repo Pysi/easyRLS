@@ -1,120 +1,50 @@
 % this script is here to guide through the use of Hugo_easyRLS branch
-% Hugo Trentesaux 2018-02-23
-% please make sure you have Neurotools to your path
+% Hugo Trentesaux 2018-03-27
 clear
 clc
-%% add path
-cd /home/ljp/Science/Hugo/easyRLS/
-addpath(genpath('Programs/easyRLS/Matlab'))
-addpath(genpath('Programs/NeuroTools/Matlab'))
-%% go to project folder, set parameters, and get focus
-cd /home/ljp/Science/Hugo/easyRLS/
-param.cwd = pwd;
-param.date = '2018-03-19';
-param.run = 2;
-param.Layers = 3:20; 
-param.RefLayers = 8:10;
-param.RefIndex = 10; 
-F = NT.Focus({param.cwd, '', param.date, param.run});
-%% other focus
-%{
-cd /home/ljp/Science/Hugo/easyRLS/
-param.cwd = pwd;
-param.date = '2018-01-11';
-param.run = 'Run00';
-param.Layers = 3:12; 
-param.RefLayers = 8:10;
-param.RefIndex = 10; 
-F = NT.Focus({param.cwd, '', param.date, param.run});
-%% dcimgRASdrift
-dcimgRASdrift(F, 'Run00', {}) % this works
-
-% not enough place to test on system drive, seems a bit better, not sure
-cd /home/ljp/SPEED_TEST/
-param.cwd = pwd;
-param.date = '2018-00-00';
-param.run = 'Run00';
-param.Layers = 3:12; 
-param.RefLayers = 8:10;
-param.RefIndex = 10; 
-F = NT.Focus({param.cwd, '', param.date, param.run});
-%}
-%% create binary file from Tif
-%{
-tifToMmap(F, {'z', param.Layers});
-%% or create binary file from DCIMG
-% TODO get info from image or mex header reader
-%% view hyperstack
-Focused.stackViewer(F, 'raw');
-%% transpose to RAS
-Focused.transposeMmap(F, 'yxzrai', 'xyzras'); % TODO know automatically from parameters
-%}
-%% shortcut Tif to RAS
-tifToRAS(F, param.Layers);
-%% view hyperstack
-Focused.stackViewer(F, 'rawRAS');
-%% compute drift on mmap
-driftCompute(F,{...
-    'RefLayers', param.RefLayers, ...
-    'RefIndex', param.RefIndex, ...
-    'Layers', param.Layers, ...
-    });
-%% see if drift is well corrected
-seeDriftCorrection(F); % plays a movie
-%% applies drift if it is ok
-driftApply(F);
-%% view corrected hyperstack
-Focused.stackViewer(F, 'corrected'); % similar to | m=Focused.Mmap(F, 'corrected'); imshow(m(:,:,3,10),[300 800]);
-%% compute background
-computeBackground(F, 'corrected', param.RefIndex);
-%% semi auto ROI
-semiAutoROI(F, param.Layers, param.RefIndex, 'corrected'); % let you adjust automatic ROI
-%% do imregdemons on an other similar brain with a mask
-%{
-param.run = 6;
-Fref = NT.Focus({param.cwd, '', param.date, param.run});
-% create defMap (deformation map)
-mapToReferenceBrain(F, Fref, param.RefIndex);
-% finds ROI using reference brain mask
-% use the mask predefined on the reference brain to find the mask for the
-% current brain, saves autoROI as a mask.mat file
-autoROI(F, Fref)
-%}
-%% check if ROI is ok (useful if autoguessed, you can then modify again)
-Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
-
-
 %% load library to compute baseline
 cd /home/ljp/Science/Hugo/easyRLS/
 [~,~] = loadlibrary('Programs/easyRLS/Tools/caTools/caTools.so',...
                     'Programs/easyRLS/Tools/caTools/caTools.h');
-%% compute baseline using caTools library
-caToolsRunquantileLin(F, param.Layers, 50)
-%% benchmark
-%{
-global LOADING
-global COMPUTING
-global WRITING
-caToolsRunquantileLin_BENCHMARK(F, 3)
-figure; hold on;
-plot(LOADING)
-plot(COMPUTING)
-plot(WRITING)
-legend('LOADING', 'COMPUTING', 'WRITING');
-title('uint16')
-%}
+%% add path
+cd /home/ljp/Science/Hugo/easyRLS/
+addpath(genpath('Programs/easyRLS/Matlab'))
+addpath(genpath('Programs/NeuroTools/Matlab'))
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+%% go to project folder, set parameters, and get focus
+cd /home/ljp/Science/Hugo/easyRLS/
+param.wd = pwd;
+param.date = '2018-01-11';
+param.run = 'Run00';
+param.Layers = 3:20; 
+param.RefLayers = 8:10;
+param.RefIndex = 10; 
+F = NT.Focus(param.wd, '', param.date, param.run);
+%% if dcimg, you can already view it (if tif, go to imageJ)
+m = MmapOnDCIMG('/home/ljp/Science/Hugo/easyRLS/Data/2018-01-11/Run00/Run00');
+stackViewer(m, [F.name ' (dcimg)'], []);
+%% semi auto ROI on dcimg
+semiAutoROI(F, param.Layers, param.RefIndex, [F.run '.dcimg']); % let you adjust automatic ROI
+%% check if ROI is ok
+Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
+%% shortcut: dcimgRASdrift
+dcimgRASdrift(F, 'Run00', {});
+Focused.stackViewer(F, 'corrected');
+%% compute background
+computeBackground(F, 'corrected', param.RefIndex);
 %% compute gray stack
 createGrayStack(F)
 %% view gray stack
 Focused.stackViewer(F, 'IP/graystack')
+%% compute baseline using caTools library
+computeBaseline(F, param.Layers, 50)
 %% view baseline
 stackViewer2D(F, 'baseline', param.Layers)
 %% compute DFF
 dff(F, param.Layers);
 %% view DFF
 stackViewer2D(F, 'dff', param.Layers);
-%% delete unecessary files
+%% delete unecessary files (including baseline)
 clean(F);
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-
+%% END
