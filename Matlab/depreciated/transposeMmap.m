@@ -1,6 +1,5 @@
-function transposeMmap(inputFile, outputFile, invertXY, invertX, invertY, invertZ)
+function transposeMmap(inputFile, outputFile, inMode, outMode)
 %transposeMmap creates a new stack
-% TODO RAS automatically
 %inputFile input file (without extension)
 %outputFile output file (without extension)
 %invertXY if true transpose
@@ -11,6 +10,8 @@ function transposeMmap(inputFile, outputFile, invertXY, invertX, invertY, invert
 % z-axis (third dimension) is superior-inferior axis
 % t-axis (fourth dimension) is after-before causality time axis
 %
+
+[invertXY, invertX, invertY, invertZ] = defInvert(inMode, outMode);
     
 	% get Mmap
 	m = Mmap(inputFile);    
@@ -39,16 +40,7 @@ function transposeMmap(inputFile, outputFile, invertXY, invertX, invertY, invert
         waitbar(t/m.t)
         for z = Z % along z
 	        Img = m(:,:,z,t);
-	        
-            if invertXY
-	            Img = Img';
-            end
-            if invertX
-                Img = flip(Img, 1);
-            end
-            if invertY
-                Img = flip(Img, 2);
-            end
+	        Img = transposeImage(Img, invertXY, invertX, invertY);
             
             fwrite(fid, Img, 'uint16');
         end
