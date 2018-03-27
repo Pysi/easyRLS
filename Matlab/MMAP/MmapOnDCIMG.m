@@ -1,8 +1,8 @@
 classdef MmapOnDCIMG < handle
 % the class MmapOnDCIMG is used to create a mmap on a dcimg stack
 % and to interact with normal subscripts (x,y,z,t), (xy, z, t)
-% without thinking about header and clockskip
-% it makes possible to use a dcimg as a standard stack
+% without thinking about header, clockskip, and RAS orientation
+% it makes possible to use a dcimg as a standard RAS stack
     properties
         mmaplin % 3D mmap of the dcimage (xy+clockskip, z, t)
         space % ALI for instance
@@ -26,7 +26,7 @@ classdef MmapOnDCIMG < handle
             inputInfo = [inputPathTag '.mat'];
             
             load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'byteskip', 'clockskip','space');
-            self.mmaplin = dcimgToMmap(binFile, '', x, y, z, t, byteskip, clockskip, false);
+            self.mmaplin = dcimgToMmap(binFile, x, y, z, t, byteskip, clockskip);
             self.space = space;
             %#ok<*PROPLC>
             self.x = x; 

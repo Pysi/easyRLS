@@ -1,7 +1,11 @@
 function stackViewer(m, titleFig, mask)
-%stackViewer is analog to imageJ hyperstack
+%stackViewer(m, titleFig, mask) is analog to imageJ 'hyperstack'
 % it allows to visualize the brain and browse z and t directions
-% it realises a permutation permute(m,[2,1]) before printing thanks 
+% it realises a rotation of 90° before printing to get an intuitive repair
+% m is the memory map on the binary to look at
+% titleFig is the title of the figure
+% if mask is not empty, will diplay it as overlay
+% --- you can use the focused version of it (Focused.stackViewer) ---
 
     viewMask = false;
     

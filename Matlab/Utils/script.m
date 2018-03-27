@@ -1,4 +1,4 @@
-% this script is here to guide through the use of Hugo_easyRLS branch
+% this script helps to understand easyRLS step by step
 % Hugo Trentesaux 2018-03-27
 clear
 clc
@@ -10,6 +10,7 @@ cd /home/ljp/Science/Hugo/easyRLS/
 cd /home/ljp/Science/Hugo/easyRLS/
 addpath(genpath('Programs/easyRLS/Matlab'))
 addpath(genpath('Programs/NeuroTools/Matlab'))
+
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 %% go to project folder, set parameters, and get focus
@@ -22,8 +23,7 @@ param.RefLayers = 8:10;
 param.RefIndex = 10; 
 F = NT.Focus(param.wd, '', param.date, param.run);
 %% if dcimg, you can already view it (if tif, go to imageJ)
-m = MmapOnDCIMG('/home/ljp/Science/Hugo/easyRLS/Data/2018-01-11/Run00/Run00');
-stackViewer(m, [F.name ' (dcimg)'], []);
+Focused.stackViewer(F, [F.run '.dcimg']);
 %% semi auto ROI on dcimg
 semiAutoROI(F, param.Layers, param.RefIndex, [F.run '.dcimg']); % let you adjust automatic ROI
 %% check if ROI is ok

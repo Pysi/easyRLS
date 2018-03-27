@@ -1,8 +1,9 @@
 function stackViewer2D(F, tag, Layers)
-%stackViewer2D aims to produce the same result as stackViewer, but for 2D mmaps
-% problem : necessity to 'load' indices (even matfile is not good)
-
-% warning('This data visualizer is slow due to indexes loading. Changing layer might be 30 s long');
+%stackViewer2D(F, tag, Layers) aims to produce the same result as 
+%                              stackViewer, but for 2D mmaps
+% F is the focus object
+% tag is 'baseline' or 'dff'
+% Layers are the layers to view
 
 viewDFF = false;
 if strcmp(tag, 'dff')

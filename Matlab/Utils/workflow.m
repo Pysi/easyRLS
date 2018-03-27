@@ -1,5 +1,5 @@
-% /!\ be careful, this script might not be always up to date
-% refer to the main script if there is a problem
+% this script allows to perform all ROI selections at a time and then run
+% all analysis during the night
 
 %% before 
 %load library to compute baseline
@@ -7,6 +7,13 @@
 cd /home/ljp/Science/Projects/easyRLS/
 [~,~] = loadlibrary('Programs/easyRLS/Tools/caTools/caTools.so',...
                     'Programs/easyRLS/Tools/caTools/caTools.h');
+                
+%% add path
+cd /home/ljp/Science/Hugo/easyRLS/
+addpath(genpath('Programs/easyRLS/Matlab'))
+addpath(genpath('Programs/NeuroTools/Matlab'))
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 %% workflow preparation
 % preliminary work : set ROI on raw RAS stack on each run you want to work on

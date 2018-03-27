@@ -1,5 +1,5 @@
 function seeDriftCorrection(F)
-%seeDriftCorrection computes and display translated images in real time
+%seeDriftCorrection(F) computes and display translated images in real time
 
     driftPath = fullfile(F.dir.IP, 'Drifts.mat');
     load(driftPath, 'dx', 'dy')

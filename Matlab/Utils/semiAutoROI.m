@@ -1,5 +1,11 @@
 function semiAutoROI(F, Layers, t, tag)
-% semiAutoROI lets you modify an automatic ROI
+%semiAutoROI(F, Layers, t, tag) lets you modify an automatic ROI
+% F is the current focus instance
+% Layers are the layers you want to draw the contour on
+% t is the time index of the reference layer
+% tag could be :
+%     - the tag of the binary you want to work on ('corrected' for instance)
+%     - the name of a dcimg if you want to work on a dcimg (Run00.dcimg for instance)
 
 % if the tag has an extension and that this extension is 'dcimg'
 % semiAutoROI will work on dcimg (particular case)

@@ -1,5 +1,6 @@
 function stackOut = transposeStack(stackIn, invertXY, invertX, invertY, invertZ)
-%transposeStack is like transposeImage, but more for dimension 4
+%transposeStack(stackIn, invertXY, invertX, invertY, invertZ)
+%    is like transposeImage, but more for dimension 4
 % TODO write it properly
 stackOut = stackIn;
 

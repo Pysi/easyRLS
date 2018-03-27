@@ -1,7 +1,8 @@
 classdef Mmap < handle
-% the class Mmap is used to load a mmap by its tag (ex raw)
+% the class Mmap is used to load a mmap of a binary file
 % and redefine layers index when called as subscript
-% allows to call by linear subscript thanks to mmaplin
+% subscript can be 4D or 3D
+% --- you can call the focused version of Mmap : Focused.Mmap ---
     properties
         mmap % 4D mmap (x,y,z,t)
         mmaplin % 3D mmap of *the same* binary file (xy, z, t)

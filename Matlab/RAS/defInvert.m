@@ -1,9 +1,8 @@
 function [invertXY, invertX, invertY, invertZ] = defInvert(inMode, outMode)
-%defInvert defines which transformations to perform
-
-% EX
-%     inMode = 'ali'; 
-%     outMode = 'ras';
+%defInvert(inMode, outMode) defines which transformations to perform
+% examples :
+% inMode = 'ali'; 
+% outMode = 'ras';
 
     % default values
     invertXY = false;

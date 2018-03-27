@@ -1,5 +1,6 @@
 function imgOut = transposeImage(imgIn, invertXY, invertX, invertY)
-%transposeImage transposes image if invertXY is on, flips X if invertX is on...
+%transposeImage(imgIn, invertXY, invertX, invertY)
+%    transposes image if invertXY is on, flips X if invertX is on...
 imgOut = imgIn;
 
 % transpose image

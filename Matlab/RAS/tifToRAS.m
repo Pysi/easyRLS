@@ -1,11 +1,13 @@
 function tifToRAS(F, Layers)
-%tifToRAS takes the tif images and write it in a 4D RAS mmap file
+%tifToRAS(F, Layers) takes the tif images and write it in a 4D RAS mmap file
 % F is the focus on the run
-global TTT
+% Layers are the layers concerned
+% TODO optimize
+
     % TODO add the focused way to find RASification
-    inMode = 'yxzrai'; 
-    outMode = 'xyzras';
-    [invertXY, invertX, invertY, invertZ] = defineInversions(inMode, outMode);
+    inMode = 'ali'; 
+    outMode = 'ras';
+    [invertXY, invertX, invertY, invertZ] = defInvert(inMode, outMode);
 
     % defines X and Y    
     %     in 'update_info'
@@ -27,8 +29,6 @@ global TTT
     % defines T
     T = 1:F.param.NCycles;
     
-    TTT = NaN(1,length(T));
-
     % define output files
     output = fullfile(F.dir.files, 'rawRAS.bin');
     outputInfo = fullfile(F.dir.files, 'rawRAS.mat');
@@ -42,7 +42,6 @@ global TTT
     % a buffer avoids switching reading and writing very fast
     BUFFER = NaN(length(Y), length(X), length(Z));
     
-        tic;
         for z = Z % along z
             F.select(F.sets(z).id);
             imgName = F.imageName(t); % 'rel' if necessary
@@ -50,7 +49,6 @@ global TTT
             pix = transposeImage(tmp, ~invertXY, invertX, invertY); % ~
             BUFFER(:,:,z) = pix;
         end
-        TTT(t)= toc;
         fwrite(fid, BUFFER, 'uint16'); % fwrite writes along the columns
         waitbar(t/T(end), w, sprintf('Converting TIF to RAS bin\n%d/%d frames done', t, T(end)))
     end
