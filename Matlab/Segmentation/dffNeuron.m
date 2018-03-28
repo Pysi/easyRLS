@@ -39,8 +39,8 @@ T = m.T;
         signal = NaN(numNeurons, 1, m.t);
         for in = 1:numNeurons 
             tic; sig = m(neuronShape{in}, iz, :); titi=toc;
-            if titi> 0.1
-                fprintf('\tgot signal : %.03f s, neuron %d size %d\n', toc, in, length(neuronShape{in}));
+            if titi> 0.1 % usually titi should be around 0.001 (100×smaller)
+                fprintf('\tgot signal : %.03f s, neuron %d size %d\n', titi, in, length(neuronShape{in}));
             end
             signal(in,1,:) = mean(sig, 1);
         end

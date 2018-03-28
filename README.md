@@ -306,7 +306,7 @@ This benchmark has been computed for 18 layers (3 → 20) of 3000 time frames on
     Elapsed time is 14120.873724 seconds.
 
 #### Per neuron
-One of the value is very low compared to the others.
+One of the value is very low compared to the others...
 
     computing baseline per neuron for layer 3 (6451 points, 1500 timeframes)
     Elapsed time is 103.273086 seconds.
@@ -431,7 +431,7 @@ Sometimes it happens for several neurons in a row :
     got signal : 0.001 s
     got signal : 0.000 s
 
-When only displaying for a time larger than 0.01 s :
+When only displaying for a time larger than 0.02 s :
 
     computing dff per neuron for layer 3 (6451 neurons, 1500 timeframes)
     Elapsed time is 3.648754 seconds.
@@ -445,29 +445,7 @@ When only displaying for a time larger than 0.01 s :
         got signal : 0.011 s, neuron size : 15
         got signal : 0.040 s, neuron size : 24
         got signal : 0.015 s, neuron size : 31
-        got signal : 0.010 s, neuron size : 20
-        got signal : 0.021 s, neuron size : 15
-        got signal : 0.014 s, neuron size : 13
-        got signal : 0.012 s, neuron size : 22
-        got signal : 0.013 s, neuron size : 39
-        got signal : 0.021 s, neuron size : 28
-        got signal : 0.016 s, neuron size : 30
-        got signal : 0.028 s, neuron size : 32
-        got signal : 0.010 s, neuron size : 27
-        got signal : 0.015 s, neuron size : 17
-        got signal : 0.010 s, neuron size : 50
-        got signal : 0.027 s, neuron size : 16
-        got signal : 0.010 s, neuron size : 42
-        got signal : 0.012 s, neuron size : 28
-        got signal : 0.010 s, neuron size : 29
-        got signal : 0.023 s, neuron size : 14
-        got signal : 0.011 s, neuron size : 43
-        got signal : 0.013 s, neuron size : 30
-        got signal : 0.017 s, neuron size : 47
-        got signal : 0.012 s, neuron size : 27
-        got signal : 0.012 s, neuron size : 60
-        got signal : 0.011 s, neuron size : 18
-        got signal : 0.025 s, neuron size : 95
+        [...]
         got signal : 0.078 s, neuron size : 27
         got signal : 0.013 s, neuron size : 35
         got signal : 0.019 s, neuron size : 77
@@ -490,9 +468,7 @@ When only displaying for a time larger than 0.01 s :
         got signal : 0.049 s, neuron size : 33
         got signal : 0.018 s, neuron size : 16
         got signal : 0.047 s, neuron size : 55
-        got signal : 0.012 s, neuron size : 20
-        got signal : 0.015 s, neuron size : 43
-        got signal : 0.012 s, neuron size : 47
+        [...]
         got signal : 0.019 s, neuron size : 23
         got signal : 0.011 s, neuron size : 22
         got signal : 0.012 s, neuron size : 45
@@ -528,28 +504,7 @@ When only displaying for a time larger than 0.01 s :
         got signal : 0.062 s, neuron size : 27
         got signal : 0.031 s, neuron size : 20
         got signal : 0.030 s, neuron size : 34
-        got signal : 0.021 s, neuron size : 10
-        got signal : 0.011 s, neuron size : 21
-        got signal : 0.097 s, neuron size : 24
-        got signal : 0.073 s, neuron size : 29
-        got signal : 0.072 s, neuron size : 24
-        got signal : 0.015 s, neuron size : 21
-        got signal : 0.179 s, neuron size : 39
-        got signal : 0.107 s, neuron size : 17
-        got signal : 0.054 s, neuron size : 20
-        got signal : 0.012 s, neuron size : 27
-        got signal : 0.082 s, neuron size : 22
-        got signal : 0.021 s, neuron size : 38
-        got signal : 0.033 s, neuron size : 13
-        got signal : 0.037 s, neuron size : 25
-        got signal : 0.033 s, neuron size : 20
-        got signal : 0.037 s, neuron size : 63
-        got signal : 0.316 s, neuron size : 22
-        got signal : 0.011 s, neuron size : 16
-        got signal : 0.118 s, neuron size : 11
-        got signal : 0.040 s, neuron size : 14
-        got signal : 0.038 s, neuron size : 69
-        got signal : 0.013 s, neuron size : 17
+        [...]
         got signal : 0.370 s, neuron size : 17
         got signal : 0.455 s, neuron size : 41
         got signal : 0.021 s, neuron size : 136
@@ -584,23 +539,7 @@ When only displaying for a time larger than 0.01 s :
         got signal : 0.141 s, neuron size : 15
         got signal : 6.736 s, neuron size : 34
         got signal : 1.705 s, neuron size : 20
-        got signal : 1.440 s, neuron size : 34
-        got signal : 3.127 s, neuron size : 62
-        got signal : 0.822 s, neuron size : 20
-        got signal : 0.096 s, neuron size : 26
-        got signal : 3.348 s, neuron size : 18
-        got signal : 1.871 s, neuron size : 22
-        got signal : 0.569 s, neuron size : 28
-        got signal : 4.518 s, neuron size : 32
-        got signal : 0.413 s, neuron size : 27
-        got signal : 0.409 s, neuron size : 30
-        got signal : 0.569 s, neuron size : 30
-        got signal : 0.381 s, neuron size : 23
-        got signal : 1.086 s, neuron size : 26
-        got signal : 2.069 s, neuron size : 48
-        got signal : 1.918 s, neuron size : 41
-        got signal : 2.207 s, neuron size : 25
-        got signal : 0.120 s, neuron size : 22
+        [...]
         got signal : 0.573 s, neuron size : 17
         got signal : 1.351 s, neuron size : 22
         got signal : 4.744 s, neuron size : 49
@@ -660,77 +599,7 @@ After restarting matlab, with a threshold of 0.1 s (100x longer as excpected):
         got signal : 0.058 s, neuron 2810 size 28
         got signal : 0.410 s, neuron 3028 size 22
         got signal : 2.203 s, neuron 3046 size 31
-        got signal : 0.108 s, neuron 3050 size 12
-        got signal : 0.163 s, neuron 3060 size 25
-        got signal : 0.515 s, neuron 3064 size 28
-        got signal : 0.223 s, neuron 3067 size 17
-        got signal : 0.172 s, neuron 3068 size 10
-        got signal : 0.165 s, neuron 3070 size 43
-        got signal : 0.153 s, neuron 3071 size 20
-        got signal : 1.630 s, neuron 3075 size 17
-        got signal : 0.082 s, neuron 3787 size 24
-        got signal : 2.251 s, neuron 3800 size 22
-        got signal : 0.630 s, neuron 3803 size 11
-        got signal : 0.078 s, neuron 3804 size 13
-        got signal : 0.106 s, neuron 3805 size 13
-        got signal : 0.206 s, neuron 3806 size 17
-        got signal : 0.974 s, neuron 3807 size 45
-        got signal : 0.046 s, neuron 4222 size 17
-        got signal : 1.768 s, neuron 4607 size 17
-        got signal : 0.373 s, neuron 4629 size 17
-        got signal : 1.468 s, neuron 4630 size 24
-        got signal : 1.790 s, neuron 4646 size 19
-        got signal : 0.523 s, neuron 4652 size 39
-        got signal : 0.106 s, neuron 4656 size 21
-        got signal : 0.039 s, neuron 4817 size 31
-        got signal : 0.024 s, neuron 4937 size 11
-        got signal : 0.075 s, neuron 5040 size 14
-        got signal : 0.050 s, neuron 5169 size 9
-        got signal : 0.397 s, neuron 5481 size 21
-        got signal : 0.917 s, neuron 5490 size 30
-        got signal : 1.969 s, neuron 5501 size 19
-        got signal : 0.747 s, neuron 5510 size 30
-        got signal : 2.668 s, neuron 5516 size 39
-        got signal : 1.117 s, neuron 5538 size 24
-        got signal : 2.743 s, neuron 6434 size 28
-        got signal : 0.218 s, neuron 6438 size 24
-        got signal : 0.150 s, neuron 6460 size 25
-        got signal : 1.349 s, neuron 6468 size 14
-        got signal : 2.281 s, neuron 6471 size 11
-        got signal : 0.053 s, neuron 6941 size 59
-        got signal : 0.075 s, neuron 7360 size 32
-        got signal : 0.048 s, neuron 7374 size 12
-        got signal : 4.188 s, neuron 7375 size 13
-        got signal : 1.204 s, neuron 7392 size 54
-        got signal : 0.258 s, neuron 7393 size 19
-        got signal : 0.123 s, neuron 7837 size 19
-        got signal : 0.028 s, neuron 7893 size 35
-        got signal : 3.919 s, neuron 8232 size 51
-        got signal : 0.702 s, neuron 8272 size 25
-        got signal : 0.135 s, neuron 8281 size 12
-        got signal : 0.028 s, neuron 8452 size 45
-        got signal : 1.985 s, neuron 9019 size 17
-        got signal : 0.112 s, neuron 9020 size 31
-        got signal : 0.133 s, neuron 9021 size 34
-        got signal : 0.392 s, neuron 9026 size 17
-        got signal : 1.418 s, neuron 9029 size 75
-        got signal : 0.043 s, neuron 9114 size 105
-        got signal : 0.037 s, neuron 9279 size 61
-        got signal : 0.075 s, neuron 9316 size 16
-        got signal : 0.033 s, neuron 9320 size 29
-        got signal : 0.066 s, neuron 9323 size 99
-        got signal : 0.090 s, neuron 9438 size 31
-        got signal : 0.855 s, neuron 9512 size 58
-        got signal : 0.064 s, neuron 9513 size 26
-        got signal : 0.058 s, neuron 9520 size 20
-        got signal : 1.322 s, neuron 9523 size 34
-        got signal : 0.734 s, neuron 9537 size 58
-        got signal : 0.044 s, neuron 9595 size 70
-        got signal : 0.031 s, neuron 9667 size 58
-        got signal : 0.035 s, neuron 9693 size 90
-        got signal : 0.037 s, neuron 9698 size 44
-        got signal : 0.023 s, neuron 9711 size 38
-        got signal : 0.047 s, neuron 9740 size 54
+        [...]
         got signal : 0.614 s, neuron 9768 size 85
         got signal : 1.470 s, neuron 9777 size 127
     Elapsed time is 61.180615 seconds.
@@ -743,45 +612,7 @@ After restarting matlab, with a threshold of 0.1 s (100x longer as excpected):
         got signal : 0.110 s, neuron 128 size 10
         got signal : 9.039 s, neuron 129 size 35
         got signal : 0.089 s, neuron 250 size 10
-        got signal : 0.032 s, neuron 272 size 27
-        got signal : 0.022 s, neuron 379 size 14
-        got signal : 0.802 s, neuron 400 size 20
-        got signal : 2.640 s, neuron 405 size 22
-        got signal : 3.450 s, neuron 406 size 23
-        got signal : 1.401 s, neuron 423 size 13
-        got signal : 0.070 s, neuron 426 size 52
-        got signal : 0.043 s, neuron 440 size 23
-        got signal : 0.032 s, neuron 454 size 64
-        got signal : 0.028 s, neuron 455 size 18
-        got signal : 0.073 s, neuron 462 size 37
-        got signal : 0.049 s, neuron 474 size 21
-        got signal : 0.053 s, neuron 493 size 13
-        got signal : 0.058 s, neuron 497 size 11
-        got signal : 0.061 s, neuron 513 size 20
-        got signal : 0.027 s, neuron 521 size 14
-        got signal : 0.060 s, neuron 536 size 16
-        got signal : 0.044 s, neuron 543 size 29
-        got signal : 0.029 s, neuron 559 size 32
-        got signal : 0.039 s, neuron 566 size 15
-        got signal : 0.040 s, neuron 568 size 33
-        got signal : 0.063 s, neuron 588 size 23
-        got signal : 0.097 s, neuron 594 size 18
-        got signal : 0.091 s, neuron 599 size 23
-        got signal : 0.086 s, neuron 603 size 15
-        got signal : 0.167 s, neuron 608 size 36
-        got signal : 0.133 s, neuron 637 size 30
-        got signal : 0.021 s, neuron 640 size 22
-        got signal : 0.056 s, neuron 648 size 33
-        got signal : 0.025 s, neuron 668 size 26
-        got signal : 0.025 s, neuron 673 size 18
-        got signal : 0.068 s, neuron 679 size 23
-        got signal : 0.048 s, neuron 680 size 29
-        got signal : 0.035 s, neuron 704 size 23
-        got signal : 0.043 s, neuron 710 size 15
-        got signal : 0.047 s, neuron 718 size 39
-        got signal : 0.026 s, neuron 732 size 27
-        got signal : 0.094 s, neuron 751 size 30
-        got signal : 0.045 s, neuron 774 size 15
+        [...]
         got signal : 0.207 s, neuron 783 size 12
         got signal : 5.217 s, neuron 787 size 24
 
@@ -803,10 +634,90 @@ It is absurd, the RAID system is not even full :
     /dev/sda1        58T   39T   17T  71% /home/ljp/Science
     tmpfs           3,2G  264K  3,2G   1% /run/user/1000
 
+Just after rebooting the computer, it is even worse !
 
+The single lign involved : 
+
+    tic; sig = m(neuronShape{in}, iz, :); titi=toc;
+    if titi> 0.1
+        fprintf('\tgot signal : %.03f s, neuron %d size %d\n', titi, in, length(neuronShape{in}));
+    end
+
+Where `m` is a memory map, which usually is quite fast (even very smooth when used in the viewer).
+
+Result is (threshold of 0.1 seconds) :
+
+    computing dff per neuron for layer 3 (6451 neurons, 1500 timeframes)
+        got signal : 12.994 s, neuron 1 size 18
+        got signal : 1.797 s, neuron 143 size 32
+        got signal : 3.042 s, neuron 157 size 16
+        got signal : 0.191 s, neuron 161 size 30
+        got signal : 3.438 s, neuron 166 size 26
+        [...]
+        got signal : 0.134 s, neuron 6409 size 24
+        got signal : 2.947 s, neuron 6413 size 46
+    Elapsed time is 99.507935 seconds.
+    computing dff per neuron for layer 4 (8534 neurons, 1500 timeframes)
+        got signal : 13.070 s, neuron 1 size 6
+        got signal : 1.841 s, neuron 188 size 21
+        got signal : 4.838 s, neuron 192 size 13
+        got signal : 0.935 s, neuron 193 size 25
+        got signal : 0.123 s, neuron 197 size 5
+        got signal : 4.429 s, neuron 198 size 21
+        got signal : 2.185 s, neuron 204 size 12
+        [...]
+        got signal : 0.311 s, neuron 7834 size 20
+        got signal : 3.556 s, neuron 7838 size 33
+        got signal : 0.385 s, neuron 8355 size 26
+        got signal : 5.755 s, neuron 8371 size 29
+    Elapsed time is 114.227532 seconds.
+
+Restarting it just after can give a very different behaviour :
+
+    computing dff per neuron for layer 3 (6451 neurons, 1500 timeframes)
+    Elapsed time is 1.862566 seconds.
+    computing dff per neuron for layer 4 (8534 neurons, 1500 timeframes)
+    Elapsed time is 2.440973 seconds.
+    computing dff per neuron for layer 5 (8678 neurons, 1500 timeframes)
+        got signal : 3.581 s, neuron 194 size 21
+        got signal : 2.215 s, neuron 195 size 26
+        got signal : 1.559 s, neuron 457 size 39
+        got signal : 6.568 s, neuron 463 size 24
+        got signal : 0.689 s, neuron 475 size 27
+        got signal : 1.066 s, neuron 483 size 26
+
+It is not acceptable to take more time to load a single data point than the whole computation !!
+
+It is not acceptable too to take more time to understand why it is slow than to program it (well) !!
+
+Trying Matlab 2018 desperately :
+
+    computing dff per neuron for layer 3 (6451 neurons, 1500 timeframes)
+    Elapsed time is 1.858578 seconds.
+    computing dff per neuron for layer 4 (8534 neurons, 1500 timeframes)
+    Elapsed time is 2.391300 seconds.
+    computing dff per neuron for layer 5 (8678 neurons, 1500 timeframes)
+    Elapsed time is 2.415821 seconds.
+    computing dff per neuron for layer 6 (9397 neurons, 1500 timeframes)
+    Elapsed time is 2.579492 seconds.
+    computing dff per neuron for layer 7 (9816 neurons, 1500 timeframes)
+    Elapsed time is 2.680576 seconds.
+    computing dff per neuron for layer 8 (10237 neurons, 1500 timeframes)
+    Elapsed time is 2.779824 seconds.
+    computing dff per neuron for layer 9 (10668 neurons, 1500 timeframes)
+        got signal : 0.312 s, neuron 2992 size 18
+        got signal : 0.511 s, neuron 3636 size 14
+        got signal : 3.139 s, neuron 3655 size 27
+        got signal : 1.848 s, neuron 3684 size 21
+        got signal : 0.869 s, neuron 4486 size 19
+        [...]
+        got signal : 3.345 s, neuron 6486 size 44
+
+It seems to be more at the system level.
 
 ### Redstar
 
+#### Per pixel
 1500 tframes, layers 3:12
 
 dcimgRASdrift
@@ -823,3 +734,74 @@ baseline
     Elapsed time is 584.353121 seconds.
     computing baseline for layer 6 (278355 points, 1500 timeframes)
     Elapsed time is 605.411876 seconds.
+
+#### Per neuron
+
+##### Baseline
+    computing baseline per neuron for layer 3 (7621 points, 1500 timeframes)
+    Elapsed time is 15.015507 seconds.
+    computing baseline per neuron for layer 4 (8886 points, 1500 timeframes)
+    Elapsed time is 17.183559 seconds.
+    computing baseline per neuron for layer 5 (9295 points, 1500 timeframes)
+    Elapsed time is 17.761997 seconds.
+    computing baseline per neuron for layer 6 (9850 points, 1500 timeframes)
+    Elapsed time is 18.670466 seconds.
+    computing baseline per neuron for layer 7 (10780 points, 1500 timeframes)
+    Elapsed time is 20.708821 seconds.
+    computing baseline per neuron for layer 8 (11423 points, 1500 timeframes)
+    Elapsed time is 21.758402 seconds.
+    computing baseline per neuron for layer 9 (12355 points, 1500 timeframes)
+    Elapsed time is 23.488098 seconds.
+    computing baseline per neuron for layer 10 (12622 points, 1500 timeframes)
+    Elapsed time is 23.950906 seconds.
+    computing baseline per neuron for layer 11 (13562 points, 1500 timeframes)
+    Elapsed time is 25.385805 seconds.
+    computing baseline per neuron for layer 12 (14871 points, 1500 timeframes)
+    Elapsed time is 27.105915 seconds.
+##### Dff
+    creating 'dff_neuron' directory
+    computing dff per neuron for layer 3 (7621 neurons, 1500 timeframes)
+    Elapsed time is 3.482185 seconds.
+    computing dff per neuron for layer 4 (8886 neurons, 1500 timeframes)
+    Elapsed time is 3.506714 seconds.
+    computing dff per neuron for layer 5 (9295 neurons, 1500 timeframes)
+    Elapsed time is 3.710781 seconds.
+    computing dff per neuron for layer 6 (9850 neurons, 1500 timeframes)
+    Elapsed time is 3.942313 seconds.
+    computing dff per neuron for layer 7 (10780 neurons, 1500 timeframes)
+    Elapsed time is 4.308497 seconds.
+    computing dff per neuron for layer 8 (11423 neurons, 1500 timeframes)
+    Elapsed time is 4.467849 seconds.
+    computing dff per neuron for layer 9 (12355 neurons, 1500 timeframes)
+    Elapsed time is 4.882332 seconds.
+    computing dff per neuron for layer 10 (12622 neurons, 1500 timeframes)
+    Elapsed time is 5.120062 seconds.
+    computing dff per neuron for layer 11 (13562 neurons, 1500 timeframes)
+    Elapsed time is 5.302207 seconds.
+    computing dff per neuron for layer 12 (14871 neurons, 1500 timeframes)
+    Elapsed time is 6.020441 seconds.
+
+It seems that the problem is specific to Dream... #IWastedSoMuchTime
+
+Once again to be sure :
+
+    computing dff per neuron for layer 3 (7621 neurons, 1500 timeframes)
+    Elapsed time is 2.932786 seconds.
+    computing dff per neuron for layer 4 (8886 neurons, 1500 timeframes)
+    Elapsed time is 3.620199 seconds.
+    computing dff per neuron for layer 5 (9295 neurons, 1500 timeframes)
+    Elapsed time is 3.569198 seconds.
+    computing dff per neuron for layer 6 (9850 neurons, 1500 timeframes)
+    Elapsed time is 3.869390 seconds.
+    computing dff per neuron for layer 7 (10780 neurons, 1500 timeframes)
+    Elapsed time is 4.087131 seconds.
+    computing dff per neuron for layer 8 (11423 neurons, 1500 timeframes)
+    Elapsed time is 4.275849 seconds.
+    computing dff per neuron for layer 9 (12355 neurons, 1500 timeframes)
+    Elapsed time is 4.776967 seconds.
+    computing dff per neuron for layer 10 (12622 neurons, 1500 timeframes)
+    Elapsed time is 4.916803 seconds.
+    computing dff per neuron for layer 11 (13562 neurons, 1500 timeframes)
+    Elapsed time is 5.157613 seconds.
+    computing dff per neuron for layer 12 (14871 neurons, 1500 timeframes)
+    Elapsed time is 5.677532 seconds.
