@@ -48,7 +48,7 @@ function semiAutoROI(F, Layers, t, tag)
         disp('creating ''IP'' directory')
         mkdir(F.dir.IP);
         disp('creating new mask file')
-        mask = NaN(x,y,20); % default total number of layers
+        mask = false(x,y,20); % default total number of layers
     end
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % print at screen
@@ -59,7 +59,7 @@ function semiAutoROI(F, Layers, t, tag)
         % show layer
         hold off; imshow(img, [400 1500]);
 
-        if isnan( max(max( tmp2 )) ) % if mask layer is not yet defined 
+        if ~max(max( tmp2 )) % if mask layer is null
             % autocompute mask (TODO add slider)
 
             % Auto brain countour (Geoffrey)
