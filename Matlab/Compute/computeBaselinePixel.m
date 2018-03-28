@@ -1,5 +1,5 @@
-function computeBaseline(F, Layers, window)
-%computeBaseline computes running quantile using caTools runquantile
+function computeBaselinePixel(F, Layers, window)
+%computeBaselinePixel computes running quantile using caTools runquantile
 % Layers are the layers you want to compute the baseline on
 % window is the window span in seconds (ex 50 sec)
 
@@ -8,8 +8,8 @@ function computeBaseline(F, Layers, window)
     % ignores the delay long
     w = floor(window / dt) ; % number of frames of the window (ex 125 frames)
 
-    baselinePath = fullfile(F.dir.IP, 'baseline');
-    disp('creating ''baseline'' directory'); mkdir(baselinePath);
+    baselinePath = fullfile(F.dir.IP, 'baseline_pixel');
+    disp('creating ''baseline_pixel'' directory'); mkdir(baselinePath);
         
     m = Focused.Mmap(F, 'corrected');
     
@@ -21,7 +21,7 @@ function computeBaseline(F, Layers, window)
         indices = maskToIndex(F, z);
         numIndex = length(indices);
         
-        fprintf('computing baseline for layer %d (%d points, %d timeframes)\n', z, numIndex, m.t)
+        fprintf('computing baseline per pixel for layer %d (%d points, %d timeframes)\n', z, numIndex, m.t)
         
         OUT = NaN(m.t, 1);
         fid = fopen(output, 'wb');

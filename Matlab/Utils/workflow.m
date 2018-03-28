@@ -45,9 +45,9 @@ for run = param.run
     start_time = tic;
         dcimgRASdrift(F, F.run, {});
         computeBackground(F, 'corrected', param.RefIndex);
-        computeBaseline(F, param.Layers)
+        computeBaselinePixel(F, param.Layers)
         createGrayStack(F)
-        dff(F, param.Layers);
+        dffPixel(F, param.Layers);
     disp('Time elapsed for [drift background baseline graystack dff] computation');
     toc(start_time);
 end

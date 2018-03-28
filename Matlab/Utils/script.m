@@ -17,7 +17,7 @@ addpath(genpath('Programs/NeuroTools/Matlab'))
 cd /home/ljp/Science/Hugo/easyRLS/
 param.wd = pwd;
 param.date = '2018-01-11';
-param.run = 'Run00';
+param.run = 'Run05';
 param.Layers = 3:20; 
 param.RefLayers = 8:10;
 param.RefIndex = 10; 
@@ -38,11 +38,11 @@ createGrayStack(F)
 %% view gray stack
 Focused.stackViewer(F, 'IP/graystack')
 %% compute baseline using caTools library
-computeBaseline(F, param.Layers, 50)
+computeBaselinePixel(F, param.Layers, 50)
 %% view baseline
-stackViewer2D(F, 'baseline', param.Layers)
+stackViewer2D(F, 'baseline_pixel', param.Layers)
 %% compute DFF
-dff(F, param.Layers);
+dffPixel(F, param.Layers);
 %% view DFF
 stackViewer2D(F, 'dff', param.Layers);
 %% delete unecessary files (including baseline)

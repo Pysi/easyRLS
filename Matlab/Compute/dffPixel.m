@@ -1,11 +1,11 @@
-function dff(F, Layers)
-%dff computes delta f over f
+function dffPixel(F, Layers)
+%dffPixel computes delta f over f
 % F focus object
 % Layers layers you want to compute dff on (ex [3 4 6])
 
 % create dff directory
-dffPath = fullfile(F.dir.IP, 'dff');
-disp('creating ''dff'' directory'); mkdir(dffPath);
+dffPath = fullfile(F.dir.IP, 'dff_pixel');
+disp('creating ''dff_pixel'' directory'); mkdir(dffPath);
 
 % load background and convert to uint16
 load(fullfile(F.dir.IP, 'background.mat'), 'background');
@@ -16,7 +16,7 @@ load(fullfile(F.dir.IP, 'background.mat'), 'background');
         msig = Focused.Mmap(F, 'corrected');
         m = msig; % just an alias for getting values
         % basestack (t, xy)
-        basePath = fullfile(F.dir.IP, 'baseline', [num2str(z, '%02d') '.mat']);
+        basePath = fullfile(F.dir.IP, 'baseline_pixel', [num2str(z, '%02d') '.mat']);
         load(basePath, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
         mbas = recreateMmap(F,mmap);
                 
@@ -34,7 +34,7 @@ load(fullfile(F.dir.IP, 'background.mat'), 'background');
                 ( single(mbas.Data.bit(:,:)) - background(z) ),...
             'single');
         
-        fprintf('computing dff for layer %d: %.02f s\n', z, toc)
+        fprintf('computing dff per pixel for layer %d: %.02f s\n', z, toc)
 
         fclose(fid);
         
