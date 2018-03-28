@@ -40,7 +40,7 @@ T = m.T;
         for in = 1:numNeurons 
             tic; sig = m(neuronShape{in}, iz, :); titi=toc;
             if titi> 0.1
-                fprintf('\tgot signal : %.03f s, neuron %d size %d\n', toc, in, length(neuronShape{in}));
+                fprintf('\tgot signal : %.03f s, neuron %d size %d\n', titi, in, length(neuronShape{in}));
             end
             signal(in,1,:) = mean(sig, 1);
         end

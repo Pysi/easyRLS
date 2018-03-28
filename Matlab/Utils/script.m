@@ -30,6 +30,7 @@ semiAutoROI(F, param.Layers, param.RefIndex, [F.run '.dcimg']); % let you adjust
 Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
 %% shortcut: dcimgRASdrift
 dcimgRASdrift(F, 'Run00', {});
+%% view corrected stack
 Focused.stackViewer(F, 'corrected');
 %% compute background
 computeBackground(F, 'corrected', param.RefIndex);
