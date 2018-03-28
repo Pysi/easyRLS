@@ -17,8 +17,8 @@ addpath(genpath('Programs/NeuroTools/Matlab'))
 cd /home/ljp/Science/Hugo/easyRLS/
 param.wd = pwd;
 param.date = '2018-01-11';
-param.run = 'Run00';
-param.Layers = 3:20; 
+param.run = 'Run05';
+param.Layers = 3:12; 
 param.RefLayers = 8:10;
 param.RefIndex = 10; 
 F = NT.Focus(param.wd, '', param.date, param.run);
@@ -30,6 +30,7 @@ semiAutoROI(F, param.Layers, param.RefIndex, [F.run '.dcimg']); % let you adjust
 Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
 %% shortcut: dcimgRASdrift
 dcimgRASdrift(F, 'Run00', {});
+%% view corrected stack
 Focused.stackViewer(F, 'corrected');
 %% compute background
 computeBackground(F, 'corrected', param.RefIndex);
@@ -37,14 +38,29 @@ computeBackground(F, 'corrected', param.RefIndex);
 createGrayStack(F)
 %% view gray stack
 Focused.stackViewer(F, 'IP/graystack')
-%% compute baseline using caTools library
-computeBaseline(F, param.Layers, 50)
+%% segment neurons
+segmentBrain(F, param.Layers);
+%% compute baseline per neuron
+computeBaselineNeuron(F, param.Layers, 50);
+%% diplay it
+stackViewer2D(F, 'baseline_neuron', param.Layers);
+%% compute dff per neuron
+dffNeuron(F, param.Layers);
+%% diplay it
+stackViewer2D(F, 'dff_neuron', param.Layers);
+
+%{ 
+%PER PIXEL
+%% compute baseline per pixel
+computeBaselinePixel(F, param.Layers, 50)
 %% view baseline
-stackViewer2D(F, 'baseline', param.Layers)
+stackViewer2D(F, 'baseline_pixel', param.Layers)
 %% compute DFF
-dff(F, param.Layers);
+dffPixel(F, param.Layers);
 %% view DFF
 stackViewer2D(F, 'dff', param.Layers);
 %% delete unecessary files (including baseline)
 clean(F);
+%}
+
 %% END
