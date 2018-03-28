@@ -18,7 +18,7 @@ cd /home/ljp/Science/Hugo/easyRLS/
 param.wd = pwd;
 param.date = '2018-01-11';
 param.run = 'Run05';
-param.Layers = 3:20; 
+param.Layers = 3:12; 
 param.RefLayers = 8:10;
 param.RefIndex = 10; 
 F = NT.Focus(param.wd, '', param.date, param.run);
@@ -37,7 +37,20 @@ computeBackground(F, 'corrected', param.RefIndex);
 createGrayStack(F)
 %% view gray stack
 Focused.stackViewer(F, 'IP/graystack')
-%% compute baseline using caTools library
+%% segment neurons
+segmentBrain(F, param.Layers);
+%% compute baseline per neuron
+computeBaselineNeuron(F, param.Layers, 50);
+%% diplay it
+stackViewer2D(F, 'baseline_neuron', param.Layers);
+%% compute dff per neuron
+dffNeuron(F, param.Layers);
+%% diplay it
+stackViewer2D(F, 'dff_neuron', param.Layers);
+
+%{ 
+%PER PIXEL
+%% compute baseline per pixel
 computeBaselinePixel(F, param.Layers, 50)
 %% view baseline
 stackViewer2D(F, 'baseline_pixel', param.Layers)
@@ -47,4 +60,6 @@ dffPixel(F, param.Layers);
 stackViewer2D(F, 'dff', param.Layers);
 %% delete unecessary files (including baseline)
 clean(F);
+%}
+
 %% END

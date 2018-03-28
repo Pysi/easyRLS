@@ -5,9 +5,14 @@ function stackViewer2D(F, tag, Layers)
 % tag is 'baseline' or 'dff'
 % Layers are the layers to view
 
+% THIS IS NOT MEANT TO BE UNDERSTANDABLE
+
 viewDFF = false;
+viewNeuron = false;
 if strcmp(tag, 'dff')
     viewDFF = true;
+elseif strcmp(tag, 'baseline_neuron')
+    viewNeuron = true;
 end
 
 m = cell(1,20); % cell array for matfiles
@@ -25,8 +30,14 @@ mgray = Focused.Mmap(F, 'IP/graystack');
     T = m{z}.matfile.T; % take time (they should be the same for all)
     t = T(1);
     
-    indices = m{z}.matfile.indices; % loads indices, will be actualized when z changes
     mmap = recreateMmap(F,m{z}.matfile.mmap); % recreates mmap, will be actualized when z changes
+    if ~viewNeuron
+        indices = m{z}.matfile.indices; % loads indices, will be actualized when z changes
+    else % (if viewNeuron is true)
+        nn = m{z}.matfile.numNeurons; % takes numNeurons
+        ns = m{z}.matfile.neuronShape; % takes neuronShape
+        snap = mmap.Data.bit(t, :); % takes a snapshot for all neurons at given t
+    end
 
     % ----- 
     f = figure('Visible','off'); 
@@ -36,7 +47,13 @@ mgray = Focused.Mmap(F, 'IP/graystack');
     end
     
     % fill image
-    img(indices) = mmap.Data.bit(t,:);
+    if ~viewNeuron
+        img(indices) = mmap.Data.bit(t,:);
+    else % display neuron by neuron
+        for i = 1:nn
+            img(ns{i}) = snap(i);
+        end
+    end
 
     % show image
     if viewDFF; h = imshow(rot90(img), [-.5 2]);
@@ -69,15 +86,24 @@ mgray = Focused.Mmap(F, 'IP/graystack');
     % ----- FUNCTIONS -----
     function actualize_z(source, ~)
         z = floor(source.Value);
-        clear('indices');
+        clear('indices', 'nn', 'ns');
         clear('mmap');
-        tic; indices = m{z}.matfile.indices; fprintf('loading indices: %.03f s\n', toc); % actualises indices
         tic; mmap = recreateMmap(F,m{z}.matfile.mmap); fprintf('creating mmap: %.03f s\n', toc); % actualises mmap
+        if ~viewNeuron
+            tic; indices = m{z}.matfile.indices; fprintf('loading indices: %.03f s\n', toc); % actualises indices
+        else
+            nn = m{z}.matfile.numNeurons; % takes numNeurons
+            ns = m{z}.matfile.neuronShape; % takes neuronShape
+            snap = mmap.Data.bit(t, :); % takes a snapshot for all neurons at given t
+        end
         drawImage();
     end
 
     function actualize_t(source, ~)
         t = floor(source.Value);
+        if viewNeuron
+            snap = mmap.Data.bit(t, :); % takes a snapshot for all neurons at given t
+        end
         drawImage();
     end
 
@@ -86,7 +112,15 @@ mgray = Focused.Mmap(F, 'IP/graystack');
         if viewDFF; img = NaN(mgray.x, mgray.y);
         else; img = mgray(:,:,z,1);
         end
-        tic;img(indices) = mmap.Data.bit(t,:);fprintf('filling: %.03f s\n', toc);
+        tic;
+        if ~viewNeuron
+            img(indices) = mmap.Data.bit(t,:);
+        else % display neuron by neuron
+            for i = 1:nn
+                img(ns{i}) = snap(i);
+            end
+        end
+        fprintf('filling: %.03f s\n', toc);
         set(h, 'Cdata', rot90(img));
         title([F.name '   z=' num2str(z) '   t=' num2str(t)]);
         drawnow;
