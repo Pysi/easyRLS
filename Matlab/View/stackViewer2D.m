@@ -9,9 +9,10 @@ function stackViewer2D(F, tag, Layers)
 
 viewDFF = false;
 viewNeuron = false;
-if strcmp(tag, 'dff')
+if strcmp(tag, 'dff') || strcmp(tag, 'dff_neuron')
     viewDFF = true;
-elseif strcmp(tag, 'baseline_neuron')
+end
+if strcmp(tag, 'baseline_neuron') || strcmp(tag, 'dff_neuron')
     viewNeuron = true;
 end
 
