@@ -89,9 +89,9 @@ mgray = Focused.Mmap(F, 'IP/graystack');
         z = floor(source.Value);
         clear('indices', 'nn', 'ns');
         clear('mmap');
-        tic; mmap = recreateMmap(F,m{z}.matfile.mmap); fprintf('creating mmap: %.03f s\n', toc); % actualises mmap
+        mmap = recreateMmap(F,m{z}.matfile.mmap); % actualises mmap
         if ~viewNeuron
-            tic; indices = m{z}.matfile.indices; fprintf('loading indices: %.03f s\n', toc); % actualises indices
+            indices = m{z}.matfile.indices;% actualises indices
         else
             nn = m{z}.matfile.numNeurons; % takes numNeurons
             ns = m{z}.matfile.neuronShape; % takes neuronShape
@@ -113,7 +113,6 @@ mgray = Focused.Mmap(F, 'IP/graystack');
         if viewDFF; img = NaN(mgray.x, mgray.y);
         else; img = mgray(:,:,z,1);
         end
-        tic;
         if ~viewNeuron
             img(indices) = mmap.Data.bit(t,:);
         else % display neuron by neuron
@@ -121,7 +120,6 @@ mgray = Focused.Mmap(F, 'IP/graystack');
                 img(ns{i}) = snap(i);
             end
         end
-        fprintf('filling: %.03f s\n', toc);
         set(h, 'Cdata', rot90(img));
         title([F.name '   z=' num2str(z) '   t=' num2str(t)]);
         drawnow;
