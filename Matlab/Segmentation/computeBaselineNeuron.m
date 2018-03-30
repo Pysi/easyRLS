@@ -12,26 +12,35 @@ function computeBaselineNeuron(F, Layers, window)
     disp('creating ''baseline_neuron'' directory'); mkdir(baselinePath);
     segPath = fullfile(F.dir.IP, 'Segmented');
         
+    % sigstack (x,y,z,t) ((xy,z,t))
     m = Focused.Mmap(F, 'corrected');
+
+    % get values
+    x = m.x; %#ok<*NASGU>
+    y = m.y;
+    z = 1; % only one layer concerned
+    t = m.t;
+    % Z = iz; % will be set at the end
+    T = m.T;
     
-    for z = Layers
-        inputSeg = fullfile(segPath, [num2str(z, '%02d') '.mat']);
+    for iz = Layers
+        inputSeg = fullfile(segPath, [num2str(iz, '%02d') '.mat']);
         
-        output = fullfile(baselinePath, [num2str(z, '%02d') '.bin']);
-        outputInfo = fullfile(baselinePath, [num2str(z, '%02d') '.mat']);
+        output = fullfile(baselinePath, [num2str(iz, '%02d') '.bin']);
+        outputInfo = fullfile(baselinePath, [num2str(iz, '%02d') '.mat']);
 
         load(inputSeg, 'centerCoord', 'neuronShape');
         ns = neuronShape;
         numNeurons = length(ns);
         
-        fprintf('computing baseline per neuron for layer %d (%d points, %d timeframes)\n', z, numNeurons, m.t)
+        fprintf('computing baseline per neuron for layer %d (%d points, %d timeframes)\n', iz, numNeurons, m.t)
         
         OUT = NaN(m.t, 1);
         fid = fopen(output, 'wb');
         start_time = tic;
             
         for i = 1:numNeurons % loop over each neuron ~10000 neurons instead of ~300000 pixels
-            IN = squeeze(mean(m(ns{i}, z, :), 1)); % call memory map with linear indexing
+            IN = squeeze(mean(m(ns{i}, iz, :), 1)); % call memory map with linear indexing
             [~, OUT] = calllib('caTools', 'runquantile',...
                     IN,... input matrix (t, index)
                     OUT,... output variable
@@ -51,20 +60,14 @@ function computeBaselineNeuron(F, Layers, window)
         toc(start_time)
         fclose(fid);
         
-        % get values
-        x = m.x;     %#ok<*NASGU>
-        y = m.y;   
-        % z
-        t = m.t;
-        Z = z;
-        T = m.T;
+        % Z is the current z
+        Z = iz; 
 
         % create corresponding mmap info
         mmap = memmapfile(output,...
             'Format',{'uint16', [t, numNeurons],'bit'});
         save(outputInfo, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'centerCoord', 'neuronShape', 'numNeurons');
         clear('mmap');
-        
     end
 end
 

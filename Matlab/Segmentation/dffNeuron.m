@@ -53,7 +53,6 @@ T = m.T;
                 ( single(mbas.Data.bit(:,:)) - background(iz) );
         fwrite(fid, dff, 'single');
         toc(ttt);
-       
         fclose(fid);
         
         % clear memory map

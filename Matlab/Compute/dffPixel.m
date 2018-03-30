@@ -10,18 +10,26 @@ disp('creating ''dff_pixel'' directory'); mkdir(dffPath);
 % load background and convert to uint16
 load(fullfile(F.dir.IP, 'background.mat'), 'background');
 
-    for z = Layers
+% sigstack (x,y,z,t) ((xy,z,t))
+m = Focused.Mmap(F, 'corrected');
         
-        % sigstack (x,y,z,t) ((xy,z,t))
-        msig = Focused.Mmap(F, 'corrected');
-        m = msig; % just an alias for getting values
+% get values
+x = m.x; %#ok<*NASGU>
+y = m.y;
+z = 1; % only one layer concerned
+t = m.t;
+% Z = iz; % will be set at the end
+T = m.T;
+
+    for iz = Layers
+
         % basestack (t, xy)
-        basePath = fullfile(F.dir.IP, 'baseline_pixel', [num2str(z, '%02d') '.mat']);
+        basePath = fullfile(F.dir.IP, 'baseline_pixel', [num2str(iz, '%02d') '.mat']);
         load(basePath, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
         mbas = recreateMmap(F,mmap);
                 
-        output = fullfile(dffPath, [num2str(z, '%02d') '.bin']);
-        outputInfo = fullfile(dffPath, [num2str(z, '%02d') '.mat']);
+        output = fullfile(dffPath, [num2str(iz, '%02d') '.bin']);
+        outputInfo = fullfile(dffPath, [num2str(iz, '%02d') '.mat']);
         
         fid = fopen(output, 'wb');
         
@@ -30,26 +38,24 @@ load(fullfile(F.dir.IP, 'background.mat'), 'background');
         % (signal - baseline) / (baseline - background)
         % single( uint16 - uint16 ) / (single(uint16) - single)
         fwrite(fid,...
-            single( squeeze(msig(indices, z, :))' - mbas.Data.bit(:,:) ) ./ ...
-                ( single(mbas.Data.bit(:,:)) - background(z) ),...
+            single( squeeze(m(indices, iz, :))' - mbas.Data.bit(:,:) ) ./ ...
+                ( single(mbas.Data.bit(:,:)) - background(iz) ),...
             'single');
         
-        fprintf('computing dff per pixel for layer %d: %.02f s\n', z, toc)
-
+        fprintf('computing dff per pixel for layer %d: %.02f s\n', iz, toc)
         fclose(fid);
         
-        % get values
-        x = m.x; %#ok<*NASGU>
-        y = m.y;
-        % z
-        t = m.t;
-        Z = z; 
-        T = m.T;
-
+        % clear memory map
+        clear('mbas');
+        
+        % Z is the current z
+        Z = iz; 
+        
         % create corresponding mmap info
         mmap = memmapfile(output,...
             'Format',{'single', [t, numIndex],'bit'});
         save(outputInfo, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
+        clear('mmap');
 
     end
 end
