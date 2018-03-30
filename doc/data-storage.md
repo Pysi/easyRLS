@@ -79,7 +79,6 @@ For per_neuron, The matfile contains:
 - centerCoord (x and y coordinates of neurons center)
 - neuronShape (cell array containing linear indexes of each neuron pixels) 
 
-
 ## Bit depth
 The images are `uint16`. We keep `uint16` for the following files:
 - corrected.bin

@@ -2,3 +2,4 @@
 
 - folder architecture
 - data types
+- memory mapping
