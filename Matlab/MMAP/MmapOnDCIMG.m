@@ -36,8 +36,8 @@ classdef MmapOnDCIMG < handle
             self.Z = Z; 
             self.T = T; 
             
-            warning('this mmap will return RAS stacks even dcimg is %s', self.space);
-            self.f = getTransformation(self.space, 'RAS');
+            warning('this mmap will return RAST stacks even dcimg is %s', self.space);
+            self.f = getTransformation(self.space, 'RAST');
         end
         
         function out = subsref(self, S)

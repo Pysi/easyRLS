@@ -1,12 +1,13 @@
 function functionList = getTransformation(inMode, outMode)
 %getFunctions returns a list of functions (permute and flip) adapted to the
-%input mode (3D or 4D)
+%input mode (1D, 2D, 3D or 4D) using letters [rlapsit]
 
     % inits
-    assert(length(inMode) == length(outMode)); % to be sure that 'in' and 'out' have the same dimension
+    EM = sprintf('!!!\nModes not compatible:\ninMode = %s, outMode = %s\n!!!', inMode, outMode);
+    assert(length(inMode) == length(outMode), EM); % to be sure that 'in' and 'out' have the same dimension
     inMode = upper(inMode); % work on upper case
     outMode = upper(outMode); % work on upper case
-    ndim = length(inMode); % dimension (3 or 4 for example)
+    ndim = length(inMode); % dimension (between 1 and 4)
     %#ok<*AGROW>
 
     % gets the new order
@@ -32,7 +33,6 @@ function functionList = getTransformation(inMode, outMode)
         end    
     end
 
-
     function dimensionName =  dimName(char)
     % gets the dimension name (ex: 'R' is 'x')
         dimensionName = ' ';
@@ -46,7 +46,7 @@ function functionList = getTransformation(inMode, outMode)
             case {'S', 'I'}
                 dimensionName = 'z';
                 return
-            case {'T'}
+            case 'T'
                 dimensionName = 't';
                 return
         end
@@ -56,7 +56,7 @@ function functionList = getTransformation(inMode, outMode)
     %findpos returns the position of the given dimension (x, y, z) in the given mode
         % position function
         findc = @(in, c) find(~(in-c)); % finds a character in the inMode
-        findm = @(in, c1, c2) [findc(in, c1) findc(in, c2)]; % finds whether c1 or c2 if exist
+        findm = @(in, c1, c2) [findc(in, c1) findc(in, c2)]; % finds a mode (finds whether c1 or c2 if exist)
         mode = upper(mode);
         switch dim
             case 'x'
@@ -67,6 +67,9 @@ function functionList = getTransformation(inMode, outMode)
             return
             case 'z'
             position = findm(mode, 'I', 'S');   
+            return  
+            case 't'
+            position = findc(mode, 'T');   
             return   
         end
     end

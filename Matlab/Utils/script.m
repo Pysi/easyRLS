@@ -17,7 +17,7 @@ addpath(genpath('Programs/NeuroTools/Matlab'))
 cd /home/ljp/Science/Hugo/easyRLS/
 param.wd = pwd;
 param.date = '2018-01-11';
-param.run = 'Run05';
+param.run = 'Run00';
 param.Layers = 3:12; 
 param.RefLayers = 8:10;
 param.RefIndex = 10; 
