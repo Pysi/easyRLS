@@ -73,7 +73,7 @@ Tif images ordered in time. (could be interleaved)
 Files containing the analysis
 
 ### Files directory
-Files contains a `Config.mat`
+Files contains a `Config.mat`, created when initializing the Focus, a stack `corrected` corresponding to the drift corrected images, and the `IP` (for Image Processing) folder.
 
     Files/
     ├── Config.mat
@@ -111,3 +111,5 @@ Files contains a `Config.mat`
             ├── 04.mat
             ├── ...
             └── 20.mat
+
+What each of the files are will be explained later.
