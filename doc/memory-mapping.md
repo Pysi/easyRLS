@@ -36,8 +36,18 @@ will return you the value of the pixel (312, 566) of the layer 7 for all the tim
 ## Z renaming
 The main thing that does the Mmap class is to redefine the Z when you call the memory map to keep the same names as during the experiment. For example:
 
-1. during the experiment, you call the first layer '1' (top layer) and the 20th '20' (bottom layer).
+1. during the experiment, you call the 1st layer '1' (top layer) and the 20th '20' (bottom layer).
 2. when creating the binary file, you only select the layers '3' to '20'
 3. these layers are written using the RAS standard, which means layer '20' becomes 1st and layer '3' becomes 12th.
 4. when calling the Mmap, it will preserve the old names of the layers: calling layer '4' will return you the layer '4', which is the 11th in the binary file.
 
+## Unfocused Mmap
+If you want to use the Mmap outside a focused context, you can call it with:
+
+    Mmap(inPathTag)
+
+Where `inPathTag` is a string representing the absolute or relative path of the `.mat` and `.bin` files followed by the tag of the files (filename without extension). Example:
+
+    Mmap('Data/RLS1P/2016-02-29/Run 05/Files/corrected')
+
+It will give you exactly the same object, the only difference being you have to tell it the path you want to look at.

@@ -14,12 +14,12 @@ classdef Mmap < handle
         T % times concerned
     end
     methods
-        function self = Mmap(inputFile)
+        function self = Mmap(inPathTag)
         %Mmap constructor takes the bin file and the info file
         %inputFile is the input file (without extension)    
             
-            binFile = [inputFile '.bin'];
-            inputInfo = [inputFile '.mat'];
+            binFile = [inPathTag '.bin'];
+            inputInfo = [inPathTag '.mat'];
             
             load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T');
             self.mmap = ...
