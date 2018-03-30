@@ -18,7 +18,7 @@ function dcimgRASdrift(F, tag, kwargs)
     % TODO add the focused way to find RASification
     inMode = 'ali'; 
     outMode = 'ras';
-    [invertXY, invertX, invertY, invertZ] = defInvert(inMode, outMode);
+    f = getTransformation(inMode, outMode);
     
 % -------------------- drift parameters --------------------
     % parse input to change reference stack TODO write validation function
@@ -54,7 +54,7 @@ function dcimgRASdrift(F, tag, kwargs)
     
     % compute reference image with max
     Ref = max(m(X,Y, RefLayers, RefIndex),[],3);
-    Ref = transposeImage(Ref, invertXY, invertX, invertY);
+    Ref = applyTransformation(Ref, f);
     
     NTRef = NT.Image(Ref); % @image version of ref image
     
@@ -79,7 +79,7 @@ function dcimgRASdrift(F, tag, kwargs)
         
         % compute the image to compare with the ref image
         Img = max( m(X,Y,RefLayers,t) ,[],3);
-        Img = transposeImage(Img, invertXY, invertX, invertY);
+        Img = applyTransformation(Img, f);
         
         NTImg = NT.Image( Img ); % @image version of image
 
@@ -98,7 +98,7 @@ function dcimgRASdrift(F, tag, kwargs)
             
             % get image
             Img = m(:,:,z,t);
-            Img = transposeImage(Img, invertXY, invertX, invertY);
+            Img = applyTransformation(Img, f);
             
             % translate image
             Img = imtranslate(Img, [-dy(t), -dx(t)]);

@@ -7,7 +7,7 @@ function tifToRAS(F, Layers)
     % TODO add the focused way to find RASification
     inMode = 'ali'; 
     outMode = 'ras';
-    [invertXY, invertX, invertY, invertZ] = defInvert(inMode, outMode);
+    f = getTransformation(inMode, outMode);
 
     % defines X and Y    
     %     in 'update_info'
@@ -46,7 +46,7 @@ function tifToRAS(F, Layers)
             F.select(F.sets(z).id);
             imgName = F.imageName(t); % 'rel' if necessary
             tmp = imread(imgName);     % reads image (sometimes very long ??)
-            pix = transposeImage(tmp, ~invertXY, invertX, invertY); % ~
+            pix = applyTransformation(tmp, f); % ~
             BUFFER(:,:,z) = pix;
         end
         fwrite(fid, BUFFER, 'uint16'); % fwrite writes along the columns

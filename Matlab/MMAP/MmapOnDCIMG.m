@@ -13,8 +13,8 @@ classdef MmapOnDCIMG < handle
         Z % layers concerned
         T % times concerned
     end
-    properties (Hidden)
-        invert % no need to see this
+    properties (Hidden) % no need to see this
+        f % list of transformations to apply
     end
     
     methods
@@ -37,11 +37,7 @@ classdef MmapOnDCIMG < handle
             self.T = T; 
             
             warning('this mmap will return RAS stacks even dcimg is %s', self.space);
-            [invertXY, invertX, invertY, invertZ] = defInvert(self.space, 'RAS');
-            self.invert.iXY = invertXY;
-            self.invert.iX = invertX;
-            self.invert.iY = invertY;
-            self.invert.iZ = invertZ;            
+            self.f = getTransformation(self.space, 'RAS');
         end
         
         function out = subsref(self, S)
@@ -73,7 +69,7 @@ classdef MmapOnDCIMG < handle
                             % we want to return a [x,y,z,t] sized matrix
                             askedSize = [length(x), length(y), length(newS(1).subs{2}), length(newS(1).subs{3})];
                             out = reshape(subsref(self.mmaplin.Data.bit, newS), askedSize);
-                            out = transposeStack(out, self.invert.iXY, self.invert.iX, self.invert.iY, self.invert.iZ);
+                            out = applyTransformation(out, self.f);
                         case 3 % 3D with xy as index
                             xy = S(1).subs{1}; 
                             
