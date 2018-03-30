@@ -1,6 +1,7 @@
-function functionList = getTransformation(inMode, outMode)
-%getFunctions returns a list of functions (permute and flip) adapted to the
-%input mode (1D, 2D, 3D or 4D) using letters [rlapsit]
+function [functionList, inversions, order] = getTransformation(inMode, outMode)
+%getTransformation('ALI', 'RAS') returns a list of functions (permute and flip) adapted to the
+%input mode (1D, 2D, 3D or 4D) using letters in [rlapsitRLAPSIT]
+% ouputs optionnaly inversions and order
 
     % inits
     EM = sprintf('!!!\nModes not compatible:\ninMode = %s, outMode = %s\n!!!', inMode, outMode);

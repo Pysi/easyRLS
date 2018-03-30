@@ -7,7 +7,9 @@ function tifToRAS(F, Layers)
     % TODO add the focused way to find RASification
     inMode = 'ali'; 
     outMode = 'ras';
-    f = getTransformation(inMode, outMode);
+    [f, inversions, order] = getTransformation(inMode, outMode);
+    invertZ = inversions(3); % /!\ assuming z is 3rd
+    invertXY = ( order(1)==2 ); % /!\ assuming x and y are 1st and 2nd    
 
     % defines X and Y    
     %     in 'update_info'
