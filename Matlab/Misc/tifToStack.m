@@ -9,7 +9,7 @@ out = 'refStack.bin';
 outInfo = 'refStack.mat';
 fid = fopen(out, 'wb');
 
-for i = 1:length(tmp)
+for i = 12:-1:3
     img = imread(tmp(i).name);
     img = flip(img, 1);
     fwrite(fid, img, 'uint16');
