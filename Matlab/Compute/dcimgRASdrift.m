@@ -56,7 +56,7 @@ function dcimgRASdrift(F, tag, kwargs)
     
     % compute reference image with max
     Ref = max(m(X,Y, RefLayers, RefIndex),[],3);
-    Ref = applyTransformation(Ref, f);
+%     Ref = applyTransformation(Ref, f);
     
     NTRef = NT.Image(Ref); % @image version of ref image
     
@@ -81,7 +81,7 @@ function dcimgRASdrift(F, tag, kwargs)
         
         % compute the image to compare with the ref image
         Img = max( m(X,Y,RefLayers,t) ,[],3);
-        Img = applyTransformation(Img, f);
+%         Img = applyTransformation(Img, f);
         
         NTImg = NT.Image( Img ); % @image version of image
 
