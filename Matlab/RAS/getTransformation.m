@@ -25,8 +25,10 @@ function [functionList, inversions, order] = getTransformation(inMode, outMode)
 
     % get functions
     functionList = {};
-    functionList{end+1} = ...
-        @(X) permute(X, order); % permutation
+    if ~isequal(order, 1:ndim) % if no permutation
+        functionList{end+1} = ...
+            @(X) permute(X, order); % permutation
+    end
     for i = 1:ndim
         if inversions(i)
             functionList{end+1} = ...
