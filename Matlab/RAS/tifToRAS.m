@@ -13,14 +13,14 @@ function tifToRAS(F, Layers)
 
     % defines X and Y    
     %     in 'update_info'
-    %     this.width = size(this.pix, 2);
     %     this.height = size(this.pix, 1);
+    %     this.width = size(this.pix, 2);
     if invertXY
-        X = 1:F.IP.width;           % x size
-        Y = 1:F.IP.height;          % y size
+        X = 1:1:F.IP.height;          % x size (first dimension) = rows 'Y'
+        Y = 1:1:F.IP.width;           % y size (second dimension) = cols 'X'
     else
-        Y = 1:F.IP.width;           % x size
-        X = 1:F.IP.height;          % y size
+        Y = 1:1:F.IP.height;          % x size (first dimension) = rows 'Y'
+        X = 1:1:F.IP.width;           % y size (second dimension) = cols 'X'
     end
     %defines Z
     if invertZ
@@ -42,14 +42,22 @@ function tifToRAS(F, Layers)
     for t = T % along t
         
     % a buffer avoids switching reading and writing very fast
-    BUFFER = NaN(length(Y), length(X), length(Z));
+    % (is it useful ?)
+    BUFFER = NaN(length(X), length(Y), length(Z));
+    izb = 1; % z iterator over buffer
     
         for z = Z % along z
             F.select(F.sets(z).id);
             imgName = F.imageName(t); % 'rel' if necessary
-            tmp = imread(imgName);     % reads image (sometimes very long ??)
+            
+            % % % when doing imread, the number of columns 'X', is the second
+            % % % dimension of the matrix and corresponds to the 'x' in imageJ
+            tmp = imread(imgName)';     % reads image (sometimes very long ??)
+                                        % then transpose to make 1rst
+                                        % dimension being x
             pix = applyTransformation(tmp, f); % ~
-            BUFFER(:,:,z) = pix;
+            BUFFER(:,:,izb) = pix;
+            izb = izb +1 ; % writes on the next slice of the buffer
         end
         fwrite(fid, BUFFER, 'uint16'); % fwrite writes along the columns
         waitbar(t/T(end), w, sprintf('Converting TIF to RAS bin\n%d/%d frames done', t, T(end)))
@@ -63,8 +71,9 @@ function tifToRAS(F, Layers)
     y = length(Y); % second dimension
     z = length(Z); % number of layers of interest
     t = length(T); % number of frames par layer
+    space = 'RAST';
 
     % save info to a matlab file
-    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T');
+    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
 
 end
