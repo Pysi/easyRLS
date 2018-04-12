@@ -37,7 +37,8 @@ createGrayStack(F)
 %% view gray stack
 Focused.stackViewer(F, 'IP/graystack')
 %% segment neurons
-segmentBrain(F, param.Layers);
+segmentBrain(F, 'IP/graystack', param.Layers);
+
 %% compute baseline per neuron
 computeBaselineNeuron(F, param.Layers, 50);
 %% diplay it
@@ -81,7 +82,12 @@ driftCompute(F, {'RefStack', 'refStack'});
 seeDriftCorrection(F);
 %% apply if ok
 driftApply(F);
-
+%% view corrected stack
+Focused.stackViewer(F, 'corrected');
+%% compute background
+computeBackground(F, 'refStack', 1);
+%% segment neurons
+segmentBrain(F, 'refStack', param.Layers);
 
 
 

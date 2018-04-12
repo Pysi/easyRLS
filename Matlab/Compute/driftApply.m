@@ -35,8 +35,9 @@ function driftApply(F)
     t=m.t;
     Z=m.Z;
     T=m.T;
+    space = m.space;
     
     % save info to a matlab file
-    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T');
+    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
 
 end

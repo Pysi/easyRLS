@@ -1,7 +1,7 @@
-function segmentBrain(F, Layers)
+function segmentBrain(F, tag, Layers)
 %segmentBrain segments the brain layer by layer using segmentNeuron
 
-    m = Focused.Mmap(F, 'IP/graystack'); % get gray stack
+    m = Focused.Mmap(F, tag); % get gray stack
     load(fullfile(F.dir.IP, 'mask.mat'), 'mask'); % get mask
 
     segPath = fullfile(F.dir.IP, 'Segmented');
