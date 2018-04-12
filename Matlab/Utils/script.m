@@ -69,6 +69,23 @@ clean(F);
 tifToRAS(F, param.Layers);
 %% see RAS
 Focused.stackViewer(F, 'rawRAS');
+%% semi auto ROI
+semiAutoROI(F, param.Layers, param.RefIndex, 'rawRAS'); % let you adjust automatic ROI
+%% check if ROI is ok
+Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
+%% check if ref stack
+Focused.stackViewer(F, 'refStack'); 
+%% computes the drift on external stack
+driftCompute(F, {});%'RefStack', 'refStack'})
+%% see if it is ok
+seeDriftCorrection(F);
+%% apply if ok
+driftApply(F);
+
+
+
+
+
 
 
 %% END
