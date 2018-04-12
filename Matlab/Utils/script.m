@@ -12,16 +12,14 @@ addpath(genpath('Programs/easyRLS/Matlab'))
 addpath(genpath('Programs/NeuroTools/Matlab'))
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%                           Version for DCIMG                             %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 %% go to project folder, set parameters, and get focus
-cd /home/ljp/Science/Hugo/easyRLS/
-param.wd = pwd;
-param.date = '2018-01-11';
-param.run = 'Run00';
 param.Layers = 3:12; 
 param.RefLayers = 8:10;
 param.RefIndex = 10; 
-F = NT.Focus(param.wd, '', param.date, param.run);
+F = NT.Focus('/home/ljp/Science/Hugo/easyRLS/', '', '2018-03-27', 'Run 10');
 %% if dcimg, you can already view it (if tif, go to imageJ)
 Focused.stackViewer(F, [F.run '.dcimg']);
 %% semi auto ROI on dcimg
@@ -62,5 +60,15 @@ stackViewer2D(F, 'dff', param.Layers);
 %% delete unecessary files (including baseline)
 clean(F);
 %}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%                           Commands for TIF                              %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+%% tif to ras stack
+tifToRAS(F, param.Layers);
+%% see RAS
+Focused.stackViewer(F, 'rawRAS');
+
 
 %% END
