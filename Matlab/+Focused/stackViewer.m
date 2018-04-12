@@ -26,8 +26,13 @@ function stackViewer(F, tag)
         m = Focused.Mmap(F, tag);
         
     end
+    
+    minmax = [400 800];
+    if strcmp(tag, 'refStack')
+        minmax = [400 4000];
+    end
 
     % call stackViewer
-    stackViewer(m, titleFig, mask)
+    stackViewer(m, titleFig, mask, minmax)
 
 end

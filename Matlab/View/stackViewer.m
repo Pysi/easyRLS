@@ -1,4 +1,4 @@
-function stackViewer(m, titleFig, mask)
+function stackViewer(m, titleFig, mask, minmax)
 %stackViewer(m, titleFig, mask) is analog to imageJ 'hyperstack'
 % it allows to visualize the brain and browse z and t directions
 % it realises a rotation of 90° before printing to get an intuitive repair
@@ -20,7 +20,7 @@ function stackViewer(m, titleFig, mask)
     
     f = figure('Visible','off'); % create invisible figure
     img = rot90(m(:,:,z,t)); % load transposed image
-    h = imshow(img, [400 1200]);
+    h = imshow(img, minmax);
     title([titleFig '   ' 'z=' num2str(z) '   t=' num2str(t)]);
     % set(gca,'Ydir','normal') (reverse)
 
