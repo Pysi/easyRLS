@@ -7,6 +7,7 @@ cmtk stands for Computational Morphometry ToolKit
 - [CMTK user guide (pdf)](https://www.nitrc.org/docman/view.php/212/708/UserGuideCMTK.pdf)
 - [NITRC project page](https://www.nitrc.org/projects/cmtk)
 - [all documents](https://www.nitrc.org/docman/?group_id=212)
+- [Tommaso's guide](https://cloud.ljp.upmc.fr/index.php/s/AdYNq0zw65NUCBV)
 
 ## Install
 
@@ -51,3 +52,8 @@ To apply the inverse transformation, just add `-i` or `--inverse` :
 
     cmtk reformatx -o transformed.nrrd --floating floatingImage.nhdr targetImage.nrrd -i transformation.xform
 
+## Alternatives
+
+Instead of NRRD, we can use NIFTI (https://nifti.nimh.nih.gov/)
+
+Instead of CMTK, we can use Ants (http://stnava.github.io/ANTsDoc/)
