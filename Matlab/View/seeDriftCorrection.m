@@ -9,7 +9,7 @@ function seeDriftCorrection(F)
     figure
     h = imshow(m(:,:,m.Z(1),1), [400 800]);
     for t = 1:10:m.t
-        img = imtranslate(m(:,:,m.Z(1),t), [-dx(t), -dy(t)]);
+        img = imtranslate(m(:,:,m.Z(1),t), [-dy(t), -dx(t)]);
         set(h, 'Cdata', img);
         drawnow
     end
