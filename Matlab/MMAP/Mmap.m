@@ -4,6 +4,7 @@ classdef Mmap < handle
 % subscript can be 4D or 3D
 % --- you can call the focused version of Mmap : Focused.Mmap ---
     properties
+        space % RAS or RAST
         mmap % 4D mmap (x,y,z,t)
         mmaplin % 3D mmap of *the same* binary file (xy, z, t)
         x % width
@@ -14,14 +15,16 @@ classdef Mmap < handle
         T % times concerned
     end
     methods
+        % --- constructor ---
         function self = Mmap(inPathTag)
         %Mmap constructor takes the bin file and the info file
-        %inputFile is the input file (without extension)    
-            
+        %inputFile is the input file (without extension)
+        
             binFile = [inPathTag '.bin'];
             inputInfo = [inPathTag '.mat'];
             
-            load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T');
+            load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
+            self.space = space; % RAS or RAST
             self.mmap = ...
                 memmapfile(binFile,'Format',{'uint16',[x,y,z,t],'bit'}, ...
                     'Repeat', 1); % repeat option might prevent from detecting errors (such on t)
@@ -36,6 +39,7 @@ classdef Mmap < handle
             self.T = T; 
         end
         
+        % --- defining '()' subsref ---
         function out = subsref(self, S)
         %subsref calls the mmap with the correct z index
             switch S(1).type
@@ -67,9 +71,8 @@ classdef Mmap < handle
                     error('subsref other than () or . are not implemented')
             end        
         end
-    end
-    
-    methods %(Static)
+        
+        % --- redefining z ---
         function new_z = zCorrect(self, old_z)
         %zCorrect returns z compatible with mmap
         % example :
@@ -84,11 +87,8 @@ classdef Mmap < handle
                     error('INDEX OUT OF RANGE : trying to reach layers outside mmap\n    asked : %s\n    available : %s', num2str(old_z), num2str(self.Z))
                 end
             end
-
         end
-        
     end
-    
 end
         
             
