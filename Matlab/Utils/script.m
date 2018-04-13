@@ -91,8 +91,10 @@ computeBackground(F, 'rawRAS', param.RefIndex); % better
 %% segment neurons
 segmentBrain(F, 'refStack', param.Layers);
 
-
-
+%% map to reference brain
+mapToRefBrain(F, 'refStack', 'affine')
+mapToRefBrain(F, 'refStack', 'warp')
+mapToRefBrain(F, 'refStack', 'reformat', 'affine')
 
 
 
