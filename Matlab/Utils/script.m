@@ -85,7 +85,9 @@ driftApply(F);
 %% view corrected stack
 Focused.stackViewer(F, 'corrected');
 %% compute background
-computeBackground(F, 'refStack', 1);
+computeBackground(F, 'refStack', 1); % not a valid background
+%% compute background
+computeBackground(F, 'rawRAS', param.RefIndex); % better
 %% segment neurons
 segmentBrain(F, 'refStack', param.Layers);
 

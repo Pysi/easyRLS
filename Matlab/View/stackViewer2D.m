@@ -7,6 +7,7 @@ function stackViewer2D(F, tag, Layers)
 
 % THIS IS NOT MEANT TO BE UNDERSTANDABLE
 
+minmax = [400 1200];
 viewDFF = false;
 viewNeuron = false;
 if strcmp(tag, 'dff') || strcmp(tag, 'dff_neuron')
@@ -24,6 +25,7 @@ try % tries to get a background
 catch
     try
         mgray = Focused.Mmap(F, 'refStack');
+        minmax = [400 4000];
     catch
         error('no gray or ref stack')
     end
@@ -66,7 +68,7 @@ end
 
     % show image
     if viewDFF; h = imshow(rot90(img), [-.5 2]);
-    else; h = imshow(rot90(img), [400 1200]);
+    else; h = imshow(rot90(img), minmax);
     end
     title([F.name '   z=' num2str(z) '   t=' num2str(t)]);
     % -----
