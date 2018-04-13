@@ -19,7 +19,15 @@ end
 m = cell(1,20); % cell array for matfiles
 % Data = cell(1,20); % easyer access to data
 
-mgray = Focused.Mmap(F, 'IP/graystack');
+try % tries to get a background
+    mgray = Focused.Mmap(F, 'IP/graystack');
+catch
+    try
+        mgray = Focused.Mmap(F, 'refStack');
+    catch
+        error('no gray or ref stack')
+    end
+end
 
     for z = Layers
         inputInfo = fullfile(F.dir.IP, tag, [num2str(z, '%02d') '.mat']);
