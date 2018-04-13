@@ -30,7 +30,3 @@ function CMTK_warp(ref, mov, out, initial)
     disp('END');
 
 end
-
-function e = escape(str)
-e = join(["'" str "'"], "");
-end
