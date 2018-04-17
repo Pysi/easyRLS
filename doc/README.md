@@ -1,7 +1,14 @@
 # Home of easyRLS documentation
 
-In the 'doc' folder, you will find documentation for:
+## Install
 
-- folder architecture
-- data types
-- memory mapping
+- [install instructions](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/install.md)
+- quickstart
+
+## Organisation and principles
+- [folder architecture](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/folder-architecture.md)
+- [data types](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/data-storage.md)
+- [memory mapping](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/memory-mapping.md)
+
+## Other
+- [benchmarks](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/benchmarks.md)
