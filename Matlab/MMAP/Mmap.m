@@ -54,7 +54,7 @@ classdef Mmap < handle
                     end
                     % corrects the z
                     old_z = S.subs{zpos}; % values asked ex layers [4 5 6]
-                    new_z = self.zCorrect(old_z); % values corrected ex index [2 3 4]
+                    new_z = self.zCorrect(old_z, self.Z); % values corrected ex index [2 3 4]
                     new_S = S; % (avoid illegal use of subscript parameter)
                     new_S(1).subs{zpos} = new_z; % replace the z in the subscript
                     
@@ -71,20 +71,28 @@ classdef Mmap < handle
                     error('subsref other than () or . are not implemented')
             end        
         end
-        
+    end
+    
+    methods (Static)        
         % --- redefining z ---
-        function new_z = zCorrect(self, old_z)
+        function new_z = zCorrect(old_z, Z)
         %zCorrect returns z compatible with mmap
-        % example :
+        % examples :
+        % EX1
+        % Z = [ 3 4 5 6 7 8 9 10 ]
         % input is 4 5 6
         % output should be 2 3 4
+        % EX2
+        % Z = [ 10 9 8 7 6 5 4 3 ]
+        % input is 4 5 6
+        % output should be 5 6 7
 
             new_z = NaN(size(old_z)); % values corrected ex [2 3 4]
             for i = 1:length(old_z)
                 try
-                    new_z(i) = find(self.Z == old_z(i));
+                    new_z(i) = find(Z == old_z(i));
                 catch
-                    error('INDEX OUT OF RANGE : trying to reach layers outside mmap\n    asked : %s\n    available : %s', num2str(old_z), num2str(self.Z))
+                    error('INDEX OUT OF RANGE : trying to reach layers outside mmap\n    asked : %s\n    available : %s', num2str(old_z), num2str(Z))
                 end
             end
         end
