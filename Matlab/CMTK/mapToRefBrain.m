@@ -1,21 +1,22 @@
-function mapToRefBrain(F, mov, mode, transformation)
+function mapToRefBrain(F, mode, transformation, mov)
 %mapToRefBrain calls CMTK wrappers for different actions
 % F     focus
-% ref   reference fixed image
-% mov   moving image
-% mode  affine, warp, reformat
-% transformation to use only needed for reformat
+% mode  affine, warp, reformat, convertcoord
+% transformation '' if none
+% mov   moving image if necessary
 
-refPath = fullfile(F.dir.RefBrain, 'RefBrain.nhdr'); % TODO create reference
-movPath = fullfile(F.dir.files, [mov '.nhdr']);
+if exist('mov', 'var')
+    refPath = fullfile(F.dir.RefBrain, 'RefBrain.nhdr'); % TODO create reference
+    movPath = fullfile(F.dir.files, [mov '.nhdr']);
+end
 
 switch mode
     case "affine"
-        outPath = fullfile(F.dir.RefBrain, 'affine.xform');
+        outPath = fullfile(F.dir.RefBrain, [transformation '.xform']);
         CMTK_affine(refPath, movPath, outPath);
     case "warp"
         outPath = fullfile(F.dir.RefBrain, 'warp.xform');
-        if exist('transformation', 'var')
+        if transformation
             initial = fullfile(F.dir.RefBrain, string([transformation '.xform']));
         else
             initial = "";
@@ -26,6 +27,13 @@ switch mode
         outPath = fullfile(F.dir.RefBrain, 'reformated.nrrd');
         transPath = fullfile(F.dir.RefBrain, string([transformation '.xform']));
         CMTK_reformat(refPath, movPath, outPath, transPath);        
+    case "convertcoord"
+        coordPath = fullfile(F.dir.IP, 'Segmented', 'coordinates.mat');
+        load(coordPath, 'coordinates', 'numberNeuron');
+        transPath = fullfile(F.dir.RefBrain, string([transformation '.xform']));
+        refCoordinates = CMTK_convertCoord(coordinates, transPath);
+        refCoordPath = fullfile(F.dir.RefBrain, 'refCoordinates.mat');
+        save(refCoordPath, 'refCoordinates', 'numberNeuron');
     otherwise
         disp("no such mode, doing nothing");        
 end

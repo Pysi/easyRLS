@@ -8,7 +8,7 @@ function CMTK_reformat(ref, mov, out, transformation)
     tool = "cmtk reformatx";
     options = join([
         ""
-        ], " ");
+        ]);
     verbose = '-v';
     output = ['-o ' escape(out)];
 

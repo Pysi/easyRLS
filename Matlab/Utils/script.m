@@ -90,11 +90,23 @@ computeBackground(F, 'refStack', 1); % not a valid background
 computeBackground(F, 'rawRAS', param.RefIndex); % better
 %% segment neurons
 segmentBrain(F, 'refStack', param.Layers);
+stackCoord(F, param.Layers)
 
-%% map to reference brain
-mapToRefBrain(F, 'refStack', 'affine')
-mapToRefBrain(F, 'refStack', 'warp')
-mapToRefBrain(F, 'refStack', 'reformat', 'affine')
+%% choose reference brain
+chooseRefBrain(F, '/home/ljp/Science/Hugo/easyRLS/Data/2018-03-27/Run 10/RefBrain/RefBrain.nhdr');
+% TODO automatically create nhdr corresponding to the ref brain nrrd or nhdr
+%% do affine transformation
+mapToRefBrain(F, 'affine', 'affine', 'refStack')
+%% do non-rigid transformation
+mapToRefBrain(F, 'warp', 'affine', 'refStack')
+%% apply registration
+mapToRefBrain(F, 'reformat', 'affine', 'refStack')
+%% apply registration on neurons coordinates
+mapToRefBrain(F, 'convertcoord', 'affine', '')
+
+%% export values to hdf5 → Thijs
+exportToHDF5(F);
+
 
 
 
