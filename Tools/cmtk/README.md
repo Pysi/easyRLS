@@ -52,6 +52,16 @@ To apply the inverse transformation, just add `-i` or `--inverse` :
 
     cmtk reformatx -o transformed.nrrd --floating floatingImage.nhdr targetImage.nrrd -i transformation.xform
 
+### apply on coordinates
+
+To apply a transformation on coordinates, use `streamxform` which reads from standard input and prints to standard output. For example
+
+    echo 0 0 0 | cmtk streamxform affine.xform
+If you want to convert a lot of coordinates, write them in a text file and pass them to streamxform with `cat`. To inverse the transformation, you have to specify the end of options with `--` and then precise `--inverse` before the transformation. For example
+
+    cat coord.txt | cmtk streamxform -- --inverse affine.xform
+Be careful, inverse means 'moving → reference' and direct means 'reference → moving'.
+
 ## Alternatives
 
 Instead of NRRD, we can use NIFTI (https://nifti.nimh.nih.gov/)

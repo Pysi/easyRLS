@@ -18,7 +18,7 @@ and then in Matlab
     addpath(genpath('NeuroTools/Matlab'))
 
 
-### R runquantile
+## R runquantile
 To compute the baseline, we use the function `runquantile` from the `caTools` R library. To install R 
 
     sudo apt install r-base
@@ -29,6 +29,11 @@ In both cases, you have to add the shared library in Matlab by calling
 
     loadlibrary('caTools.so', 'caTools.h');
 These files are present in easyRLS/Tools/caTools/.
+
+## CMTK
+See [mini cmtk doc](https://github.com/LaboJeanPerrin/easyRLS/tree/master/Tools/cmtk). You only have to do
+
+    sudo apt install cmtk
 
 
 ## Update
