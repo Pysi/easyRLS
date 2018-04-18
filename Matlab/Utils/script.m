@@ -74,6 +74,11 @@ Focused.stackViewer(F, 'rawRAS');
 semiAutoROI(F, param.Layers, param.RefIndex, 'rawRAS'); % let you adjust automatic ROI
 %% check if ROI is ok
 Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%                           With ref stack                                %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
 %% check if ref stack
 Focused.stackViewer(F, 'refStack'); 
 %% computes the drift on external stack
@@ -91,6 +96,12 @@ computeBackground(F, 'rawRAS', param.RefIndex); % better
 %% segment neurons
 segmentBrain(F, 'refStack', param.Layers);
 stackCoord(F, param.Layers)
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%                           Mapping to ref brain                          %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
 
 %% choose reference brain
 chooseRefBrain(F, '/home/ljp/Science/Hugo/easyRLS/Data/2018-03-27/Run 10/RefBrain/RefBrain.nhdr');

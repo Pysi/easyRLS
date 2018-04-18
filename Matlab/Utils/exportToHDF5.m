@@ -18,13 +18,13 @@ function exportToHDF5(F)
     end
 
     h5create(fileName,'/Data/Coordinates', [numberNeuron 3]); % xyz = 3 coordinates
-    h5write(fileName,'/Data/Coordinates', coordinates);
+    h5write(fileName,'/Data/Coordinates', coordinates ./ 1000); % µm → mm
 
     h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
-    h5write(fileName, '/Data/RefCoordinates', refCoordinates);
+    h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
 
-    % h5create(fileName,'/Data/Times',[1, Range]);
-    % h5write(fileName,'/Data/Times', time_vector(1:Range));
+    h5create(fileName,'/Data/Times', [1 timeFrames]);
+    h5write(fileName,'/Data/Times', 1: F.dt / 1000 * F.param.NLayers :timeFrames); % ms → s
 
     %h5create(FileName,'/Data/Behavior', [Range,3]);
     %h5write(FileName,'/Data/Behavior', Behavior);

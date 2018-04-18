@@ -2,6 +2,16 @@
 
 This document intends to provide an overview of the folder architecture. Each time you see three files with extensions xxx.bin, xxx.mat, xxx.nhdr, this corresponds to a single stack and the informations attached to it.
 
+## Root directory
+I recommend your computer's root directory contains
+
+    Data
+    ├── Study1
+    └── Study2
+    Programs
+    ├── easyRLS
+    └── NeuroTools
+
 ## Data directory
 The neurotools Focus class helps you deal with the folder architecture if you respect the 'Study/Date/Run' convention :
 
