@@ -1,11 +1,11 @@
-function tifToRAS(F, Layers)
+function tifToRAS(F, Layers, inMode)
 %tifToRAS(F, Layers) takes the tif images and write it in a 4D RAS mmap file
 % F is the focus on the run
 % Layers are the layers concerned
 % TODO optimize
 
     % TODO add the focused way to find RASification
-    inMode = 'RAS'; 
+%     inMode = 'RAS'; 
     outMode = 'RAS';
     [f, inversions, order] = getTransformation(inMode, outMode);
     invertZ = inversions(3); % /!\ assuming z is 3rd
