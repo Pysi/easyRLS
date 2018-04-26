@@ -11,15 +11,19 @@ cd /home/ljp/Science/Hugo/easyRLS/
 addpath(genpath('Programs/easyRLS/Matlab'))
 addpath(genpath('Programs/NeuroTools/Matlab'))
 
+
+%% go to project folder, set parameters, and get focus
+param.Layers = 3:20; 
+param.RefLayers = 8:10;
+param.RefIndex = 10; 
+F = NT.Focus('/home/ljp/Science/Projects/RLS/', '', '2018-01-31', 8);
+
+
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 %                           Version for DCIMG                             %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-%% go to project folder, set parameters, and get focus
-param.Layers = 3:12; 
-param.RefLayers = 8:10;
-param.RefIndex = 10; 
-F = NT.Focus('/home/ljp/Science/Hugo/easyRLS/', '', '2018-03-27', 'Run 10');
+
 %% if dcimg, you can already view it (if tif, go to imageJ)
 Focused.stackViewer(F, [F.run '.dcimg']);
 %% semi auto ROI on dcimg
