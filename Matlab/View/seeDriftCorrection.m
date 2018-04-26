@@ -11,7 +11,9 @@ function seeDriftCorrection(F)
     for t = 1:10:m.t
         img = imtranslate(m(:,:,m.Z(1),t), [-dy(t), -dx(t)]);
         set(h, 'Cdata', img);
+        title(num2str(t))
         drawnow
+        
     end
     
     clear gcf
