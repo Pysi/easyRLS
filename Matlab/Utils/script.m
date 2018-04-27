@@ -3,11 +3,11 @@
 clear
 clc
 %% load library to compute baseline
-cd /home/ljp/Science/Hugo/easyRLS/
+cd /home/ljp/Science/Projects/easyRLS/
 [~,~] = loadlibrary('Programs/easyRLS/Tools/caTools/caTools.so',...
                     'Programs/easyRLS/Tools/caTools/caTools.h');
 %% add path
-cd /home/ljp/Science/Hugo/easyRLS/
+cd /home/ljp/Science/Projects/easyRLS/
 addpath(genpath('Programs/easyRLS/Matlab'))
 addpath(genpath('Programs/NeuroTools/Matlab'))
 
@@ -71,7 +71,7 @@ clean(F);
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 %% tif to ras stack
-tifToRAS(F, param.Layers);
+tifToRAS(F, param.Layers, 'ALI');
 %% see RAS
 Focused.stackViewer(F, 'rawRAS');
 %% semi auto ROI
@@ -86,15 +86,19 @@ Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argume
 %% check if ref stack
 Focused.stackViewer(F, 'refStack'); 
 %% computes the drift on external stack
-driftCompute(F, {'RefStack', 'refStack'});
+param.RefLayers = 8:10;
+param.RefIndex = 10; 
+driftCompute(F, {'RefIndex', param.RefIndex,'RefLayers', param.RefLayers});
+%% computes the drift on external stack
+param.RefLayers = 8:10;
+param.RefIndex = 10; 
+driftCompute(F, {'RefIndex', param.RefIndex,'RefLayers', param.RefLayers});
 %% see if it is ok
 seeDriftCorrection(F);
 %% apply if ok
 driftApply(F);
 %% view corrected stack
 Focused.stackViewer(F, 'corrected');
-%% compute background
-computeBackground(F, 'refStack', 1); % not a valid background
 %% compute background
 computeBackground(F, 'rawRAS', param.RefIndex); % better
 %% segment neurons
