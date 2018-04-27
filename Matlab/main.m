@@ -2,21 +2,21 @@
 % Hugo Trentesaux 2018-03-27
 clear
 clc
+
 %% load library to compute baseline
-cd /home/ljp/Science/Hugo/easyRLS/
-[~,~] = loadlibrary('Programs/easyRLS/Tools/caTools/caTools.so',...
-                    'Programs/easyRLS/Tools/caTools/caTools.h');
+
+cd(path.caTools)
+[~,~] = loadlibrary('caTools.so',...
+                    'caTools.h');
 %% add path
-cd /home/ljp/Science/Hugo/easyRLS/
-addpath(genpath('Programs/easyRLS/Matlab'))
-addpath(genpath('Programs/NeuroTools/Matlab'))
+cd(path.program)
+addpath(genpath('easyRLS/Matlab'))
+addpath(genpath('NeuroTools/Matlab'))
 
 
 %% go to project folder, set parameters, and get focus
-param.Layers = 3:20; 
-param.RefLayers = 8:10;
-param.RefIndex = 10; 
-F = NT.Focus('/home/ljp/Science/Projects/RLS/', '', '2018-01-31', 8);
+
+F = NT.Focus(path.root, param.study, param.date, param.run);
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -25,7 +25,7 @@ F = NT.Focus('/home/ljp/Science/Projects/RLS/', '', '2018-01-31', 8);
 
 
 %% if dcimg, you can already view it (if tif, go to imageJ)
-Focused.stackViewer(F, [F.run '.dcimg']);
+Focused.stackViewer(F, [F.run '.dcimg']); % TODO define default name for dcimg
 %% semi auto ROI on dcimg
 semiAutoROI(F, param.Layers, param.RefIndex, [F.run '.dcimg']); % let you adjust automatic ROI
 %% check if ROI is ok
