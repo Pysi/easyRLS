@@ -7,7 +7,7 @@ function stackViewer(F, tag)
     sp = split(tag, '.'); % splits the tag to see if there is an extension
 
     if strcmp(tag, 'ROImask') % particular case to view mask contour
-        load(fullfile(F.dir.IP, 'mask.mat'), 'mask');
+        load(F.tag('mask'), 'mask');
         try
             m = Focused.Mmap(F, 'rawRAS');
         catch

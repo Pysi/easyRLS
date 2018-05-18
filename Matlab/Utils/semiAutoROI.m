@@ -43,10 +43,10 @@ function semiAutoROI(F, Layers, t, tag)
 % % % % % % % % % % % % % % % % % % % % % % % % load existing or initialize
     try % try to load existing mask.mat
         disp('found mask file, loading it')
-        load(fullfile(F.dir.IP, 'mask.mat'), 'mask'); % get the mask
+        load(F.tag('mask'), 'mask'); % get the mask
     catch % if no mask variable to load, initialize to NaN
-        disp('creating ''IP'' directory')
-        mkdir(F.dir.IP);
+        disp('creating ''Mask'' directory')
+        mkdir(F.dir('Mask'));
         disp('creating new mask file')
         mask = false(x,y,20); % default total number of layers
     end
@@ -85,7 +85,7 @@ function semiAutoROI(F, Layers, t, tag)
 
         % stores it in 'mask' variable and saves it
         mask(:,:,z) = tmp2;
-        save(fullfile(F.dir.IP, 'mask.mat'), 'mask'); % overwrites the mask
+        save(F.tag('mask'), 'mask'); % overwrites the mask
         fprintf('saved layer %d\n', z);
 
     end

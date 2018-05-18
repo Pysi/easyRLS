@@ -8,8 +8,8 @@ function computeBaselinePixel(F, Layers, window)
     % ignores the delay long
     w = floor(window / dt) ; % number of frames of the window (ex 125 frames)
 
-    baselinePath = fullfile(F.dir.IP, 'baseline_pixel');
-    disp('creating ''baseline_pixel'' directory'); mkdir(baselinePath);
+    baselinePath = F.dir('BaselinePixel');
+    disp('creating ''BaselinePixel'' directory'); mkdir(baselinePath);
         
     % sigstack (x,y,z,t) ((xy,z,t))
     m = Focused.Mmap(F, 'corrected');

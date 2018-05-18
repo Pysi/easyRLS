@@ -70,7 +70,8 @@ function dcimgRASdrift(F, tag, kwargs)
     
 % ------------------- loop ---------------------------
 	% open in write binary mode
-    outputPathTag = fullfile(F.dir.files, 'corrected');
+    [~,~] = mkdir(F.dir('corrected'));
+    outputPathTag = F.tag('corrected');
 	fid = fopen([outputPathTag '.bin'], 'wb');
     w = waitbar(0, 'performing drift correction on dcimg');
     T = m.T;
@@ -116,11 +117,11 @@ function dcimgRASdrift(F, tag, kwargs)
     
     % --- Save drift parameters ---
     % save bbox and drifts
-    disp('making ''IP'' directory');
-    mkdir(F.dir.IP);
-    save(fullfile(F.dir.IP, 'DriftBox'), 'bbox');
-    save(fullfile(F.dir.IP, 'Drifts'), 'dx', 'dy');
-    savefig(fullfile(F.dir.IP, 'driftCorrection'));
+    disp('making ''Drift'' directory');
+    [~,~] = mkdir(F.dir('Drift'));
+    save(fullfile(F.dir('Drift'), 'DriftBox.mat'), 'bbox');
+    save(fullfile(F.dir('Drift'), 'Drifts.mat'), 'dx', 'dy');
+    savefig(fullfile(F.dir('Drift'), 'driftCorrection.fig'));
 
     % defines x and y
     if invertXY

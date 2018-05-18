@@ -4,11 +4,11 @@ function dffPixel(F, Layers)
 % Layers layers you want to compute dff on (ex [3 4 6])
 
 % create dff directory
-dffPath = fullfile(F.dir.IP, 'dff_pixel');
+dffPath = F.dir('DFFPixel');
 disp('creating ''dff_pixel'' directory'); mkdir(dffPath);
 
 % load background and convert to uint16
-load(fullfile(F.dir.IP, 'background.mat'), 'background');
+load(F.tag('background'), 'background');
 
 % sigstack (x,y,z,t) ((xy,z,t))
 m = Focused.Mmap(F, 'corrected');
@@ -24,7 +24,7 @@ T = m.T;
     for iz = Layers
 
         % basestack (t, xy)
-        basePath = fullfile(F.dir.IP, 'baseline_pixel', [num2str(iz, '%02d') '.mat']);
+        basePath = fullfile(F.dir('BaselinePixel'), [num2str(iz, '%02d') '.mat']);
         load(basePath, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
         mbas = recreateMmap(F,mmap);
                 

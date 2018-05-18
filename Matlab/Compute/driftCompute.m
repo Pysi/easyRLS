@@ -1,5 +1,5 @@
 function driftCompute(F, kwargs)
-%driftCompute computes the drift on the given layer against the given reference stack max projection
+%driftCompute(F [,kwargs]) computes the drift on the given layer against the given reference stack max projection
 % using the parabolic fft based drift correction
 % F is the focus
 % m is the Mmap object
@@ -10,6 +10,12 @@ function driftCompute(F, kwargs)
 %  - bbox définie dans le programme                         %
 %  - enregistrement des drifts dans des dossiers séparés    %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+switch nargin
+    case 1
+        kwargs = {};
+    case 2
+end
 
 % create wrapper object
 m = Focused.Mmap(F, 'rawRAS');
@@ -70,11 +76,11 @@ end
 
 % --- Save ---
 % save bbox and drifts
-disp('making ''IP'' directory');
-mkdir(F.dir.IP);
-save(fullfile(F.dir.IP, 'DriftBox'), 'bbox');
-save(fullfile(F.dir.IP, 'Drifts'), 'dx', 'dy');
-savefig(fullfile(F.dir.IP, 'driftCorrection'));
+disp('making ''Drift'' directory');
+[~,~] = mkdir(F.dir('Drift'));
+save(fullfile(F.dir('Drift'), 'DriftBox.mat'), 'bbox');
+save(fullfile(F.dir('Drift'), 'Drifts.mat'), 'dx', 'dy');
+savefig(fullfile(F.dir('Drift'), 'driftCorrection.fig'));
 
 close gcf
 

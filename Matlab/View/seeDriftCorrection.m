@@ -1,7 +1,7 @@
 function seeDriftCorrection(F)
 %seeDriftCorrection(F) computes and display translated images in real time
 
-    driftPath = fullfile(F.dir.IP, 'Drifts.mat');
+    driftPath = fullfile(F.dir('Drift'), 'Drifts.mat');
     load(driftPath, 'dx', 'dy')
     
     m = Focused.Mmap(F, 'rawRAS');

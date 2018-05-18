@@ -10,10 +10,10 @@ function stackViewer2D(F, tag, Layers)
 minmax = [400 1200];
 viewDFF = false;
 viewNeuron = false;
-if strcmp(tag, 'dff') || strcmp(tag, 'dff_neuron')
+if strcmp(tag, 'DFF') || strcmp(tag, 'DFFNeuron')
     viewDFF = true;
 end
-if strcmp(tag, 'baseline_neuron') || strcmp(tag, 'dff_neuron')
+if strcmp(tag, 'BaselineNeuron') || strcmp(tag, 'DFFNeuron')
     viewNeuron = true;
 end
 
@@ -21,7 +21,7 @@ m = cell(1,20); % cell array for matfiles
 % Data = cell(1,20); % easyer access to data
 
 try % tries to get a background
-    mgray = Focused.Mmap(F, 'IP/graystack');
+    mgray = Focused.Mmap(F, 'graystack');
 catch
     try
         mgray = Focused.Mmap(F, 'refStack');
@@ -32,7 +32,7 @@ catch
 end
 
     for z = Layers
-        inputInfo = fullfile(F.dir.IP, tag, [num2str(z, '%02d') '.mat']);
+        inputInfo = fullfile(F.dir(tag), [num2str(z, '%02d') '.mat']);
         m{z}.matfile = matfile(inputInfo); % readable matfile (prevents from loading all indices at the same time)
 %         Data{z} = m{z}.mmap.Data; % loads reference on bit
     end

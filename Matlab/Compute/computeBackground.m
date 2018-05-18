@@ -13,6 +13,7 @@ function computeBackground(F, tag, RefIndex)
         background(z) = single(Img.background);
     end
 
-    save(fullfile(F.dir.IP, 'background.mat'), 'background');
+    [~,~] = mkdir(F.dir('Background'));
+    save(F.tag('background'), 'background');
 
 end

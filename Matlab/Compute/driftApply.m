@@ -1,16 +1,17 @@
 function driftApply(F)
-%driftApply creates a binary file with the translated values
+%driftApply(F) creates a binary file with the translated values
 
     % load drift
-    driftPath = fullfile(F.dir.IP, 'Drifts.mat');
+    driftPath = fullfile(F.dir('Drift'), 'Drifts.mat');
     load(driftPath, 'dx', 'dy')
 
     % load mmap info
     m = Focused.Mmap(F, 'rawRAS');
 
     % define output files
-    output = fullfile(F.dir.files, 'corrected.bin');
-    outputInfo = fullfile(F.dir.files, 'corrected.mat');
+    mkdir(F.dir('corrected'));
+    output = [F.tag('corrected') '.bin'];
+    outputInfo = [F.tag('corrected') '.mat'];
 
     w = waitbar(0, 'Applying computed drift');
 
@@ -38,6 +39,7 @@ function driftApply(F)
     space = m.space;
     
     % save info to a matlab file
+    writeNHDR(F, 'corrected');
     save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
 
 end

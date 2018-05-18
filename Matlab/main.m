@@ -39,18 +39,18 @@ computeBackground(F, 'corrected', param.RefIndex);
 %% compute gray stack
 createGrayStack(F)
 %% view gray stack
-Focused.stackViewer(F, 'IP/graystack')
+Focused.stackViewer(F, 'graystack')
 %% segment neurons
-segmentBrain(F, 'IP/graystack', param.Layers);
+segmentBrain(F, 'graystack', param.Layers);
 
 %% compute baseline per neuron
 computeBaselineNeuron(F, param.Layers, 50);
 %% diplay it
-stackViewer2D(F, 'baseline_neuron', param.Layers);
+stackViewer2D(F, 'BaselineNeuron', param.Layers);
 %% compute dff per neuron
 dffNeuron(F, param.Layers);
 %% diplay it
-stackViewer2D(F, 'dff_neuron', param.Layers);
+stackViewer2D(F, 'DFFNeuron', param.Layers);
 
 %{ 
 %PER PIXEL
@@ -71,13 +71,15 @@ clean(F);
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 %% tif to ras stack
-tifToRAS(F, param.Layers);
+tifToRAS(F, param.Layers, 'ALI');
 %% see RAS
 Focused.stackViewer(F, 'rawRAS');
 %% semi auto ROI
 semiAutoROI(F, param.Layers, param.RefIndex, 'rawRAS'); % let you adjust automatic ROI
 %% check if ROI is ok
 Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
+%% drift
+driftCompute(F, {'RefLayers', param.RefLayers})
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 %                           With ref stack                                %
@@ -108,14 +110,14 @@ stackCoord(F, param.Layers)
 
 
 %% choose reference brain
-chooseRefBrain(F, '/home/ljp/Science/Hugo/easyRLS/Data/2018-03-27/Run 10/RefBrain/RefBrain.nhdr');
+chooseRefBrain(F, fullfile(path.RefBrains, 'RefBrain.nhdr'));
 % TODO automatically create nhdr corresponding to the ref brain nrrd or nhdr
 %% do affine transformation
-mapToRefBrain(F, 'affine', 'affine', 'refStack')
+mapToRefBrain(F, 'affine', 'affine', 'graystack')%'refStack')
 %% do non-rigid transformation
 mapToRefBrain(F, 'warp', 'affine', 'refStack')
 %% apply registration
-mapToRefBrain(F, 'reformat', 'affine', 'refStack')
+mapToRefBrain(F, 'reformat', 'affine', 'graystack')%'refStack')
 %% apply registration on neurons coordinates
 mapToRefBrain(F, 'convertcoord', 'affine', '')
 

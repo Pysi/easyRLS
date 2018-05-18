@@ -19,7 +19,8 @@ function mapToReferenceBrain(F, Fref, RefIndex)
 
     close(w)
 
-    defMapPath = fullfile(F.dir.IP, 'defMap.mat');
+    [~,~] = mkdir(F.dir('Garbage'));
+    defMapPath = fullfile(F.dir('Garbage'), 'defMap.mat');
     save(defMapPath, 'defMap');
 
 end

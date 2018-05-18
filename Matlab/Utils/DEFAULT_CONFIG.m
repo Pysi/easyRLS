@@ -5,6 +5,7 @@
 
 path.caTools = '/home/ljp/Science/Programs/easyRLS/Tools/caTools/';
 path.program = '/home/ljp/Science/Programs/';
+path.RefBrains = '/home/ljp/Science/RefBrains';
 
 path.root = '/home/ljp/Science/Projects/RLS/';
 param.study = '';

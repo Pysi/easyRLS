@@ -8,7 +8,7 @@ function caToolsRunquantileLin(F, Layers, window)
     % ignores the delay long
     w = floor(window / dt) ; % number of frames of the window (ex 125 frames)
 
-    baselinePath = fullfile(F.dir.IP, 'baseline');
+    baselinePath = F.dir('baseline');
     disp('creating ''baseline'' directory'); mkdir(baselinePath);
         
     m = Focused.Mmap(F, 'corrected');
