@@ -41,6 +41,11 @@ To get help :
 Example :
 
     cmtk registration -o transformation.xform --dofs 3,6,9 ReferenceImage.nrrd FloatingImage.nhdr
+    
+Example with options to run faster :
+    
+    cmtk registration --sampling 3 --coarsest 25 --omit-original-data --accuracy 3 \\
+    -o transformation.xform --dofs 3,6,9 ReferenceImage.nrrd FloatingImage.nhdr
 
 ### apply transformation
 
