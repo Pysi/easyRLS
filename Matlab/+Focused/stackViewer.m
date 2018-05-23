@@ -7,20 +7,28 @@ function stackViewer(F, tag)
     sp = split(tag, '.'); % splits the tag to see if there is an extension
 
     if strcmp(tag, 'ROImask') % particular case to view mask contour
-        load(fullfile(F.dir.IP, 'mask.mat'), 'mask');
+        load(F.tag('mask'), 'mask');
         try
             m = Focused.Mmap(F, 'rawRAS');
         catch
             try
                 m = Focused.MmapOnDCIMG(F, F.run, {});
             catch
-                error('could not find rawRAS nor dcimg');
+                try
+                    m = TifAsMatrix(F);
+                catch
+                    error('could not find rawRAS nor dcimg nor TIF');
+                end
             end
         end
         
     elseif strcmp(sp{end}, 'dcimg') % if extension is dcimg
         m = Focused.MmapOnDCIMG(F, sp{1}, {}); % get memory map on dcimg
         titleFig = [titleFig ' (dcimg)'];
+        
+    elseif strcmp(sp{end}, 'tif') % if extension is dcimg
+        m = TifAsMatrix(F); % get memory map on dcimg
+        titleFig = [titleFig ' (tif)'];
         
     else % normal case
         m = Focused.Mmap(F, tag);

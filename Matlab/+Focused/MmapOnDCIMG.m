@@ -14,9 +14,9 @@ function m = MmapOnDCIMG(F, tag, kwargs)
     
     % replace default values by exisiting if exist
     try
-        load(fullfile(F.dir.data, [tag '.mat']), 'x','y','z','t','Z','T','byteskip','clockskip','space');
+        load([F.tag(tag) '.mat'], 'x','y','z','t','Z','T','byteskip','clockskip','space');
     catch M
-        warning(M.message); % no file is not an erreor, but a warning
+        warning(M.message); % no file is not an error, but a warning
     end
 
 	% parse input
@@ -44,8 +44,8 @@ function m = MmapOnDCIMG(F, tag, kwargs)
     Z = 1:z; % (assumes that Z are oriented this way)
     T = 1:t; %#ok<*NASGU>
     
-    save(fullfile(F.dir.data, [tag '.mat']), 'x','y','z','t','Z','T','byteskip','clockskip','space');
+    save([F.tag(tag) '.mat'], 'x','y','z','t','Z','T','byteskip','clockskip','space');
 
-    m = MmapOnDCIMG(fullfile(F.dir.data, tag));
+    m = MmapOnDCIMG(F.tag(tag));
 
 end

@@ -4,11 +4,11 @@ function dffNeuron(F, Layers)
 % Layers layers you want to compute dff on (ex [3 4 6])
 
 % create dff directory
-dffPath = fullfile(F.dir.IP, 'dff_neuron');
-disp('creating ''dff_neuron'' directory'); mkdir(dffPath);
+dffPath = F.dir('DFFNeuron');
+disp('creating ''DFFNeuron'' directory'); mkdir(dffPath);
 
 % load background
-load(fullfile(F.dir.IP, 'background.mat'), 'background');
+load(F.tag('background'), 'background');
 
 % sigstack (x,y,z,t) ((xy,z,t))
 m = Focused.Mmap(F, 'corrected');
@@ -24,7 +24,7 @@ T = m.T;
     for iz = Layers
         
         % basestack (t, xy)
-        basePath = fullfile(F.dir.IP, 'baseline_neuron', [num2str(iz, '%02d') '.mat']);
+        basePath = fullfile(F.dir('BaselineNeuron'), [num2str(iz, '%02d') '.mat']);
         load(basePath, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'centerCoord', 'neuronShape', 'numNeurons');
         mbas = recreateMmap(F,mmap); clear('mmap');
                 

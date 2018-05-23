@@ -8,9 +8,9 @@ function computeBaselineNeuron(F, Layers, window)
     % ignores the delay long
     w = floor(window / dt) ; % number of frames of the window (ex 125 frames)
 
-    baselinePath = fullfile(F.dir.IP, 'baseline_neuron');
-    disp('creating ''baseline_neuron'' directory'); mkdir(baselinePath);
-    segPath = fullfile(F.dir.IP, 'Segmented');
+    baselinePath = F.dir('BaselineNeuron');
+    disp('creating ''BaselineNeuron'' directory'); mkdir(baselinePath);
+    segPath = F.dir('Segmentation');
         
     % sigstack (x,y,z,t) ((xy,z,t))
     m = Focused.Mmap(F, 'corrected');

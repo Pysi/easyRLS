@@ -32,8 +32,9 @@ function tifToRAS(F, Layers, inMode)
     T = 1:F.param.NCycles;
     
     % define output files
-    output = fullfile(F.dir.files, 'rawRAS.bin');
-    outputInfo = fullfile(F.dir.files, 'rawRAS.mat');
+    mkdir(F.dir('rawRAS'));
+    output = [F.tag('rawRAS') '.bin'];
+    outputInfo = [F.tag('rawRAS') '.mat'];
 
     w = waitbar(0, 'Converting TIF to RAS bin');
 
@@ -75,6 +76,7 @@ function tifToRAS(F, Layers, inMode)
     space = 'RAST';
 
     % save info to a matlab file
+    writeNHDR(F, 'rawRAS');
     save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
 
 end
