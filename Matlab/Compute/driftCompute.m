@@ -1,8 +1,11 @@
-function driftCompute(F, kwargs)
+function driftCompute(F, m, mRef, RefLayers, RefIndex)
 %driftCompute(F [,kwargs]) computes the drift on the given layer against the given reference stack max projection
 % using the parabolic fft based drift correction
 % F is the focus
-% m is the Mmap object
+% m is the 4D matrix
+% ref is a 3D matrix or false
+% RefLayers value
+% RefIndex value or false
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 %  Attention : driftCompute contient plusieurs choix        %
@@ -11,32 +14,11 @@ function driftCompute(F, kwargs)
 %  - enregistrement des drifts dans des dossiers séparés    %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-switch nargin
-    case 1
-        kwargs = {};
-    case 2
-end
-
-% create wrapper object
-m = Focused.Mmap(F, 'rawRAS');
-mRef = m;
-
-% parse input to change reference stack TODO write validation function
-in = inputParser;
-in.addParameter('RefIndex', 10);        % by default 10th stack
-in.addParameter('RefStack', '');        % by default none
-in.addParameter('RefLayers', 8:10);     % by default stacks 8, 9, 10
-% in.addParameter('Layers', [F.sets.id]); % by default all 1 2 3 ... 20
-in.parse(kwargs{:})
-
-% Layers = in.Results.Layers;
-RefStack = in.Results.RefStack;
-RefIndex = in.Results.RefIndex;
-RefLayers = in.Results.RefLayers;
-
-if RefStack % if we want to use a reference stack which is outside the stack
-    mRef = Focused.Mmap(F, RefStack);
+% --- manage case of reference stack
+if mRef~=false % if reference stack wanted
     RefIndex = 1;
+else % take it from m
+    mRef=m;
 end
 
 % --- Define reference image ---
@@ -48,7 +30,7 @@ X = bbox(1):bbox(2);
 Y = bbox(3):bbox(4);
 
 % compute reference image with max and loads it in Raphael's image object
-Ref = NT.Image(max(mRef(X,Y, RefLayers, RefIndex),[],3));
+Ref = NT.Image(max( mRef(X,Y, RefLayers, RefIndex) ,[],3));
 
 % --- Drift correction ---
 % creates a figure to plot the drift correction
@@ -76,8 +58,7 @@ end
 
 % --- Save ---
 % save bbox and drifts
-disp('making ''Drift'' directory');
-[~,~] = mkdir(F.dir('Drift'));
+disp('making ''Drift'' directory'); mkdir(F.dir('Drift'));
 save(fullfile(F.dir('Drift'), 'DriftBox.mat'), 'bbox');
 save(fullfile(F.dir('Drift'), 'Drifts.mat'), 'dx', 'dy');
 savefig(fullfile(F.dir('Drift'), 'driftCorrection.fig'));

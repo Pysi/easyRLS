@@ -1,4 +1,4 @@
-function driftApply(F)
+function driftApply(F, tag)
 %driftApply(F) creates a binary file with the translated values
 
     % load drift
@@ -6,7 +6,7 @@ function driftApply(F)
     load(driftPath, 'dx', 'dy')
 
     % load mmap info
-    m = Focused.Mmap(F, 'rawRAS');
+    m = adapted4DMatrix(F, tag);
 
     % define output files
     mkdir(F.dir('corrected'));

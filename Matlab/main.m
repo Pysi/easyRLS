@@ -24,14 +24,19 @@ F = NT.Focus(path.root, param.study, param.date, param.run);
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 
-%% if dcimg, you can already view it (if tif, go to imageJ)
-Focused.stackViewer(F, [F.run '.dcimg']); % TODO define default name for dcimg
-%% semi auto ROI on dcimg
-semiAutoROI(F, param.Layers, param.RefIndex, [F.run '.dcimg']); % let you adjust automatic ROI
+%% view dcimg / tif
+Focused.stackViewer(F, 'Run00.dcimg'); % TODO define default name for dcimg
+Focused.stackViewer(F, 'images.tif');
+%% semi auto ROI on dcimg / tif
+semiAutoROI(F, param.Layers, param.RefIndex, 'images.tif'); % let you adjust automatic ROI
 %% check if ROI is ok
 Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
-%% shortcut: dcimgRASdrift
-dcimgRASdrift(F, 'Run00', {});
+%% drift compute
+Focused.driftCompute(F, 'images.tif');
+%% see drift correction before applying
+seeDriftCorrection(F, 'images.tif');
+%% apply drift if satisfacted
+driftApply(F, 'images.tif');
 %% view corrected stack
 Focused.stackViewer(F, 'corrected');
 %% compute background
@@ -66,20 +71,6 @@ stackViewer2D(F, 'dff', param.Layers);
 clean(F);
 %}
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-%                           Commands for TIF                              %
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-
-%% tif to ras stack
-tifToRAS(F, param.Layers, 'ALI');
-%% see RAS
-Focused.stackViewer(F, 'rawRAS');
-%% semi auto ROI
-semiAutoROI(F, param.Layers, param.RefIndex, 'rawRAS'); % let you adjust automatic ROI
-%% check if ROI is ok
-Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
-%% drift
-driftCompute(F, {'RefLayers', param.RefLayers})
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 %                           With ref stack                                %
@@ -89,8 +80,6 @@ driftCompute(F, {'RefLayers', param.RefLayers})
 Focused.stackViewer(F, 'refStack'); 
 %% computes the drift on external stack
 driftCompute(F, {'RefStack', 'refStack'});
-%% see if it is ok
-seeDriftCorrection(F);
 %% apply if ok
 driftApply(F);
 %% view corrected stack

@@ -7,38 +7,12 @@ function semiAutoROI(F, Layers, t, tag)
 %     - the tag of the binary you want to work on ('corrected' for instance)
 %     - the name of a dcimg if you want to work on a dcimg (Run00.dcimg for instance)
 
+    Z = Layers;
+    
 % if the tag has an extension and that this extension is 'dcimg'
 % semiAutoROI will work on dcimg (particular case)
 
-    dcimg = false;
-    Z = Layers;
-    sp = split(tag, '.');
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % handle dcimg case
-    if length(sp) == 1 % if no extension (regular case)
-        m = Focused.Mmap(F, tag); % get the memory map
-        x = m.x;
-        y = m.y;
-    else
-        if strcmp(sp{end}, 'dcimg') % if extension is dcimg
-            dcimg = true;
-        else
-            error('case not implemented for tag %s', tag);
-        end
-    end
-    if dcimg % if dcimg is true, do it on dcimg
-        m = Focused.MmapOnDCIMG(F, sp{1}, {});
-        if m.invert.iZ
-            Z = flip(Z);
-        end        
-        if m.invert.iXY
-            x = m.y;
-            y = m.x;
-        else
-            x = m.x;
-            y = m.y;
-        end        
-    end
+    m = adapted4DMatrix(F,tag);
 
 % % % % % % % % % % % % % % % % % % % % % % % % load existing or initialize
     try % try to load existing mask.mat

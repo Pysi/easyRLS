@@ -1,4 +1,4 @@
-function dcimgRASdrift(F, tag, kwargs)
+function dcimgRASdrift(F, tag, inMode, kwargs)
 %dcimgRASdrift takes dcimg stack, corrects orientation, computes drift, and records corrected stack
 % it is a shortcut function to perform several tasks, so it contains redundant code
 
@@ -16,7 +16,7 @@ function dcimgRASdrift(F, tag, kwargs)
 
 % ------------------ RAS parameters -----------------------
     % TODO add the focused way to find RASification
-    inMode = 'ali'; 
+%     inMode = 'ali'; 
     outMode = 'ras';
     [f, inversions, order] = getTransformation(inMode, outMode);
     invertZ = inversions(3); % /!\ assuming z is 3rd
