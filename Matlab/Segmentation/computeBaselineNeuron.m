@@ -1,4 +1,4 @@
-function computeBaselineNeuron(F, Layers, window)
+function computeBaselineNeuron(F, window)
 %computeBaselineNeuron computes baseline per neuron
 % Layers are the layers you want to compute the baseline on
 % window is the window span in seconds (ex 50 sec)
@@ -23,7 +23,7 @@ function computeBaselineNeuron(F, Layers, window)
     % Z = iz; % will be set at the end
     T = m.T;
     
-    for iz = Layers
+    for iz = m.Z
         inputSeg = fullfile(segPath, [num2str(iz, '%02d') '.mat']);
         
         output = fullfile(baselinePath, [num2str(iz, '%02d') '.bin']);

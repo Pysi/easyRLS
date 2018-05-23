@@ -1,23 +1,10 @@
-function driftCompute(F, tag, kwargs)
+function driftCompute(F, tag)
 %+Focused version of driftCompute
 
-    switch nargin % check if kwargs were given
-        case 2
-            kwargs = {};
-        case 3
-    end
-
-    % parse input to change reference stack TODO write validation function
-    in = inputParser;
-    in.addParameter('RefIndex', 10);        % by default 10th stack
-    in.addParameter('RefStack', '');        % by default none
-    in.addParameter('RefLayers', 8:10);     % by default stacks 8, 9, 10
-    in.parse(kwargs{:})
-
     % Layers = in.Results.Layers;
-    RefStack = in.Results.RefStack;
-    RefIndex = in.Results.RefIndex;
-    RefLayers = in.Results.RefLayers;
+    RefStack = F.Analysis.RefStack;
+    RefIndex = F.Analysis.RefIndex;
+    RefLayers = F.Analysis.RefLayers;
 
     % create wrapper object
     m = adapted4DMatrix(F,tag);

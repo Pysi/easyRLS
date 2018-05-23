@@ -10,10 +10,14 @@ function seeDriftCorrection(F, tag)
     h = imshow(m(:,:,5,1), [400 800]);
     for t = 1:10:m.t
         img = imtranslate(m(:,:,5,t), [-dy(t), -dx(t)]);
-        set(h, 'Cdata', img);
-        title(num2str(t))
-        drawnow
-        
+        try
+            set(h, 'Cdata', img);
+            title(num2str(t))
+            drawnow
+        catch
+            disp('is it ok ?');
+            return
+        end
     end
     
     clear gcf

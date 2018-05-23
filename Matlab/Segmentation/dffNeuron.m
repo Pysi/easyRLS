@@ -1,8 +1,9 @@
-function dffNeuron(F, Layers)
+function dffNeuron(F)
 %dffNeuron computes delta f over f for each segmented neuron
 % F focus object
 % Layers layers you want to compute dff on (ex [3 4 6])
 
+Layers = F.Analysis.Layers;
 % create dff directory
 dffPath = F.dir('DFFNeuron');
 disp('creating ''DFFNeuron'' directory'); mkdir(dffPath);

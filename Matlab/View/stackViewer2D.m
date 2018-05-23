@@ -1,4 +1,4 @@
-function stackViewer2D(F, tag, Layers)
+function stackViewer2D(F, tag)
 %stackViewer2D(F, tag, Layers) aims to produce the same result as 
 %                              stackViewer, but for 2D mmaps
 % F is the focus object
@@ -7,6 +7,7 @@ function stackViewer2D(F, tag, Layers)
 
 % THIS IS NOT MEANT TO BE UNDERSTANDABLE
 
+Layers = F.Analysis.Layers;
 minmax = [400 1200];
 viewDFF = false;
 viewNeuron = false;

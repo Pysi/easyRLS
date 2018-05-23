@@ -1,4 +1,4 @@
-function segmentBrain(F, tag, Layers)
+function segmentBrain(F, tag)
 %segmentBrain segments the brain layer by layer using segmentNeuron
 
     m = Focused.Mmap(F, tag); % get gray stack
@@ -7,7 +7,7 @@ function segmentBrain(F, tag, Layers)
     segPath = F.dir('Segmentation');
     disp('creating ''Segmented'' directory'); mkdir(segPath);
 
-    for z = Layers % for each layer
+    for z = m.Z % for each layer
         Img = m(:,:,z,1);
         Mask = mask(:,:,z);
 
