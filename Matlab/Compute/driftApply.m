@@ -44,7 +44,7 @@ function driftApply(F, tag)
     space = m.space;
     
     % save info to a matlab file
-    writeNHDR(F, 'corrected');
     save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
+    writeNHDR(F, 'corrected');
 
 end
