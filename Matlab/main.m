@@ -33,17 +33,14 @@ computeBaselineNeuron(F, 50);
 computeBaselinePixel(F, 4:10, 50);
 %% diplay it
 stackViewer2D(F, 'BaselineNeuron');
+stackViewer2D(F, 'BaselinePixel');
 %% compute dff per neuron / pixel
 dffNeuron(F);
 dffPixel(F, 4:10);
 %% display it
 stackViewer2D(F, 'DFFNeuron');
+stackViewer2D(F, 'DFFPixel');
 %{
-%PER PIXEL (not well maintained)
-computeBaselinePixel(F, param.Layers, 50) %% compute baseline per pixel
-stackViewer2D(F, 'baseline_pixel', param.Layers) %% view baseline
-dffPixel(F, param.Layers); %% compute DFF
-stackViewer2D(F, 'dff', param.Layers); %% view DFF
 clean(F); %% delete unecessary files (including baseline)
 %}
 % stackCoord
