@@ -41,6 +41,11 @@ To get help :
 Example :
 
     cmtk registration -o transformation.xform --dofs 3,6,9 ReferenceImage.nrrd FloatingImage.nhdr
+    
+Example with options to run faster :
+    
+    cmtk registration --sampling 3 --coarsest 25 --omit-original-data --accuracy 3 \\
+    -o transformation.xform --dofs 3,6,9 ReferenceImage.nrrd FloatingImage.nhdr
 
 ### apply transformation
 
@@ -61,6 +66,15 @@ If you want to convert a lot of coordinates, write them in a text file and pass 
 
     cat coord.txt | cmtk streamxform -- --inverse affine.xform
 Be careful, inverse means 'moving → reference' and direct means 'reference → moving'.
+
+
+### Limit of Jacobian for warp on zbb brain GCaMP5
+--jacobian-weight 0.05 
+note that smaller values lead to more local deformations
+
+### Fast warp registration on zbb or zBrain (~60s)
+options= 'warp -v --fast --grid-spacing 40 --refine 2 --jacobian-weight 0.001 --coarsest 6.4 --sampling 3.2 --accuracy 3.2 --omit-original-data '
+
 
 ## Alternatives
 

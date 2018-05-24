@@ -7,7 +7,7 @@ function caToolsRunquantileLin_BENCHMARK(F, Layers)
     global COMPUTING
     global WRITING
 
-    baselinePath = fullfile(F.dir.IP, 'baseline');
+    baselinePath = F.dir('baseline');
     disp('creating ''baseline'' directory'); mkdir(baselinePath);
         
     m = Focused.Mmap(F, 'corrected');

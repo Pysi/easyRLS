@@ -5,9 +5,9 @@ function mmapOut = recreateMmap(F, mmapIn)
 % F is the focus object to rebuild path
 % mmapIn it the input memory map to redefine
 
-p = split(mmapIn.Filename, 'Files/'); % gets the relative part of the path
+p = split(mmapIn.Filename, 'Analysis/'); % gets the relative part of the path
 relPath = p{end}; % takes the end
-binFile = fullfile(F.dir.files, relPath);
+binFile = fullfile(F.dir('Analysis'), relPath);
 
 mmapOut = memmapfile(...
                 binFile,...

@@ -9,7 +9,7 @@ classdef MmapOnDCIMG < handle
         x % width
         y % height
         z % number of layers
-        t % number of time frame
+        t % number of time frames
         Z % layers concerned
         T % times concerned
     end

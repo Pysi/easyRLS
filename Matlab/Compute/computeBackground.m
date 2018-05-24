@@ -1,7 +1,9 @@
-function computeBackground(F, tag, RefIndex)
+function computeBackground(F, tag)
 %computeBackground computes the background using Raphael's function
 % tag might be 'corrected'
 % RefIndex is the reference index used for drift correction
+
+    RefIndex = F.Analysis.RefIndex;
 
     % loads mmap
     m = Focused.Mmap(F, tag);
@@ -13,6 +15,7 @@ function computeBackground(F, tag, RefIndex)
         background(z) = single(Img.background);
     end
 
-    save(fullfile(F.dir.IP, 'background.mat'), 'background');
+    mkdir(F.dir('Background'));
+    save(F.tag('background'), 'background');
 
 end

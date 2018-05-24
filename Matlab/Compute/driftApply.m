@@ -1,29 +1,32 @@
-function driftApply(F)
-%driftApply creates a binary file with the translated values
+function driftApply(F, tag)
+%driftApply(F) creates a binary file with the translated values
+
+    Z = F.Analysis.Layers;
 
     % load drift
-    driftPath = fullfile(F.dir.IP, 'Drifts.mat');
+    driftPath = fullfile(F.dir('Drift'), 'Drifts.mat');
     load(driftPath, 'dx', 'dy')
 
     % load mmap info
-    m = Focused.Mmap(F, 'rawRAS');
+    m = adapted4DMatrix(F, tag);
 
     % define output files
-    output = fullfile(F.dir.files, 'corrected.bin');
-    outputInfo = fullfile(F.dir.files, 'corrected.mat');
+    mkdir(F.dir('corrected'));
+    output = [F.tag('corrected') '.bin'];
+    outputInfo = [F.tag('corrected') '.mat'];
 
-    w = waitbar(0, 'Applying computed drift');
+    w = waitbar(0, {'Applying computed drift', ['frame ' num2str(0) '/' num2str(m.t)]});
 
     % write the binary file
     fid = fopen(output, 'wb');
     for t = m.T % along t
-        for z = m.Z % along z
+        for z = Z % along z
             fwrite(fid,...
                 imtranslate(m(:,:,z,t),...
                 [-dy(t), -dx(t)]),... %  'x' of a matlab image is 'y'
                 'uint16'); % apply dy on rows (y) and dx on columns (x)
         end
-        waitbar(t/m.t)
+        waitbar(t/m.t, w, {'Applying computed drift', ['frame ' num2str(t) '/' num2str(m.t)]})
     end
     fclose(fid);
 
@@ -31,13 +34,15 @@ function driftApply(F)
 
     x=m.x; %#ok<*NASGU>
     y=m.y;
-    z=m.z;
+%     z=m.z;
+    z=length(Z);
     t=m.t;
-    Z=m.Z;
+%     Z=m.Z;
     T=m.T;
     space = m.space;
     
     % save info to a matlab file
+    writeNHDR(F, 'corrected');
     save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
 
 end

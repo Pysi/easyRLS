@@ -5,7 +5,7 @@ function stackCoord(F, Layers)
 
 % !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! take care to Z
 
-    segPath = fullfile(F.dir.IP, 'Segmented');
+    segPath = F.dir('Segmentation');
     
     coordinates = NaN(0,3);
     
