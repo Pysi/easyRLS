@@ -1,7 +1,9 @@
 function driftApply(F, tag)
 %driftApply(F) creates a binary file with the translated values
 
+    % get layers to analyse and put them in inferior to superior order
     Z = F.Analysis.Layers;
+    Z = sort(Z, 'descend');
 
     % load drift
     driftPath = fullfile(F.dir('Drift'), 'Drifts.mat');

@@ -24,12 +24,14 @@ createGrayStack(F)
 Focused.stackViewer(F, 'graystack')
 %% segment neurons
 segmentBrain(F, 'graystack');
-%% compute baseline per neuron
+%% compute baseline per neuron / pixel
 computeBaselineNeuron(F, 50);
+computeBaselinePixel(F, 4:10, 50);
 %% diplay it
 stackViewer2D(F, 'BaselineNeuron');
-%% compute dff per neuron
+%% compute dff per neuron / pixel
 dffNeuron(F);
+dffPixel(F, 4:10);
 %% display it
 stackViewer2D(F, 'DFFNeuron');
 %{
