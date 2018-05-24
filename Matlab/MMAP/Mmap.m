@@ -4,15 +4,15 @@ classdef Mmap < handle
 % subscript can be 4D or 3D
 % --- you can call the focused version of Mmap : Focused.Mmap ---
     properties
-        space % RAS or RAST
         mmap % 4D mmap (x,y,z,t)
         mmaplin % 3D mmap of *the same* binary file (xy, z, t)
-        x % width
-        y % height
-        z % number of layers
-        t % number of time frame
-        Z % layers concerned
-        T % times concerned
+        space % RAS or RAST depending on dimension
+        x % width (left to right)
+        y % height (posterior to anterior)
+        z % number of layers (inferior to superior)
+        t % number of time frames (per layer)
+        Z % layers concerned (TODO make optionnal)
+        T % times concerned (TODO remove it)
     end
     methods
         % --- constructor ---
@@ -74,7 +74,8 @@ classdef Mmap < handle
     end
     
     methods (Static)        
-        % --- redefining z ---
+        % --- redefining z --- TODO take into account not well ordered Zs
+        % (return RAS whatever the input is, with warning in not RAS asked)
         function new_z = zCorrect(old_z, Z)
         %zCorrect returns z compatible with mmap
         % examples :

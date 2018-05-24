@@ -1,7 +1,7 @@
 function [functionList, inversions, order] = getTransformation(inMode, outMode)
 %getTransformation('ALI', 'RAS') returns a list of functions (permute and flip) adapted to the
 %input mode (1D, 2D, 3D or 4D) using letters in [rlapsitRLAPSIT]
-% ouputs optionnaly inversions and order
+% ouputs optionaly inversions and order
 
     % inits
     EM = sprintf('!!!\nModes not compatible:\ninMode = %s, outMode = %s\n!!!', inMode, outMode);
@@ -17,7 +17,7 @@ function [functionList, inversions, order] = getTransformation(inMode, outMode)
         order(end+1) = findPos(outMode, dimName(inMode(i))); % number between 1 and ndim
     end
 
-    % gets the inversions
+    % gets the inversions (in the outmode order)
     inversions = [];
     for i = 1:ndim
         inversions(end+1) = (inMode(order(i)) ~= outMode(i)); % true or false 

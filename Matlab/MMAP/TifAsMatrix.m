@@ -3,31 +3,34 @@ classdef TifAsMatrix < handle
     % it is a wrapper to access tif stack as a 4D RAS matrix
     % it is not memory mapping, but simplifies the function that work with 4D matrix
     
-%     there is no focused version of this since it is already focused
+    % there is no focused version of this since it is already focused
     
     properties
-        space % RAS or RAST
-        x % width
-        y % height
-        z % number of layers
-        t % number of time frame
-        Z % layers concerned
-        T % times concerned
+        space % RAS or RAST depending on dimension
+        x % width (left to right)
+        y % height (posterior to anterior)
+        z % number of layers (inferior to superior)
+        t % number of time frames (per layer)
+        Z % layers concerned (TODO make optionnal)
+        T % times concerned (TODO remove it)
     end
     properties (Hidden) % no need to see this
         f % list of transformations to apply
+        inv % inversions
+        ord % order
+        origSpace % space of input tif files (ALIT for instance)
         F % Focus (TODO chek if not a problem)
     end
     methods
         % --- constructor ---
         function self = TifAsMatrix(F)
             
-            inMode= 'ALIT'; % TODO get in focus
-            outMode = 'RAST';
+            self.origSpace = 'ALIT'; % TODO get in focus
+            self.space = 'RAST'; % TODO adapt to single stack
             
-            [self.f, inversions, order] = getTransformation(inMode, outMode);
-            invertZ = inversions(3); % /!\ assuming z is 3rd dimension
-            invertXY = ( order(1)==2 ); % /!\ assuming x and y are 1st and 2nd    
+            [self.f, self.inv, self.ord] = getTransformation(self.origSpace, self.space);
+            invertZ = self.inv(3); % /!\ assuming z is 3rd dimension
+            invertXY = ( self.ord(1)==2 ); % /!\ assuming x and y are 1st and 2nd    
 
             % defines X and Y    
             %     in 'update_info'
@@ -42,12 +45,11 @@ classdef TifAsMatrix < handle
                 end
             % defines Z
                 if invertZ
-                    Z = flip([F.sets.id]);
+                    Z = flip([F.sets.id]); % TODO check with unordered sets
                 else
                     Z = [F.sets.id];
                 end
             
-            self.space = inMode;
             self.x = x; 
             self.y = y; 
             self.z = length(Z); 

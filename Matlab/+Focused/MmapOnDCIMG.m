@@ -5,17 +5,27 @@ function m = MmapOnDCIMG(F, tag)
 	% define default values
 	byteskip = 808;
 	clockskip = 8;
-    space = 'ALIT';
-	x = 1024;
-	y = 604;
+    space = 'RAST';
+	x = 604;
+	y = 1024;
 	z = 20;
 	t = 1500;
     
+    origSpace = 'ALIT';
+    
+    [f, inv, ord] = getTransformation(origSpace, space);
+
+    
     % replace by focus values if available
-    if F.IP.width
-        x = F.IP.height; % TODO get RAS to see if it has to be inverted
-        y = F.IP.width;
+    if F.IP.width % if values available
+        if ord(1) == 2 % if x and y inverted TODO more robust  
+            x = F.IP.height;
+            y = F.IP.width;
 %         t = F.param.NCycles;
+        else  
+            x = F.IP.width;
+            y = F.IP.height;            
+        end
     end
     
     % replace default values by exisiting if exist
