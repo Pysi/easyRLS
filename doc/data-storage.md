@@ -10,10 +10,6 @@ We are working with 4D images. Their dimensions are:
 
 This defines the RAST standard (right-anterior-superior-time). Raw data might not be RAS, but all processed data has to be RAS.
 
-The following files are 4D stacks:
-- corrected.bin
-- graystack.bin
-
 ### In the matfile
 The matfile contains:
 - space (orientation)
@@ -53,7 +49,10 @@ For example:
 
 In the matfiles associated with the binary files, we can find the information about the pixels concerned by the binary file.
 
-The first dimension is the time, and the second dimension is the xy position of the neuron / pixel. The linear indexes of the neuron or the linear index of the pixel is given in the matfile.
+The first dimension is the time, and the second dimension is the xy position of the neuron / pixel. The linear indexes of the neuron or the linear index of the pixel is given in the matfile:
+
+- t (time)
+- xy linear index, pixel or neuron index
 
 ### In the matfile
 For per_pixel, The matfile contains:

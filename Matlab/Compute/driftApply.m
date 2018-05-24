@@ -42,9 +42,10 @@ function driftApply(F, tag)
 %     Z=m.Z;
     T=m.T;
     space = m.space;
+    pixtype='unit16';
     
     % save info to a matlab file
-    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
+    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
     writeNHDR(F, 'corrected');
 
 end

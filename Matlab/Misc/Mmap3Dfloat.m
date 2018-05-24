@@ -1,44 +1,33 @@
-classdef Mmap < handle
-% the class Mmap is used to load a mmap of a binary file
-% and redefine layers index when called as subscript
-% subscript can be 4D or 3D
-% --- you can call the focused version of Mmap : Focused.Mmap ---
+classdef Mmap3Dfloat < handle
+
+    % ---------- THIS IS ONLY A DRAFT ------------
+    
     properties
-        mmap % 4D mmap (x,y,z,t)
-        mmaplin % 3D mmap of *the same* binary file (xy, z, t)
-        pixtype % uint16 ou single
-        space % RAS or RAST depending on dimension
+        mmap % 3D mmap (x,y,z)
+        space % RAS
         x % width (left to right)
         y % height (posterior to anterior)
         z % number of layers (inferior to superior)
-        t % number of time frames (per layer)
         Z % layers concerned (TODO make optionnal)
-        T % times concerned (TODO remove it)
     end
     methods
         % --- constructor ---
-        function self = Mmap(inPathTag)
+        function self = Mmap3Dfloat(inPathTag)
         %Mmap constructor takes the bin file and the info file
         %inputFile is the input file (without extension)
         
             binFile = [inPathTag '.bin'];
             inputInfo = [inPathTag '.mat'];
             
-            load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
-            self.pixtype = pixtype; % get type
-            self.space = space; % RAS or RAST
+            load(inputInfo, 'x', 'y', 'z', 'Z', 'space');
+            self.space = space; % RAS
             self.mmap = ...
-                memmapfile(binFile,'Format',{self.pixtype,[x,y,z,t],'bit'}, ...
-                    'Repeat', 1); % repeat option might prevent from detecting errors (such on t)
-            self.mmaplin = ...
-                memmapfile(binFile,'Format',{self.pixtype,[x*y,z,t],'bit'}, ...
+                memmapfile(binFile,'Format',{'single',[x,y,z],'bit'}, ...
                     'Repeat', 1);
             self.x = x; 
             self.y = y; 
-            self.z = z; 
-            self.t = t; 
+            self.z = z;  
             self.Z = Z; 
-            self.T = T; 
         end
         
         % --- defining '()' subsref ---
@@ -47,12 +36,10 @@ classdef Mmap < handle
             switch S(1).type
                 case '()'
                     switch length(S(1).subs)
-                        case 4 % 4D
+                        case 3
                             zpos = 3; % position of the z coordinate in the subscript
-                        case 3 % 3D with xy as index
-                            zpos = 2; % position of the z coordinate in the subscript
                         otherwise
-                            error('NUMBER OF SUBSCRIPT NOT COMPATIBLE possible calls : m(x,y,z,t) or m(index,z,t)')
+                            error('NUMBER OF SUBSCRIPT NOT COMPATIBLE possible call : m(x,y,z)')
                     end
                     % corrects the z
                     old_z = S.subs{zpos}; % values asked ex layers [4 5 6]
@@ -62,10 +49,8 @@ classdef Mmap < handle
                     
                     % calls the right mmap
                     switch length(S(1).subs)
-                        case 4 % 4D
+                        case 3
                             out = subsref(self.mmap.Data.bit, new_S);
-                        case 3 % 3D with xy as index
-                            out = subsref(self.mmaplin.Data.bit, new_S);
                     end
                 case '.'
                     out = builtin('subsref', self, S);

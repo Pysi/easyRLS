@@ -12,6 +12,8 @@ function phaseMapPixel(F, fstim)
 % real part of fft peak
 % imaginary part of fft peak
 
+% % % % % % % THIS IS A DRAFT VERSION % % % % % % % % %
+
     % get the layers on which compute phasemap in the RAS order (inferior → superior)
     Z = sort(F.Analysis.Layers, 'descend');
 
@@ -26,13 +28,14 @@ function phaseMapPixel(F, fstim)
     out = struct();
     outInfo = struct();
     for label = labels
-        mkdir(F.dir(label)); % create corresponding directory
-        out.(label) = fopen([F.tag(label) '.bin']);
-        outInfo.(label) = [F.tag(label) '.mat'];
+        mkdir(F.dir(label{:})); % create corresponding directory
+        out.(label{:}) = fopen([F.tag(label{:}) '.bin'], 'wb');
+        outInfo.(label{:}) = [F.tag(label{:}) '.mat'];
     end
-
+    
     % run across the layers
     for iz = Z
+        fprintf('\nlayer %d\t', iz);tic;
 
         % focus on the current layer
         F.select(iz);
@@ -46,7 +49,7 @@ function phaseMapPixel(F, fstim)
 
         % Phase shift
         phi_GCaMP = 0;%-0.6916;                      % Phase shift because of the response of the GCaMP, get with the convolution of the stimulus with a Kernel
-        phi_layer = layer*(F.dt*2*pi)*fstim*0.001;   % Phase shift because of the delay time between each layer (F.dt)
+        phi_layer = iz*(F.dt*2*pi)*fstim*0.001;   % Phase shift because of the delay time between each layer (F.dt)
         phase_delay = phi_GCaMP + phi_layer;         % (pi/2 - 0.8796) Phase shift of sinusodial stimulus
 
         % Load DFF
@@ -55,20 +58,26 @@ function phaseMapPixel(F, fstim)
         mdff = recreateMmap(F,mmap);
 
         % run across all image pixels
-        for index = 1:x*y
+        index = 0; % number of index in dff
+        zerosToWrite = 0;
+        for i = 1:x*y
 
             %if index is not in ROI (could check directly with mask, but mask could have changed)
-            if ~max(ismember(indices,index))
-                % write zero
-                for label = labels
-                    fwrite(out.(label), 0, 'single');
-                end
+            if ~max(ismember(indices,i))
+                zerosToWrite = zerosToWrite +1;
             %else index is in ROI and DFF is defined
             else
+                index = index + 1; % increment by one
+                % write zeros
+                for label = labels
+                    fwrite(out.(label{:}), zeros(1,zerosToWrite), 'single');
+                end
+                zerosToWrite = 0;
+                
                 % do stuff
 
                 % Calculate fourier transformation
-                Y = fft(mdff(:,index));
+                Y = fft(mdff.Data.bit(:,index));
 
                 % Define frequency vector
                 f = fs*[0:1:N/2]/N;
@@ -78,30 +87,40 @@ function phaseMapPixel(F, fstim)
                 ind_fstim = find(f_round==fstim);
 
                 % extract peak from dff
-                amplitude = abs(Y(:,ind_fstim));
-                phase     = angle(Y(:,ind_fstim));
-                realpart  = real(Y(:,ind_fstim));
-                imaginary = imag(Y(:,ind_fstim));
-                deltaphi = (phi - phase_delay + pi);
+                amplitude = abs(Y(ind_fstim,:));
+                phase     = angle(Y(ind_fstim,:));
+                realpart  = real(Y(ind_fstim,:));
+                imaginary = imag(Y(ind_fstim,:));
+                deltaphi = (phase - phase_delay + pi);
                     % -phase_delay = Shift positive of the fluorescence
                     % +pi = because of the fourier transform is done against a cosinus  
 
                 % write pixel in binaries
                 for label = labels
-                    fwrite(out.(label), eval(label), 'single')
+                    fwrite(out.(label{:}), eval(label{:}), 'single');
                 end
 
             end
 
         end
-        
-        % close binary files
+        % write remaining zeros
         for label = labels
-            fclose(out.(label));
+            fwrite(out.(label{:}), zeros(1,zerosToWrite), 'single');
         end
+        toc;
         
+    end 
+        
+    % close binary files
+    space = 'RAS';
+    pixtype = 'single';
+    z = length(Z);
+    t = 1; T = 1;
+    for label = labels
+        fclose(out.(label{:}));
+        save(outInfo.(label{:}),'x','y','z','t','Z','T','space','pixtype')
         % TODO write info and nhdr (/!\ on single)
-
+        writeNHDR(F, label{:});
     end
-
+    
 end

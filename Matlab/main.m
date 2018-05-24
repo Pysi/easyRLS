@@ -40,6 +40,11 @@ dffPixel(F, 4:10);
 %% display it
 stackViewer2D(F, 'DFFNeuron');
 stackViewer2D(F, 'DFFPixel');
+%% compute phase map neuron / pixel
+phaseMapPixel(F, 0.2)
+%% display it
+
+
 %{
 clean(F); %% delete unecessary files (including baseline)
 %}
