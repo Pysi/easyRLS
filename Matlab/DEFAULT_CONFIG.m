@@ -25,14 +25,19 @@ F.Analysis.RefLayers = 8:10;
 F.Analysis.RefIndex = 10;
 F.Analysis.RefStack = '';
 
-%% load library to compute baseline
+%% Linux: load library to compute baseline 
 
 cd(path.caTools)
 [~,~] = loadlibrary('caTools.so',...
                     'caTools.h');
-                    
-% you can add your own functions in the CONFIG_Hugo.m or CONFIG_Geoffrey.m ...
 
+%% Windows load library to compute baseline 
+
+cd(path.caTools)
+[~,~] = loadlibrary('caTools.dll',...
+                    'caTools.h');
+
+% you can add your own functions in the CONFIG_Hugo.m or CONFIG_Geoffrey.m ...
 
 
 

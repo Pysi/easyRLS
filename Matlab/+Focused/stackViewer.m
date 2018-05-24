@@ -12,7 +12,7 @@ function stackViewer(F, tag)
             m = Focused.Mmap(F, 'rawRAS');
         catch
             try
-                m = Focused.MmapOnDCIMG(F, F.run, {});
+                m = Focused.MmapOnDCIMG(F, 'dcimg');
             catch
                 try
                     m = TifAsMatrix(F);
@@ -23,7 +23,7 @@ function stackViewer(F, tag)
         end
         
     elseif strcmp(sp{end}, 'dcimg') % if extension is dcimg
-        m = Focused.MmapOnDCIMG(F, sp{1}, {}); % get memory map on dcimg
+        m = Focused.MmapOnDCIMG(F, 'dcimg'); % get memory map on dcimg
         titleFig = [titleFig ' (dcimg)'];
         
     elseif strcmp(sp{end}, 'tif') % if extension is dcimg

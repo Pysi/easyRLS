@@ -23,7 +23,7 @@ function m = adapted4DMatrix(F, tag)
     if bin % if standard binary stack
         m = Focused.Mmap(F, tag); % get the memory map        
     elseif dcimg % if dcimg is true, do it on dcimg
-        m = Focused.MmapOnDCIMG(F, sptag{1}, {});      
+        m = Focused.MmapOnDCIMG(F, sptag{1});      
     elseif tif % if tif is true, do it on tif
         m = TifAsMatrix(F);     
     else

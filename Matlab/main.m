@@ -2,17 +2,21 @@
 % Hugo Trentesaux 2018-05-23
 
 %% view dcimg / tif
-Focused.stackViewer(F, 'Run00.dcimg'); % TODO define default name for dcimg
+Focused.stackViewer(F, 'dcimg.dcimg'); % TODO define default name for dcimg
 Focused.stackViewer(F, 'images.tif');
 %% semi auto ROI on dcimg / tif
+semiAutoROI(F, 'dcimg.dcimg'); % let you adjust automatic ROI
 semiAutoROI(F, 'images.tif'); % let you adjust automatic ROI
 %% check if ROI is ok
 Focused.stackViewer(F, 'ROImask'); % stack viewer behaves differently for argument 'ROImask'
 %% drift compute
+Focused.driftCompute(F, 'dcimg.dcimg');
 Focused.driftCompute(F, 'images.tif');
 %% see drift correction before applying
+seeDriftCorrection(F, 'dcimg.dcimg');
 seeDriftCorrection(F, 'images.tif');
 %% apply drift if satisfacted
+driftApply(F, 'dcimg.dcimg');
 driftApply(F, 'images.tif');
 %% view corrected stack
 Focused.stackViewer(F, 'corrected');
