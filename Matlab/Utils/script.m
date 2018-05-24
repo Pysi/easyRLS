@@ -3,13 +3,24 @@
 clear
 clc
 %% load library to compute baseline
-cd /home/ljp/Science/Hugo/easyRLS/
+cd('C:\Users\FLASH 4.0\Documents\Science\Projects\easyRLS')
 [~,~] = loadlibrary('Programs/easyRLS/Tools/caTools/caTools.so',...
                     'Programs/easyRLS/Tools/caTools/caTools.h');
+                
+                
+%% load library to compute baseline on windows platform
+cd('C:\Users\FLASH 4.0\Documents\Science\Projects\easyRLS')
+[~,~] = loadlibrary('Programs/easyRLS/Tools/caTools/caTools.dll' ,...
+                    'Programs/easyRLS/Tools/caTools/caTools.h');
+
 %% add path
 cd /home/ljp/Science/Hugo/easyRLS/
 addpath(genpath('Programs/easyRLS/Matlab'))
 addpath(genpath('Programs/NeuroTools/Matlab'))
+
+cd('C:\Users\FLASH 4.0\Documents\Science\Projects\easyRLS')
+addpath(genpath('Programs\easyRLS\Matlab'))
+addpath(genpath('Programs\NeuroTools\Matlab'))
 
 
 %% go to project folder, set parameters, and get focus
@@ -18,6 +29,7 @@ param.RefLayers = 8:10;
 param.RefIndex = 10; 
 F = NT.Focus('/home/ljp/Science/Projects/RLS/', '', '2018-01-31', 8);
 
+F = NT.Focus('D:\', '', '2018-03-12', 2);
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 %                           Version for DCIMG                             %
