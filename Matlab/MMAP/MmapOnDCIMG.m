@@ -15,6 +15,8 @@ classdef MmapOnDCIMG < handle
     end
     properties (Hidden) % no need to see this
         f % list of transformations to apply
+        inv % inversions
+        ord % order
     end
     
     methods
@@ -37,7 +39,7 @@ classdef MmapOnDCIMG < handle
             self.T = T; 
             
             warning('this mmap will return RAST stacks even dcimg is %s', self.space);
-            self.f = getTransformation(self.space, 'RAST');
+            [self.f, self.inv, self.ord] = getTransformation(self.space, 'RAST');
         end
         
         function out = subsref(self, S)
@@ -49,6 +51,7 @@ classdef MmapOnDCIMG < handle
                     switch length(S(1).subs)
                         case 4 % 4D
                             newS(1).subs = cell(1,3); 
+                            
                             x = S(1).subs{1}; 
                             y = S(1).subs{2};
                             newS(1).subs{2} = S(1).subs{3}; % z
@@ -62,19 +65,26 @@ classdef MmapOnDCIMG < handle
                             end                            
                             
                             [X,Y] = meshgrid(x, y);
-                            xy = sub2ind([self.x self.y], X, Y);
+                            
+                            % TODO make this more robust
+                            if self.ord(1) == 1 % good order
+                                xy = sub2ind([self.x self.y], X, Y);
+                            else % bad order
+                                xy = sub2ind([self.y self.x], Y, X);
+                            end
                             
                             newS(1).subs{1} = xy'; % (matlab inverses x and y)
                             
                             % we want to return a [x,y,z,t] sized matrix
                             askedSize = [length(x), length(y), length(newS(1).subs{2}), length(newS(1).subs{3})];
                             out = reshape(subsref(self.mmaplin.Data.bit, newS), askedSize);
-                            out = applyTransformation(out, self.f);
+%                             out = applyTransformation(out, self.f);
                         case 3 % 3D with xy as index
                             xy = S(1).subs{1}; 
-                            
+                            % TODO lake sure RAS is returned
+                            % if everything
                             if xy == ':'
-                                xy = 1:self.x;
+                                xy = 1:self.x*self.y;
                             end
                             
                             newS(1).subs{1} = xy; % xy

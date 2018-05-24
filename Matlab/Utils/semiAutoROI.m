@@ -21,7 +21,7 @@ function semiAutoROI(F, tag)
         disp('creating ''Mask'' directory')
         mkdir(F.dir('Mask'));
         disp('creating new mask file')
-        mask = false(x,y,20); % default total number of layers
+        mask = false(m.x,m.y,20); % default total number of layers
     end
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % print at screen

@@ -1,16 +1,22 @@
-function m = MmapOnDCIMG(F, tag, kwargs)
+function m = MmapOnDCIMG(F, tag)
 % focused MmapOnDCIMG is the focused wrapper for MmapOnDCIMG
 % it creates the info file automatically
 
 	% define default values
-    % TODO get this in focus when possible
 	byteskip = 808;
 	clockskip = 8;
-    space = 'ALI';
+    space = 'ALIT';
 	x = 1024;
 	y = 604;
 	z = 20;
 	t = 1500;
+    
+    % replace by focus values if available
+    if F.IP.width
+        x = F.IP.height; % TODO get RAS to see if it has to be inverted
+        y = F.IP.width;
+%         t = F.param.NCycles;
+    end
     
     % replace default values by exisiting if exist
     try
@@ -18,27 +24,6 @@ function m = MmapOnDCIMG(F, tag, kwargs)
     catch M
         warning(M.message); % no file is not an error, but a warning
     end
-
-	% parse input
-    % TODO remove kwargs once they are found in focus
-	in = inputParser;
-	in.addParameter('byteskip', byteskip);
-	in.addParameter('clockskip', clockskip);
-	in.addParameter('space', space);
-	in.addParameter('x', x);
-	in.addParameter('y', y);
-	in.addParameter('z', z);
-	in.addParameter('t', t);
-	in.parse(kwargs{:})
-
-	% get results
-	byteskip = in.Results.byteskip;
-	clockskip = in.Results.clockskip;
-	space = in.Results.space;
-	x = in.Results.x;
-	y = in.Results.y;
-	z = in.Results.z;
-	t = in.Results.t;
     
     % create necessary variables
     Z = 1:z; % (assumes that Z are oriented this way)
