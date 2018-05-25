@@ -3,7 +3,7 @@ function writeNHDR(F, tag)
 
     m = Focused.Mmap(F, tag); % creates the Mmap object to make sure info can be loaded
 
-    pixtype = m.type;
+    pixtype = m.pixtype;
     if strcmp(pixtype,'single');pixtype='float';end
     space = m.space;
     dimension = length(space);

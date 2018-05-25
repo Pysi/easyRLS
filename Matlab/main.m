@@ -43,7 +43,7 @@ stackViewer2D(F, 'DFFPixel');
 %% compute phase map neuron / pixel
 phaseMapPixel(F, 0.2)
 %% display it
-
+Focused.phaseMapViewer(F)
 
 %{
 clean(F); %% delete unecessary files (including baseline)
