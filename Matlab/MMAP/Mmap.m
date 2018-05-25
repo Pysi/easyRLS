@@ -4,15 +4,16 @@ classdef Mmap < handle
 % subscript can be 4D or 3D
 % --- you can call the focused version of Mmap : Focused.Mmap ---
     properties
-        space % RAS or RAST
         mmap % 4D mmap (x,y,z,t)
         mmaplin % 3D mmap of *the same* binary file (xy, z, t)
-        x % width
-        y % height
-        z % number of layers
-        t % number of time frame
-        Z % layers concerned
-        T % times concerned
+        pixtype % uint16 ou single
+        space % RAS or RAST depending on dimension
+        x % width (left to right)
+        y % height (posterior to anterior)
+        z % number of layers (inferior to superior)
+        t % number of time frames (per layer)
+        Z % layers concerned (TODO make optionnal)
+        T % times concerned (TODO remove it)
     end
     methods
         % --- constructor ---
@@ -23,13 +24,14 @@ classdef Mmap < handle
             binFile = [inPathTag '.bin'];
             inputInfo = [inPathTag '.mat'];
             
-            load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
+            load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
+            self.pixtype = pixtype; % get type
             self.space = space; % RAS or RAST
             self.mmap = ...
-                memmapfile(binFile,'Format',{'uint16',[x,y,z,t],'bit'}, ...
+                memmapfile(binFile,'Format',{self.pixtype,[x,y,z,t],'bit'}, ...
                     'Repeat', 1); % repeat option might prevent from detecting errors (such on t)
             self.mmaplin = ...
-                memmapfile(binFile,'Format',{'uint16',[x*y,z,t],'bit'}, ...
+                memmapfile(binFile,'Format',{self.pixtype,[x*y,z,t],'bit'}, ...
                     'Repeat', 1);
             self.x = x; 
             self.y = y; 
@@ -74,7 +76,8 @@ classdef Mmap < handle
     end
     
     methods (Static)        
-        % --- redefining z ---
+        % --- redefining z --- TODO take into account not well ordered Zs
+        % (return RAS whatever the input is, with warning in not RAS asked)
         function new_z = zCorrect(old_z, Z)
         %zCorrect returns z compatible with mmap
         % examples :

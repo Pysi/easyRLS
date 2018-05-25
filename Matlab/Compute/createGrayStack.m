@@ -3,8 +3,9 @@ function createGrayStack(F)
 
     m = Focused.Mmap(F, 'corrected');
 
-    output = fullfile(F.dir.IP, 'graystack.bin');
-    outputInfo = fullfile(F.dir.IP, 'graystack.mat');
+    mkdir(F.dir('graystack'));
+    output = [F.tag('graystack') '.bin'];
+    outputInfo = [F.tag('graystack') '.mat'];
 
     fid = fopen(output, 'wb');
 
@@ -21,8 +22,12 @@ function createGrayStack(F)
     t = 1; %#ok<NASGU>
     Z = m.Z;
     T = 1; %#ok<NASGU>
+    space = 'RAS';
+    pixtype = 'uint16';
 
     % create corresponding info
-    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T');
+    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
+    
+    writeNHDR(F,'graystack');
 
 end

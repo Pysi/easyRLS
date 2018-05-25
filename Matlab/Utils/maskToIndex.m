@@ -3,8 +3,7 @@ function indices = maskToIndex(F, z)
 % F is the focus which gives the path of mask.mat
 % z is the layer you want to retrive the index from
 
-    maskPath = fullfile(F.dir.IP, 'mask.mat');
-    load(maskPath, 'mask');
+    load(F.tag('mask'), 'mask');
 
     indices = uint32(find(mask(:,:,z))); %#ok<IDISVAR,NODEF>
 

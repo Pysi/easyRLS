@@ -1,54 +1,27 @@
-function semiAutoROI(F, Layers, t, tag)
+function semiAutoROI(F, tag)
 %semiAutoROI(F, Layers, t, tag) lets you modify an automatic ROI
 % F is the current focus instance
-% Layers are the layers you want to draw the contour on
-% t is the time index of the reference layer
 % tag could be :
 %     - the tag of the binary you want to work on ('corrected' for instance)
 %     - the name of a dcimg if you want to work on a dcimg (Run00.dcimg for instance)
 
+    Z = F.Analysis.Layers;
+    t = F.Analysis.RefIndex;
+    
 % if the tag has an extension and that this extension is 'dcimg'
 % semiAutoROI will work on dcimg (particular case)
 
-    dcimg = false;
-    Z = Layers;
-    sp = split(tag, '.');
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % handle dcimg case
-    if length(sp) == 1 % if no extension (regular case)
-        m = Focused.Mmap(F, tag); % get the memory map
-        x = m.x;
-        y = m.y;
-    else
-        if strcmp(sp{end}, 'dcimg') % if extension is dcimg
-            dcimg = true;
-        else
-            error('case not implemented for tag %s', tag);
-        end
-    end
-    if dcimg % if dcimg is true, do it on dcimg
-        m = Focused.MmapOnDCIMG(F, sp{1}, {});
-        if m.invert.iZ
-            Z = flip(Z);
-        end        
-        if m.invert.iXY
-            x = m.y;
-            y = m.x;
-        else
-            x = m.x;
-            y = m.y;
-        end        
-    end
+    m = adapted4DMatrix(F,tag);
 
 % % % % % % % % % % % % % % % % % % % % % % % % load existing or initialize
     try % try to load existing mask.mat
         disp('found mask file, loading it')
-        load(fullfile(F.dir.IP, 'mask.mat'), 'mask'); % get the mask
+        load(F.tag('mask'), 'mask'); % get the mask
     catch % if no mask variable to load, initialize to NaN
-        disp('creating ''IP'' directory')
-        mkdir(F.dir.IP);
+        disp('creating ''Mask'' directory')
+        mkdir(F.dir('Mask'));
         disp('creating new mask file')
-        mask = false(x,y,20); % default total number of layers
+        mask = false(m.x,m.y,20); % default total number of layers
     end
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % print at screen
@@ -85,7 +58,7 @@ function semiAutoROI(F, Layers, t, tag)
 
         % stores it in 'mask' variable and saves it
         mask(:,:,z) = tmp2;
-        save(fullfile(F.dir.IP, 'mask.mat'), 'mask'); % overwrites the mask
+        save(F.tag('mask'), 'mask'); % overwrites the mask
         fprintf('saved layer %d\n', z);
 
     end

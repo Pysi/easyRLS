@@ -51,3 +51,7 @@ Where `inPathTag` is a string representing the absolute or relative path of the 
     Mmap('Data/RLS1P/2016-02-29/Run 05/Files/corrected')
 
 It will give you exactly the same object, the only difference being you have to tell it the path you want to look at.
+
+## Similar to Mmap
+
+There are two objects similar to Mmap : MmapOnDCIMG and TifAsMatrix. They both allows to access dcimg files and tif collection as 4D matrix. Take care, it is not very robust and is just used to simplify automated scripts.

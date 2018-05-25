@@ -2,6 +2,8 @@ function chooseRefBrain(F, refbrain)
 %chooseRefBrain creates a RefBrain.nhdr linking to the chosen brain or let
 %you interactivlety choose between available ref brains
 
+    [~,~] = mkdir(F.dir('RefBrain'));
+
     switch nargin
         case 1 % interactive
             refBrainDir = input('give refbrains directory:\n? ','s');
@@ -16,13 +18,13 @@ function chooseRefBrain(F, refbrain)
             refbrain = fullfile(tmp(ref).folder, tmp(ref).name);        
         case 2 % select given
             if ~exist(refbrain, 'file')
-                error('brain does not exist');
+                error('%s does not exist', refbrain);
             end
-        otherwise
+        otherwise % bad number of arguments
             error('wat ?')
     end
 
-    refPath = fullfile(F.dir.RefBrain, 'RefBrain.nhdr');
+    refPath = F.tag('RefBrain');
     if exist(refPath, 'file')
         warning('overwriting existing header');
     end
