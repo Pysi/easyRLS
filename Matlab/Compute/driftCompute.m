@@ -31,10 +31,14 @@ Y = bbox(3):bbox(4);
 
 % compute reference image with max and loads it in Raphael's image object
 Ref = NT.Image(max( mRef(X,Y, RefLayers, RefIndex) ,[],3));
+% display it
+refIm = figure;
+imagesc(Ref.pix);
+axis equal
 
 % --- Drift correction ---
 % creates a figure to plot the drift correction
-figure; hold on;
+seeDrift = figure; hold on;
 title([F.name '   dx=red, dy=green']);
 
 % init drift vectors
@@ -50,6 +54,11 @@ for t = m.T % run across the times
     
     % plot 1/50 figures
     if ~mod(t,50)
+        try
+            figure(seeDrift);
+        catch
+            error('killing the figure stops the computation');
+        end
         plot(t-49:t,dx(t-49:t),'r.');
         plot(t-49:t,dy(t-49:t),'g.');
         pause(0.01);
@@ -63,7 +72,8 @@ save(fullfile(F.dir('Drift'), 'DriftBox.mat'), 'bbox');
 save(fullfile(F.dir('Drift'), 'Drifts.mat'), 'dx', 'dy');
 savefig(fullfile(F.dir('Drift'), 'driftCorrection.fig'));
 
-close gcf
+close(seeDrift);
+close(refIm);
 
 end
 

@@ -23,9 +23,10 @@ function createGrayStack(F)
     Z = m.Z;
     T = 1; %#ok<NASGU>
     space = 'RAS';
+    pixtype = 'uint16';
 
     % create corresponding info
-    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space');
+    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
     
     writeNHDR(F,'graystack');
 
