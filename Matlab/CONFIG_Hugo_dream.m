@@ -37,6 +37,7 @@ computeBaselinePixel(F, 20:3, 50);
 dffNeuron(F);
 dffPixel(F, 20:3);
 phaseMapPixel(F, 0.2)
+phaseMapNeuron(F, 0.2)
 
 
 

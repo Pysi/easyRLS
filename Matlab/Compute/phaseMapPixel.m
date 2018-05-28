@@ -89,11 +89,11 @@ function phaseMapPixel(F, fstim)
                 Y = fft(mdff.Data.bit(:,index));
 
                 % extract peak from dff
-                amplitude = abs(Y(ind_fstim,:));
-                phase     = angle(Y(ind_fstim,:));
-                realpart  = real(Y(ind_fstim,:));
-                imaginary = imag(Y(ind_fstim,:));
-                deltaphi = (phase - phase_delay + pi);
+                pmp_amplitude = abs(Y(ind_fstim,:));
+                pmp_phase     = angle(Y(ind_fstim,:));
+                pmp_realpart  = real(Y(ind_fstim,:));
+                pmp_imaginary = imag(Y(ind_fstim,:));
+                pmp_deltaphi = (pmp_phase - phase_delay + pi);
                     % -phase_delay = Shift positive of the fluorescence
                     % +pi = because of the fourier transform is done against a cosinus  
 

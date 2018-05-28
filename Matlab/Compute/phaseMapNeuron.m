@@ -54,7 +54,7 @@ function phaseMapNeuron(F, fstim)
 % % % % % % LOOP % % % % % 
     % run across the layers
     for iz = Zlay
-        fprintf('\nphasemap per neuron for layer %d\t', iz);tic;
+        fprintf('phasemap per neuron for layer %d\t', iz);tic;
 
         % Phase shift because of the response of the GCaMP, get with the convolution of the stimulus with a Kernel
         phi_layer = iz*(F.dt*2*pi)*fstim*0.001;   % Phase shift because of the delay time between each layer (F.dt)
@@ -77,11 +77,11 @@ function phaseMapNeuron(F, fstim)
             Y = fft(mdff.Data.bit(:,i));
 
             % extract peak from dff
-            amplitude = abs(Y(ind_fstim,:));
-            phase     = angle(Y(ind_fstim,:));
-            realpart  = real(Y(ind_fstim,:));
-            imaginary = imag(Y(ind_fstim,:));
-            deltaphi = (phase - phase_delay + pi);
+            pmn_amplitude = abs(Y(ind_fstim,:));
+            pmn_phase     = angle(Y(ind_fstim,:));
+            pmn_realpart  = real(Y(ind_fstim,:));
+            pmn_imaginary = imag(Y(ind_fstim,:));
+            pmn_deltaphi = (pmn_phase - phase_delay + pi);
                 % -phase_delay = Shift positive of the fluorescence
                 % +pi = because of the fourier transform is done against a cosinus
                 
@@ -96,7 +96,7 @@ function phaseMapNeuron(F, fstim)
         
         % write buffer (full layer)
         for label = labels
-            fwrite(out.(label{:}), BUFFER, 'single');
+            fwrite(out.(label{:}), BUFFER.(label{:}), 'single');
         end
     end 
         
