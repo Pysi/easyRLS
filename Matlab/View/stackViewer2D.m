@@ -11,7 +11,7 @@ Layers = F.Analysis.Layers;
 minmax = [400 1200];
 viewDFF = false;
 viewNeuron = false;
-if strcmp(tag, 'DFF') || strcmp(tag, 'DFFNeuron')
+if strcmp(tag, 'DFFPixel') || strcmp(tag, 'DFFNeuron')
     viewDFF = true;
 end
 if strcmp(tag, 'BaselineNeuron') || strcmp(tag, 'DFFNeuron')

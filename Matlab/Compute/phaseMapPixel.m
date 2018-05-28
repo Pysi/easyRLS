@@ -50,7 +50,7 @@ function phaseMapPixel(F, fstim)
         fprintf('\nlayer %d\t', iz);tic;
 
         % focus on the current layer
-        F.select(iz);
+        % F.select(iz); % this is not useful anymore, and does not work when no tif
 
         % Phase shift because of the response of the GCaMP, get with the convolution of the stimulus with a Kernel
         phi_layer = iz*(F.dt*2*pi)*fstim*0.001;   % Phase shift because of the delay time between each layer (F.dt)
