@@ -5,18 +5,14 @@
 
 clear; clc
 
-path.caTools = '/home/ljp/Science/Programs/easyRLS/Tools/caTools/';
-path.program = '/home/ljp/Science/Programs/';
-path.RefBrains = '/home/ljp/Science/RefBrains';
+cd /home/ljp/Programs/
+addpath(genpath('easyRLS/Matlab'))
+addpath(genpath('NeuroTools/Matlab'))
 
 root = '/home/ljp/Science/Projects/RLS/';
 study = '';
 date = '0000-00-00';
 run = 0;
-
-cd(path.program)
-addpath(genpath('easyRLS/Matlab'))
-addpath(genpath('NeuroTools/Matlab'))
 
 F = NT.Focus(root, study, date, run);
 
@@ -27,22 +23,17 @@ F.Analysis.RefStack = '';
 
 %% Linux: load library to compute baseline 
 
-cd(path.caTools)
+cd(F.dir('caTools'))
 [~,~] = loadlibrary('caTools.so',...
                     'caTools.h');
 
 %% Windows load library to compute baseline 
 
-cd(path.caTools)
+cd(F.dir('caTools'))
 [~,~] = loadlibrary('caTools.dll',...
                     'caTools.h');
 
 % you can add your own functions in the CONFIG_Hugo.m or CONFIG_Geoffrey.m ...
-
-
-
-
-
 
 
 
