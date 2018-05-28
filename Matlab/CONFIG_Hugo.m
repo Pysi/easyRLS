@@ -2,22 +2,16 @@
 
 clear; clc
 
-path.caTools = '/home/ljp/Science/Hugo/easyRLS/Programs/easyRLS/Tools/caTools/';
-path.program = '/home/ljp/Science/Hugo/easyRLS/Programs/';
-path.RefBrains = '/home/ljp/Science/Hugo/easyRLS/Data/2018-03-27/Run 10/RefBrain/';
-
-root = '/home/ljp/Science/Hugo/easyRLS/';
-study = 'RLS';
-date = '2018-05-21';
-run = 0;
-
-cd(path.program)
+cd /home/ljp/Programs/
 addpath(genpath('easyRLS/Matlab'))
 addpath(genpath('NeuroTools/Matlab'))
 
-F = NT.Focus(root, study, date, run);
+root = '/home/ljp/Science/Projects/RLS1P/';
+study = '';
+date = '2018-05-21';
+run = 3;
 
-cd(root);
+F = NT.Focus(root, study, date, run);
 
 F.Analysis.Layers = 3:20;
 F.Analysis.RefLayers = 6:6;
@@ -27,6 +21,24 @@ F.Analysis.RefStack = '';
 
 %% load library to compute baseline
 
-cd(path.caTools)
+cd(F.dir('caTools'))
 [~,~] = loadlibrary('caTools.so',...
                     'caTools.h');
+
+%% workflow
+
+Focused.driftCompute(F, 'dcimg.dcimg');
+driftApply(F, 'dcimg.dcimg');
+computeBackground(F, 'corrected');
+createGrayStack(F)
+segmentBrain(F, 'graystack');
+computeBaselineNeuron(F, 50);
+computeBaselinePixel(F, 20:3, 50);
+dffNeuron(F);
+dffPixel(F, 20:3);
+phaseMapPixel(F, 0.2)
+
+
+
+%%
+path.RefBrains = '/home/ljp/Science/RefBrains';
