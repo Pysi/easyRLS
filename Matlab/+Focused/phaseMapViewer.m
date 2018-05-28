@@ -1,7 +1,7 @@
 function phaseMapViewer(F)
 %+Focused version of phaseMapViewer
 
-	phaseMapViewer(Focused.Mmap(F, 'amplitude'),Focused.Mmap(F, 'phase'), 'phaseMap', 100)
+	phaseMapViewer(Focused.Mmap(F, 'amplitude'),Focused.Mmap(F, 'deltaphi'), [F.name ' phaseMap'], 100);
 
 
 end 

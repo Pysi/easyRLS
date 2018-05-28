@@ -8,7 +8,7 @@ function phaseMapViewer(mAmplitude, mPhase, titleFig, maximum)
     
     f = figure('Visible','off'); % create invisible figure
     img = ones(m.x, m.y, 3);	% saturation init to 1
-    img(:,:,1) = mPhase(:,:,z,1)./(2*pi); 		% hue
+    img(:,:,1) = mod(mPhase(:,:,z,1),2*pi)./(2*pi); 		% hue
     img(:,:,3) = mAmplitude(:,:,z,1)./maximum; 	% value
     img = hsv2rgb(img);
     img = rot90(img); % rotate image to display head up
@@ -33,7 +33,7 @@ function phaseMapViewer(mAmplitude, mPhase, titleFig, maximum)
     function actualize_z(source, ~)
         z = floor(source.Value); % round the value
         img = ones(mAmplitude.x, mAmplitude.y, 3);	% saturation init to 1
-        img(:,:,1) = mPhase(:,:,z,1)./(2*pi); 		% hue
+        img(:,:,1) = mod(mPhase(:,:,z,1),2*pi)./(2*pi); 		% hue
         img(:,:,3) = mAmplitude(:,:,z,1)./maximum; 	% value
         img = hsv2rgb(img);
         img = rot90(img); % rotate image to display head up

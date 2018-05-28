@@ -43,9 +43,9 @@ end
     t = T(1);
     
     mmap = recreateMmap(F,m{z}.matfile.mmap); % recreates mmap, will be actualized when z changes
-    if ~viewNeuron
+    if ~viewNeuron % if viewing per pixel
         indices = m{z}.matfile.indices; % loads indices, will be actualized when z changes
-    else % (if viewNeuron is true)
+    else % if viewing per neuron (viewNeuron is true)
         nn = m{z}.matfile.numNeurons; % takes numNeurons
         ns = m{z}.matfile.neuronShape; % takes neuronShape
         snap = mmap.Data.bit(t, :); % takes a snapshot for all neurons at given t

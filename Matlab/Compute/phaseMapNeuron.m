@@ -1,4 +1,4 @@
-function phaseMapPixel(F, fstim)
+function phaseMapNeuron(F, fstim)
 %phaseMapPixel computes the phase map per pixel using the fft
 
 % inputs
@@ -18,13 +18,13 @@ function phaseMapPixel(F, fstim)
     Zlay = sort(F.Analysis.Layers, 'descend');
 
     % get path of dff per pixel
-    dffPath = F.dir('DFFPixel');
+    dffPath = F.dir('DFFNeuron');
 
     % create phasemap folder
-    mkdir(F.dir('PhaseMapPixel'));
+    mkdir(F.dir('PhaseMapNeuron'));
 
     % get path to record data
-    labels = {'pmp_amplitude', 'pmp_phase', 'pmp_deltaphi', 'pmp_realpart', 'pmp_imaginary'};
+    labels = {'pmn_amplitude', 'pmn_phase', 'pmn_deltaphi'};% 'pmn_realpart', 'pmn_imaginary'};
     out = struct();
     outInfo = struct();
     for label = labels
@@ -54,10 +54,7 @@ function phaseMapPixel(F, fstim)
 % % % % % % LOOP % % % % % 
     % run across the layers
     for iz = Zlay
-        fprintf('\nphasemap per pixel for layer %d\t', iz);tic;
-
-        % focus on the current layer
-        % F.select(iz); % this is not useful anymore, and does not work when no tif
+        fprintf('\nphasemap per neuron for layer %d\t', iz);tic;
 
         % Phase shift because of the response of the GCaMP, get with the convolution of the stimulus with a Kernel
         phi_layer = iz*(F.dt*2*pi)*fstim*0.001;   % Phase shift because of the delay time between each layer (F.dt)
@@ -65,52 +62,42 @@ function phaseMapPixel(F, fstim)
 
         % Load DFF
         dffLayer = fullfile(dffPath, [num2str(iz, '%02d') '.mat']);
-        load(dffLayer, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
+        load(dffLayer, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'centerCoord', 'neuronShape', 'numNeurons');
         mdff = recreateMmap(F,mmap);
+        
+        % initialize buffer
+       	for label = labels
+            BUFFER.(label{:}) = zeros(x,y); % a buffer for the layer
+        end
 
-        % run across all image pixels
-        index = 0; % number of index in dff
-        zerosToWrite = 0;
-        for i = 1:x*y
+        % run across all neurons
+        for i = 1:numNeurons % index of neuron in dff
 
-            %if index is not in ROI (could check directly with mask, but mask could have changed)
-            if ~max(ismember(indices,i))
-                zerosToWrite = zerosToWrite +1;
-            %else index is in ROI and DFF is defined
-            else
-                index = index + 1; % increment by one
-                % write all zeros at the same time
-                for label = labels
-                    fwrite(out.(label{:}), zeros(1,zerosToWrite), 'single');
-                end
-                zerosToWrite = 0;
+            % Calculate fourier transformation
+            Y = fft(mdff.Data.bit(:,i));
+
+            % extract peak from dff
+            amplitude = abs(Y(ind_fstim,:));
+            phase     = angle(Y(ind_fstim,:));
+            realpart  = real(Y(ind_fstim,:));
+            imaginary = imag(Y(ind_fstim,:));
+            deltaphi = (phase - phase_delay + pi);
+                % -phase_delay = Shift positive of the fluorescence
+                % +pi = because of the fourier transform is done against a cosinus
                 
-                % Calculate fourier transformation
-                Y = fft(mdff.Data.bit(:,index));
-
-                % extract peak from dff
-                amplitude = abs(Y(ind_fstim,:));
-                phase     = angle(Y(ind_fstim,:));
-                realpart  = real(Y(ind_fstim,:));
-                imaginary = imag(Y(ind_fstim,:));
-                deltaphi = (phase - phase_delay + pi);
-                    % -phase_delay = Shift positive of the fluorescence
-                    % +pi = because of the fourier transform is done against a cosinus  
-
-                % write pixel in all binaries
-                for label = labels
-                    fwrite(out.(label{:}), eval(label{:}), 'single');
-                end
-
+            
+            % fills buffer
+            for label = labels
+                BUFFER.(label{:})(neuronShape{i}) = eval(label{:}); % a buffer for the layer
             end
 
         end
-        % write remaining zeros
-        for label = labels
-            fwrite(out.(label{:}), zeros(1,zerosToWrite), 'single');
-        end
         toc;
         
+        % write buffer (full layer)
+        for label = labels
+            fwrite(out.(label{:}), BUFFER, 'single');
+        end
     end 
         
     % close binary files and write info (.mat and .nhdr)
