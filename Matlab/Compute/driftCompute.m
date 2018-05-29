@@ -8,10 +8,8 @@ function driftCompute(F, m, mRef, RefLayers, RefIndex)
 % RefIndex value or false
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-%  Attention : driftCompute contient plusieurs choix        %
+%  Attention : driftCompute                                 %
 %  - utilisation du max des layers selectionnés             %
-%  - bbox définie dans le programme                         %
-%  - enregistrement des drifts dans des dossiers séparés    %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 % --- manage case of reference stack
@@ -25,7 +23,7 @@ end
 % the reference image we take is the maximum of the selected layers along
 % the 3rd dimension
 
-bbox = [ 53 566 45 914 ]; % define bounding box to look into
+bbox = F.Analysis.DriftBox; % define bounding box to look into
 X = bbox(1):bbox(2);
 Y = bbox(3):bbox(4);
 
