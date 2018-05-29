@@ -4,30 +4,33 @@ function m = adapted4DMatrix(F, tag)
     bin = false;
     dcimg = false;
     tif = false;
-
-    sptag = split(tag, '.');
-
-    if length(sptag) == 1 % if no extension (regular case)
-        bin = true;
-    else
-        switch sptag{end}
-            case 'dcimg' % if extension is dcimg
+    
+    % if source is asked, search it in focus
+    if strcmp(tag,'source')
+        switch F.extra.Source
+            case 'dcimg'
                 dcimg = true;
-            case 'tif' % if alias for tif
+            case 'tif'
                 tif = true;
-            otherwise
-                error('case not implemented for tag %s', tag);
+        end
+    else % if not 'source', parse the tag
+        switch tag
+            case 'dcimg' % if dcimg
+                dcimg = true;
+            case 'tif' % if tif
+                tif = true;
+            otherwise % regular case
+                bin = true; 
         end
     end
-    
+
     if bin % if standard binary stack
         m = Focused.Mmap(F, tag); % get the memory map        
     elseif dcimg % if dcimg is true, do it on dcimg
-        m = Focused.MmapOnDCIMG(F, sptag{1});      
+        m = Focused.MmapOnDCIMG(F);      
     elseif tif % if tif is true, do it on tif
         m = TifAsMatrix(F);     
     else
-        error('%s tag not implemented', tag);
+        error('%s tag not implemented', tag); % should not happen anymore
     end
-    
 end

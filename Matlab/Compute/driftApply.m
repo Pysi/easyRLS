@@ -1,4 +1,4 @@
-function driftApply(F, tag)
+function driftApply(F)
 %driftApply(F) creates a binary file with the translated values
 
     % get layers to analyse and put them in inferior to superior order
@@ -10,7 +10,7 @@ function driftApply(F, tag)
     load(driftPath, 'dx', 'dy')
 
     % load mmap info
-    m = adapted4DMatrix(F, tag);
+    m = adapted4DMatrix(F, 'source');
 
     % define output files
     mkdir(F.dir('corrected'));

@@ -1,4 +1,4 @@
-function driftCompute(F, tag)
+function driftCompute(F)
 %+Focused version of driftCompute
 
     % Layers = in.Results.Layers;
@@ -7,7 +7,7 @@ function driftCompute(F, tag)
     RefLayers = F.Analysis.RefLayers;
 
     % create wrapper object
-    m = adapted4DMatrix(F,tag);
+    m = adapted4DMatrix(F,'source');
     mRef = false;
     
     if RefStack % if we want to use a reference stack which is outside the stack
