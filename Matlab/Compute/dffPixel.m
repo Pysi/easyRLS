@@ -1,7 +1,10 @@
-function dffPixel(F, Layers)
+function dffPixel(F)
 %dffPixel computes delta f over f
 % F focus object
 % Layers layers you want to compute dff on (ex [3 4 6])
+
+% layers to analyse
+Layers = F.Analysis.Layers;
 
 % create dff directory
 dffPath = F.dir('DFFPixel');

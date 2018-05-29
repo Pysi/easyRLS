@@ -27,23 +27,23 @@ createGrayStack(F)
 %% --- %% segment neurons %% --- %%
 segmentBrain(F, 'graystack');
 %% --- %% compute baseline per neuron / pixel %% --- %%
-computeBaselineNeuron(F, 50);
-computeBaselinePixel(F, 3:20, 50);
-%% display it
-stackViewer2D(F, 'BaselineNeuron');
-stackViewer2D(F, 'BaselinePixel');
+computeBaseline(F, 'neuron');
+computeBaseline(F, 'pixel');
+    %% display it
+    stackViewer2D(F, 'BaselineNeuron');
+    stackViewer2D(F, 'BaselinePixel');
 %% --- %%% compute dff per neuron / pixel %% --- %%
-dffNeuron(F);
-dffPixel(F, 3:20);
-%% display it
-stackViewer2D(F, 'DFFNeuron');
-stackViewer2D(F, 'DFFPixel');
+computeDFF(F, 'neuron');
+computeDFF(F, 'pixel');
+    %% display it
+    stackViewer2D(F, 'DFFNeuron');
+    stackViewer2D(F, 'DFFPixel');
 %% --- %% compute phase map neuron / pixel %% --- %%
-phaseMapNeuron(F, 0.2)
-phaseMapPixel(F, 0.2)
-%% display it
-Focused.phaseMapViewer(F, 'neuron')
-Focused.phaseMapViewer(F, 'pixel')
+computePhaseMap(F, 'neuron');
+computePhaseMap(F, 'pixel');
+    %% display it
+    Focused.phaseMapViewer(F, 'neuron')
+    Focused.phaseMapViewer(F, 'pixel')
 
 %{
 clean(F); %% delete unecessary files (including baseline)
