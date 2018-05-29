@@ -8,10 +8,10 @@ function segmentBrain(F, tag)
     disp('creating ''Segmented'' directory'); mkdir(segPath);
     
     % for nuclear lineage
-    switch F.Analysis.Lineage
-        case 'Nuclear'
+    switch lower(F.Analysis.Lineage)
+        case 'nuclear'
             nuc = true;
-        case 'Cytoplasmic'
+        case 'cytoplasmic'
             nuc = false;
         otherwise
             error('lineage unknowned : %s', F.Analysis.Lineage);
