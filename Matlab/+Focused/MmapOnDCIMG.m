@@ -16,10 +16,10 @@ function m = MmapOnDCIMG(F, tag)
         clockskip = 8;
         origSpace = 'ALIT';
         space = 'RAST';
-        x = 604;
-        y = 1024;
+        x = 614;
+        y = 1018;
         z = 20;
-        t = 1500;
+        t = 3000;
 
         [~, ~, ord] = getTransformation(origSpace, space);
 
