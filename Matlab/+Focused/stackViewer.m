@@ -35,7 +35,7 @@ function stackViewer(F, tag)
         
     end
     
-    minmax = [400 1000];
+    minmax = [400 1500];
     if strcmp(tag, 'refStack')
         minmax = [400 4000];
     end
