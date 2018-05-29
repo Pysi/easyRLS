@@ -1,4 +1,4 @@
-function [centerCoord, neuronShape] = segmentNeuron(Img, Mask)
+function [centerCoord, neuronShape] = segmentNeuron(Img, Mask, nuc)
 %segmentNeuron returns the list of the center coordinates and the list of
 %the pixels belonging to the neuron
 % it is "copy and paste" from the Raphael's script
@@ -15,7 +15,7 @@ assert( min(size(Img) == size(Mask)) ); % assert image and mask have the same si
 % fprintf(' %.02f sec\n', toc);
 
 % parameters
-Nuc = false;                % true for nuclear lines
+Nuc = nuc;                  % true for nuclear lines
 sizeRange = [3 150];        % Size filter (pixels)
 thCorr = 0.05;              % Correlation filter
 
