@@ -6,12 +6,22 @@ function segmentBrain(F, tag)
 
     segPath = F.dir('Segmentation');
     disp('creating ''Segmented'' directory'); mkdir(segPath);
+    
+    % for nuclear lineage
+    switch F.Analysis.Lineage
+        case 'Nuclear'
+            nuc = true;
+        case 'Cytoplasmic'
+            nuc = false;
+        otherwise
+            error('lineage unknowned : %s', F.Analysis.Lineage);
+    end
 
     for z = m.Z % for each layer
         Img = m(:,:,z,1);
         Mask = mask(:,:,z);
 
-        [centerCoord, neuronShape] = segmentNeuron(Img, Mask);  %#ok<ASGLU>
+        [centerCoord, neuronShape] = segmentNeuron(Img, Mask, nuc);  %#ok<ASGLU>
         numberNeuron = length(centerCoord);                     %#ok<NASGU>
         outSeg = fullfile(segPath, [num2str(z, '%02d') '.mat']);
         save(outSeg, 'centerCoord', 'neuronShape', 'numberNeuron');
