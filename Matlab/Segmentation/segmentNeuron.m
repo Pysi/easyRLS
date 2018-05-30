@@ -32,6 +32,21 @@ thCorr = 0.05;              % Correlation filter
     B = ordfilt2(Img, 95, ones(10));
 
     if Nuc
+        % Remove the dark parts of the brain (Geoffrey)
+        Img(Img < mean2(Img)/1.5) = 0;
+        while ok == 0
+            Img_cor = Img;
+            promt = 'Set the threshold value (0 to 1): '
+            t = input(promt)
+            T = adaptthresh(Img,t);
+            Imgbin = imbinarize(Img,T);
+            Img_cor(Imgbin == 0) = 0;
+            imshow(cat(3, Img, Img_cor, Img));
+            prompt = 'The pink parts will be set to 0, is it ok (0 = No, 1 = Ok)? '
+            ok = input(prompt)
+        end
+        
+        Img = Img_cor;
         Pre = (B-Img)./(B-A); 
     else
         Pre = (Img-A)./(B-A);
