@@ -21,11 +21,12 @@ function segmentBrain(F, tag)
         Img = m(:,:,z,1);
         Mask = mask(:,:,z);
 
-        [centerCoord, neuronShape] = segmentNeuron(Img, Mask, nuc);  %#ok<ASGLU>
+        [centerCoord, neuronShape, CD] = segmentNeuron(Img, Mask, nuc);  %#ok<ASGLU>
         numberNeuron = length(centerCoord);                     %#ok<NASGU>
         outSeg = fullfile(segPath, [num2str(z, '%02d') '.mat']);
+        outIMG = fullfile(segPath, [num2str(z, '%02d') '.png']);
         save(outSeg, 'centerCoord', 'neuronShape', 'numberNeuron');
-
+        imwrite(CD, outIMG);
     end
 
 end

@@ -1,4 +1,4 @@
-function [centerCoord, neuronShape] = segmentNeuron(Img, Mask, nuc)
+function [centerCoord, neuronShape, CD] = segmentNeuron(Img, Mask, nuc)
 %segmentNeuron returns the list of the center coordinates and the list of
 %the pixels belonging to the neuron
 % it is "copy and paste" from the Raphael's script
@@ -189,5 +189,13 @@ thCorr = 0.05;              % Correlation filter
     
      centerCoord = pos;
      neuronShape = plist;
+
+% --- Display -------------------------------------------------------------
+    Resc = (Img-min(Img(:)))/(max(Img(:))-min(Img(:)));
+    Grid = ones(size(Img))*0.8;
+    for i = 1:numel(plist)
+        Grid(plist{i}) = 1;
+    end
+    CD = cat(3, Resc, Resc.*Grid, Resc);  
     
 end
