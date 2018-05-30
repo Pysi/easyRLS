@@ -4,6 +4,8 @@
 %%% This file is a collection of existing function. You can paste them in
 %%% your workflow
 
+% see TEMPLATE.m for more information and example
+
     %% view dcimg / tif
     Focused.stackViewer(F);
 %% --- %% semi auto ROI on dcimg / tif %% --- %%

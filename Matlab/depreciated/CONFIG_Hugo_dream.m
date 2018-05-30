@@ -70,22 +70,3 @@ F.Analysis = Analysis;
 %     phaseMapNeuron(F, 0.2)
 % end
 
-F = NT.Focus(root, study, date, 4);
-F.Analysis = Analysis;
-workflow(F);
-
-function workflow(F)
-    Focused.driftCompute(F, 'dcimg.dcimg');
-    driftApply(F, 'dcimg.dcimg');
-    computeBackground(F, 'corrected');
-    createGrayStack(F)
-    segmentBrain(F, 'graystack');
-    computeBaselineNeuron(F);
-    computeBaselinePixel(F);
-    dffNeuron(F);
-    dffPixel(F);
-    phaseMapPixel(F)
-    phaseMapNeuron(F)
-end
-
-
