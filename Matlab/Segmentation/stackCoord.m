@@ -15,7 +15,7 @@ function stackCoord(F, Layers)
         load(inSeg, 'centerCoord', 'numberNeuron');
 %         coordinates = [coordinates ; [centerCoord F.set.z*ones(numberNeuron, 1)]]; % concatenate
         % to find the z coordinate, we have to know where it is in the memory map
-        zcoord = (Mmap.zCorrect(z, Layers) -1 ) * abs(F.param.Increment);
+        zcoord = (Mmap.zCorrect(z, Layers) -1 ) * abs(F.param.Increment)/0.8;
         coordinates = [coordinates ; [centerCoord zcoord*ones(numberNeuron, 1)]]; % concatenate
     end
     

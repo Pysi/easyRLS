@@ -4,7 +4,10 @@ function exportToHDF5(F)
     fileName = fullfile(F.dir('HDF5'), [erase(F.name, ' ') '.h5']);
 
     load(fullfile(F.dir('Segmentation'), 'coordinates.mat'), 'coordinates', 'numberNeuron');
-    load(fullfile(F.dir('RefBrain'), 'refCoordinates.mat'), 'refCoordinates');
+    
+    % add again when mapping to reference brain  Volker
+   % load(fullfile(F.dir('RefBrain'), 'refCoordinates.mat'), 'refCoordinates');
+   
     timeFrames = 3000;
     calciumActivity = [];
 
@@ -21,11 +24,12 @@ function exportToHDF5(F)
     h5write(fileName,'/Data/Coordinates', coordinates ./ 1000); % µm → mm
     h5writeatt(fileName,'/Data/Coordinates','unit', 'mm')
     h5writeatt(fileName,'/Data/Coordinates','orientation', 'RAS')
-
-    h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
-    h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
-    h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
-    h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')
+    
+% add again when mapping to reference brain  Volker
+%     h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
+%     h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
+%     h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
+%     h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')
 
     h5create(fileName,'/Data/Times', [1 timeFrames]);
     dtframe = F.dt / 1000 * F.param.NLayers ;
