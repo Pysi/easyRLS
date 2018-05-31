@@ -1,18 +1,18 @@
 function exportToHDF5(F,Layers)
-% export to hdf5 file
+    % === export to hdf5 file
     mkdir(F.dir('HDF5'));
     fileName = fullfile(F.dir('HDF5'), [erase(F.name, {'(' ')' ' '}) '.h5']);
-
-
+    
+    % === load coordinates of segmented neurons
     load(fullfile(F.dir('Segmentation'), 'coordinates.mat'), 'coordinates', 'numberNeuron');
     
-    % add again when mapping to reference brain  Volker
+   % add again when mapping to reference brain  Volker
    % load(fullfile(F.dir('RefBrain'), 'refCoordinates.mat'), 'refCoordinates');
    
     timeFrames = 3000;
     calciumActivity = [];
 
-    % concatenate neurons activity
+    % === load and concatenate neurons activity
     for iz = Layers
         dffPath = fullfile(F.dir('DFFNeuron'), [num2str(iz, '%02d') '.mat']);
         load(dffPath, 'mmap');
@@ -21,6 +21,17 @@ function exportToHDF5(F,Layers)
         calciumActivity = [calciumActivity; mdff.Data.bit(:,:)'];
     end
 
+    % == load and interpolate stimulus according to image acquisition time
+    % poins
+    load(fullfile(F.dir('Run'), 'Stimulus.txt'))
+    time_exp = Stimulus(:, 2);
+    Stimulus = Stimulus(:, 3);
+
+    range = timeFrames;
+    time_range = linspace(min(time_exp), max(time_exp), range);
+    Stimulus = interp1(time_exp, Stimulus, time_range);
+    
+% == write to HDF5 file
     h5create(fileName,'/Data/Coordinates', [numberNeuron 3]); % xyz = 3 coordinates
     h5write(fileName,'/Data/Coordinates', coordinates ./ 1000); % µm → mm
     h5writeatt(fileName,'/Data/Coordinates','unit', 'mm')
@@ -44,8 +55,8 @@ function exportToHDF5(F,Layers)
     h5write(fileName,'/Data/Values', calciumActivity);
     h5writeatt(fileName,'/Data/Values','type', 'DFF, single')
 
-    % h5create(fileName,'/Data/Stimulus', [Range,1]);
-    % h5write(fileName,'/Data/Stimulus', Stimulus);
+    h5create(fileName,'/Data/Stimulus', [1 , range]);
+    h5write(fileName,'/Data/Stimulus', Stimulus);
 
     % h5create(fileName, '/Data/ZBrainAtlas_Labels', [NCells, labels_size(2)]);
     % h5write(fileName, '/Data/ZBrainAtlas_Labels', Labels);
