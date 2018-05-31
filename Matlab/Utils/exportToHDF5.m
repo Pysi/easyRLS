@@ -1,7 +1,8 @@
-function exportToHDF5(F)
+function exportToHDF5(F,Layers)
 % export to hdf5 file
+    mkdir(F.dir('HDF5'));
+    fileName = fullfile(F.dir('HDF5'), [erase(F.name, {'(' ')' ' '}) '.h5']);
 
-    fileName = fullfile(F.dir('HDF5'), [erase(F.name, ' ') '.h5']);
 
     load(fullfile(F.dir('Segmentation'), 'coordinates.mat'), 'coordinates', 'numberNeuron');
     
@@ -12,7 +13,7 @@ function exportToHDF5(F)
     calciumActivity = [];
 
     % concatenate neurons activity
-    for iz = 3:12
+    for iz = Layers
         dffPath = fullfile(F.dir('DFFNeuron'), [num2str(iz, '%02d') '.mat']);
         load(dffPath, 'mmap');
         mdff = recreateMmap(F,mmap); clear('mmap');
