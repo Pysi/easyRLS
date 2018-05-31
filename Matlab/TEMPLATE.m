@@ -6,7 +6,7 @@
 clear; clc
 
 %% add programs
-addPrograms('/home/ljp/Programs');
+addPrograms('/home/ljp/');
 
 %% sample focus
 
