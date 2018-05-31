@@ -67,5 +67,5 @@ mapToRefBrain(F, 'reformat', 'affine', 'graystack')%'refStack')
 mapToRefBrain(F, 'convertcoord', 'affine', '')
 %% export values to hdf5 → Thijs
 stackCoord(F, Analysis.Layers)
-exportToHDF5(F);
+exportToHDF5(F, Analysis.Layers);
 %% END
