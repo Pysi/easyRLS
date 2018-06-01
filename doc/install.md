@@ -6,16 +6,11 @@ easyRLS depends on matlab and non-matlab programs
 To get easyRLS, do
 
     git clone https://github.com/LaboJeanPerrin/easyRLS.git
-To add easyRLS functions to your Matlab path, do in Matlab
-
-    addpath(genpath('easyRLS/Matlab'))
 
 easyRLS depends heavily on NeuroTools, to get it do
 
     git clone https://github.com/LaboJeanPerrin/NeuroTools.git
-and then in Matlab
 
-    addpath(genpath('NeuroTools/Matlab'))
 
 
 ## R runquantile
