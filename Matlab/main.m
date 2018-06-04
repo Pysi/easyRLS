@@ -46,11 +46,7 @@ computePhaseMap(F, 'pixel');
     %% display it
     Focused.phaseMapViewer(F, 'neuron')
     Focused.phaseMapViewer(F, 'pixel')
-
-%{
-clean(F); %% delete unecessary files (including baseline)
-%}
-% stackCoord
+    
 %% choose reference brain
 chooseRefBrain(F, fullfile(path.RefBrains, 'RefBrain.nhdr'));
 % TODO automatically create nhdr corresponding to the ref brain nrrd or nhdr
