@@ -1,12 +1,15 @@
-%% DEFAULT CONFIG : do not change
+%% TEMPLATE : do not change this file !!!
 
-% if you want to set your config copy it in an other file (ex CONFIG_Hugo.m)
-% and ignore it in the git
+% if you want to change this file
+% create instead a copy in other file (ex TEMPLATE_Hugo.m)
+% and ignore it in the git if you only want it locally
+
+% if you change this file, make sure you discard your changes before commiting
 
 clear; clc
 
 %% add programs
-addPrograms('/home/ljp/');
+addPrograms('/home/ljp/Programs');
 
 %% sample focus
 
@@ -25,9 +28,11 @@ Analysis.RefIndex = 10;         % index of the reference stack for drift correct
 Analysis.RefStack = '';         % external reference stack if exists
 
 Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
+Analysis.BaselinePercentile = 10;       % percentile for baseline computation
 Analysis.DriftBox = [ 53 566 45 914 ];  % bounding box for drift correction
 Analysis.Lineage = 'Cytoplasmic';       % possible values : 'Nuclear', 'Cytoplasmic'
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
+Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
 % TODO correct the phasemap function to take into account other frequencies
 
 F.Analysis = Analysis;
@@ -40,6 +45,12 @@ Fprepare(F);
 Fanalyse(F, @workflowNeuron);
 Fanalyse(F, @workflowPixel);
 
+%% sample viewer
+
+F = NT.Focus(root, study, '0000-00-00', 0);
+F.Analysis = Analysis;
+stackViewer2D(F, 'BaselinePixel');
+
 %% sample workflow
 
 date = '2018-05-25'; % select date
@@ -49,10 +60,12 @@ prepare(root, study, date, Analysis, RUNS)
 
 RUNS = [ 3 4 7 8 ]; % run cytoplasmic runs
 Analysis.Lineage = 'cytoplasmic';
+Analysis.Stimulus = 'sinus';
 analyse(root, study, date, Analysis, RUNS, @workflowNeuron)
 
 RUNS = [11 12 15]; % run nuclear runs
 Analysis.Lineage = 'nuclear';
+Analysis.Stimulus = 'step';
 analyse(root, study, date, Analysis, RUNS, @workflowNeuron)
 
 %% workflow function
@@ -98,12 +111,46 @@ function workflowNeuron(F)
     segmentBrain(F, 'graystack');
     computeBaselineNeuron(F);
     dffNeuron(F);
-    phaseMapNeuron(F);
+    switch F.Analysis.Stimulus
+        case 'sinus'
+            phaseMapNeuron(F);
+    end
 end
 
 % workflow for per pixel analysis (workflowNeuron must have been runned first)
 function workflowPixel(F)
     computeBaselinePixel(F);
     dffPixel(F);
-    phaseMapPixel(F);
+    switch F.Analysis.Stimulus
+        case 'sinus'
+            phaseMapPixel(F);
+    end
+end
+
+%% adding programs
+
+function addPrograms(root)
+%addPrograms adds the matlab programs to the path and loads the caTools library
+% root is the root of the programs (ex /home/ljp/programs)
+
+    % adds matlab programs path
+    addpath(genpath(fullfile(root,'Programs', 'easyRLS','Matlab')));
+    addpath(genpath(fullfile(root,'Programs', 'NeuroTools','Matlab')));
+
+    dir = NT.Focus.architecture(root, 'none');
+
+    if ismac
+        warning('test if caTools is ok for mac');
+    elseif isunix
+        cd(dir('caTools'))
+        [~,~] = loadlibrary('caTools.so',...
+                            'caTools.h');
+    elseif ispc
+        cd(dir('caTools'))
+        [~,~] = loadlibrary('caTools.dll',...
+                            'caTools.h');
+    else
+        disp('Platform not supported')
+    end
+
 end
