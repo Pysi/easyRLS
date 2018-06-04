@@ -10,6 +10,9 @@ function computeBaselinePixel(F)
     % ignores the delay long
     w = floor(window / dt) ; % number of frames of the window (ex 125 frames)
 
+    % quantile
+    q = F.Analysis.BaselinePercentile / 100; % percentile
+
     baselinePath = F.dir('BaselinePixel');
     disp('creating ''BaselinePixel'' directory'); mkdir(baselinePath);
         
@@ -45,7 +48,7 @@ function computeBaselinePixel(F)
                     OUT,... output variable
                     m.t,... size of input matrix
                     w,... window
-                    0.1,... quantile
+                    q,... quantile
                     1,... lenght of quantile vector (here only one)
                     1 ... type of quantile calculation
                     );
