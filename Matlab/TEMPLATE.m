@@ -9,7 +9,7 @@
 clear; clc
 
 %% add programs
-addPrograms('/home/ljp/Programs');
+addPrograms('/home/ljp/');
 
 %% sample focus
 
@@ -35,7 +35,7 @@ Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasema
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
 % TODO correct the phasemap function to take into account other frequencies
 
-F.Analysis = Analysis;
+% F.Analysis = Analysis;
 
 %% sample analysis
 
@@ -47,7 +47,7 @@ Fanalyse(F, @workflowPixel);
 
 %% sample viewer
 
-F = NT.Focus(root, study, '0000-00-00', 0);
+F = NT.Focus(root, study, '2018-05-00', 0);
 F.Analysis = Analysis;
 stackViewer2D(F, 'BaselinePixel');
 
