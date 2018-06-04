@@ -77,7 +77,7 @@ function newContour = editContour(oldContour)
 
     [B, ~] = bwboundaries(tmp2,'noholes');
     boundary = B{1};
-    boundary = boundary(1:100:end, :); % reduce the number of points by 100
+    boundary = boundary(1:50:end, :); % reduce the number of points by 100
     for k = 1:length(B)
         plot(boundary(:,2), boundary(:,1), 'r', 'LineWidth', 2)
     end

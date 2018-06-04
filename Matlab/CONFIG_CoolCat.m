@@ -9,7 +9,7 @@ addpath(genpath('NeuroTools/Matlab'))
 root = '/home/ljp/Science/Projects/RLS/';
 study = '';
 date = '2018-05-24';
-run = 8;
+run = 19;
 
 F = NT.Focus(root, study, date, run);
 
