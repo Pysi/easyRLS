@@ -1,7 +1,10 @@
-%% DEFAULT CONFIG : do not change
+%% TEMPLATE : do not change this file !!!
 
-% if you want to set your config copy it in an other file (ex CONFIG_Hugo.m)
-% and ignore it in the git
+% if you want to change this file
+% create instead a copy in other file (ex TEMPLATE_Hugo.m)
+% and ignore it in the git if you only want it locally
+
+% if you change this file, make sure you discard your changes before commiting
 
 clear; clc
 
@@ -41,6 +44,12 @@ F.Analysis = Analysis;
 Fprepare(F);
 Fanalyse(F, @workflowNeuron);
 Fanalyse(F, @workflowPixel);
+
+%% sample viewer
+
+F = NT.Focus(root, study, '0000-00-00', 0);
+F.Analysis = Analysis;
+stackViewer2D(F, 'BaselinePixel');
 
 %% sample workflow
 
