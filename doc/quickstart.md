@@ -62,11 +62,9 @@ As a preview, after running the analysis, you will have something like this.
 
 The file 'TEMPLATE.mat' gives you a template to configure the focus. *Do not edit it*, instead, copy it and modify it locally with a personalised name (ex Template_Hugo.m).
 
-Once you have your own template, run the function 
+Once you have your own template, run the function 'addPrograms' which adds the programs to the Matlab path and loads the dependencies ('caTools' library has to be installed).
 
-	addPrograms('/home/ljp/');
-
-with the root containing your 'Programs' folder, and it will automatically add the code to the Matlab path, and load the caTools library, on windows as on ubuntu.
+	addPrograms('/home/ljp/Programs');
 
 Then you can change the following parameters according to your needs
 
@@ -79,13 +77,13 @@ and create the focus with
 
     F = NT.Focus(root, study, date, run);
 
-The focus is your golden thread for data analysis, it knows everything about the data and the data architecture. It's the first argument of most of the functions.
+The focus is your golden thread for data analysis, it knows the data architecture. It's the first argument of most of the functions.
 
 To do the analysis, you need to load certain parameters in the focus
 
     Analysis.Layers = 3:20;         % Layers to analyse
     Analysis.RefLayers = 6:6;       % reference layers for drift correction
-    Analysis.RefIndex = 10;         % index of the reference stack for drift correction
+    Analysis.RefIndex = 10;         % index of the reference frame for drift correction
     Analysis.RefStack = '';         % external reference stack if exists
 
     Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
@@ -98,9 +96,46 @@ To do the analysis, you need to load certain parameters in the focus
 After this you can run step by step the 'main.m' file to understand how the analysis works and view the output step by step or you can run a workflow by looking the following.
 
 ### Main script
-The main script gives you a list of all the functions and all the viewers.
+The main script gives you a list of all the functions and all the viewers. It helps you understand how the program works.
 
-TODO: complete this section
+#### 'Focused' function
+Certain functions can be used manually (without focus). Aliases for these functions are groupped in the +Focused package, allowing to call them with the advantages of the focus.
+
+#### stackViewer
+The 'stackViewer' function lets you see a 4D matrix (x,y,z,t) as a 2D image with sliders for z and t. A trick hidden in the 'Focused' version of stackViewer allows you to see a binary file as well as a DCIMG or a collection of TIF images by just identifying it by its tag.
+
+#### semiAutoROI
+This function tries to draw the ROI and lets you adjust it. It creates a "mask" 3D matrix in the 'Mask' folder. TODO improve this function.
+
+#### driftCompute
+This function computes the x and y drifts (dx, dy) for all stack compared to a reference frame. The reference image is computed as the max projection of the given layers. The drift is computed on a given region by auto-correlation (in Fourier domain). The computed drift can be previewed with seeDriftCorrection before applying it with driftApply.
+
+#### computeBackground
+The DFF computation requires the background to be computed first. It sets the level of dark by a custom fitting method.
+
+#### createGrayStack
+The graystack is a t-averaged stack after drift correction. In our case, the drift is corrected with undersampling.
+
+#### segmentBrain
+The data are segmented for a per-neuron analysis, faster than the per-pixel analysis. The algorithm used is of the watershed kind. The following functions take an argument which can be either 'neuron' or 'pixel'.
+
+#### computeBaseline
+The baseline is computed as the 10th percentile of the data on a moving window (the percentile can be changed in the parameters, see 'template'). The algorithm used is implemented in the 'caTools' R library ([runquantile](https://www.rdocumentation.org/packages/caTools/versions/1.17.1/topics/runquantile) funtion) and loaded in matlab with 'loadlibrary'. It is only computed on the ROI given in the mask. It produces a collection of 3D stacks (one per layer) and stored before computing the DFF. It requires a special viewer poorly named stackViewer2D.
+
+#### computeDFF
+The dff (delta f over f), the relative intensity of the signal, is computed with the following formula.
+
+$$ \frac{\Delta f}{f} = \frac{\text{Signal} - \text{Baseline}}{\text{Baseline} - \text{Background}}$$
+
+![equation](https://latex.codecogs.com/svg.latex?%5Cfrac%7B%5CDelta%7Ef%7D%7Bf%7D%3D%5Cfrac%7B%5Ctext%7BSignal%7D-%5Ctext%7BBaseline%7D%7D%7B%5Ctext%7BBaseline%7D-%5Ctext%7BBackground%7D%7D)
+
+It is stored as single precision values and can also be viewed with stackViewer2D.
+
+#### computePhaseMap
+The phasemap mesures the spectral response at the stimulus frequency. The phaseMapViewer allows to view the complex number in hsv space.
+
+#### mapToRefBrain
+
 
 ### Workflow
 See 'sample analysis' and 'sample workflow' in the template to have a model to run the workflow.

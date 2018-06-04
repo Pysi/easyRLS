@@ -24,7 +24,7 @@ F = NT.Focus(root, study, date, run);
 
 Analysis.Layers = 3:20;         % Layers to analyse
 Analysis.RefLayers = 6:6;       % reference layers for drift correction
-Analysis.RefIndex = 10;         % index of the reference stack for drift correction
+Analysis.RefIndex = 10;         % index of the reference frame for drift correction
 Analysis.RefStack = '';         % external reference stack if exists
 
 Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
@@ -35,6 +35,7 @@ Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasema
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
 % TODO correct the phasemap function to take into account other frequencies
 
+% loads the parameters in the current focus
 F.Analysis = Analysis;
 
 %% sample analysis
@@ -74,6 +75,7 @@ analyse(root, study, date, Analysis, RUNS, @workflowNeuron)
 function prepare(root, study, date, Analysis, RUNS) % manual part
     for run = RUNS
         F = NT.Focus(root, study, date, run);
+        fprintf("Preparing %s", F.name);
         F.Analysis = Analysis;
         Fprepare(F);
     end
@@ -89,6 +91,7 @@ function analyse(root, study, date, Analysis, RUNS, workflow) % automatic part
     for run = RUNS
         try
             F = NT.Focus(root, study, date, run);
+            fprintf("Analysing %s", F.name);
             F.Analysis = Analysis;
             Fanalyse(F, workflow);
         catch me
