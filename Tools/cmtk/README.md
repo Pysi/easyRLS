@@ -34,17 +34,17 @@ You can read the head of a .nrrd file with `head your-file.nrrd`.
 
 Create nrrd with ImageJ: Load image sequence with ImageJ and save it as .raw file. Then create a header file following this template and save it as a text file with the file extension .nhdr . 
 
-NRRD0004 
-type: uint16
-dimension: 3
-space: RAS
-sizes: 614 1018 20
-space directions: (0.8,0,0) (0,0.8,0) (0,0,10.00)
-space units: "um" "um" "um"
-encoding: raw
-endian: big
-space origin: (0,0,0)
-data file: filename.raw
+NRRD0004   
+type: uint16   
+dimension: 3   
+space: RAS   
+sizes: 614 1018 20    
+space directions: (0.8,0,0) (0,0.8,0) (0,0,10.00)    
+space units: "um" "um" "um"  
+encoding: raw   
+endian: big   
+space origin: (0,0,0)   
+data file: filename.raw   
 
 ### cmtk registration
 
