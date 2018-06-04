@@ -9,7 +9,7 @@
 clear; clc
 
 %% add programs
-addPrograms('/home/ljp/'); % loads caTools library 
+addPrograms('/home/ljp/');
 
 %% sample focus
 
@@ -48,7 +48,7 @@ Fanalyse(F, @workflowPixel);
 
 %% sample viewer
 
-F = NT.Focus(root, study, '0000-00-00', 0);
+F = NT.Focus(root, study, '2018-05-00', 0);
 F.Analysis = Analysis;
 stackViewer2D(F, 'BaselinePixel');
 
