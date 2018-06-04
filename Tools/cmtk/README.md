@@ -32,6 +32,21 @@ In general, `-o` means 'output'.
 NRRD is a format that can be read by CMTK. I strongly recommend using it. You can find online [documentation](http://teem.sourceforge.net/nrrd/) and [format specifications](http://teem.sourceforge.net/nrrd/format.html). It is composed of a header and a binary which can be in the same file (.nrrd) or in two different files (.bin and .nhdr for example).
 You can read the head of a .nrrd file with `head your-file.nrrd`.
 
+Create nrrd with ImageJ: Load image sequence with ImageJ and save it as .raw file. Then create a header file following this template and save it as a text file with the file extension .nhdr . 
+
+NRRD0004 
+
+type: uint16
+dimension: 3
+space: RAS
+sizes: 614 1018 20
+space directions: (0.8,0,0) (0,0.8,0) (0,0,10.00)
+space units: "um" "um" "um"
+encoding: raw
+endian: big
+space origin: (0,0,0)
+data file: filename.raw
+
 ### cmtk registration
 
 To get help :
