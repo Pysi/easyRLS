@@ -23,7 +23,7 @@ F = NT.Focus(root, study, date, run);
 %% sample parameters
 
 Analysis.Layers = 3:20;         % Layers to analyse
-Analysis.RefLayers = 6:6;       % reference layers for drift correction
+Analysis.RefLayers = 8:10;       % reference layers for drift correction
 Analysis.RefIndex = 10;         % index of the reference frame for drift correction
 Analysis.RefStack = '';         % external reference stack if exists
 
