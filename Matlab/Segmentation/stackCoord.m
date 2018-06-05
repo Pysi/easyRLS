@@ -14,7 +14,7 @@ function stackCoord(F)
     assert(F.dx==F.dy, 'pixel sizes are not defined or not equal');
     
     for zid = Layers
-        inSeg = fullfile(segPath, [num2str(z, '%02d') '.mat']);
+        inSeg = fullfile(segPath, [num2str(zid, '%02d') '.mat']);
         load(inSeg, 'centerCoord', 'numberNeuron'); % loads coordinates in pixel
         zorder = (Mmap.zCorrect(zid, Layers) -1 ) ; % converts the id to an order
         % (example : layer 20 is the number 0)
