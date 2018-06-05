@@ -59,7 +59,7 @@ classdef TifAsMatrix < handle
             
             self.F = F;
             
-            warning('you are working with TIF (no memory mapping) which are %s but will return RAST', self.space);
+            warning('you are working with TIF (no memory mapping) which are %s but will return %s', self.origSpace, self.space);
         end
         
         % --- defining '()' subsref ---
