@@ -28,6 +28,10 @@ function chooseRefBrain(F, refbrain)
         otherwise % bad number of arguments
             error('wat ?')
             
+            
     end
+    
+    sp = split(F.Analysis.RefBrain, '.');
+    F.Analysis.RefBrainName = sp{1};
 
 end
