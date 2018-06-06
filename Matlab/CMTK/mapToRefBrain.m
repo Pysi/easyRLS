@@ -6,8 +6,8 @@ function mapToRefBrain(F, mode, transformation, mov)
 % mov   moving image if necessary
 
 if exist('mov', 'var')
-    refPath = F.tag('RefBrain'); % TODO create reference
-    movPath = [F.tag(mov) '.nhdr'];
+    refPath = fullfile(F.dir('RefBrains'), F.Analysis.RefBrain); % points to the refbrain in the refbrain folder
+    movPath = [F.tag(mov) '.nhdr']; % ex: if mov is 'graystack' tag, movPath will point to 'graystack.nhdr'
 end
 
 switch mode
