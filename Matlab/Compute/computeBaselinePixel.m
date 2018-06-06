@@ -1,12 +1,17 @@
-function computeBaselinePixel(F, Layers, window)
+function computeBaselinePixel(F)
 %computeBaselinePixel computes running quantile using caTools runquantile
-% Layers are the layers you want to compute the baseline on
-% window is the window span in seconds (ex 50 sec)
+
+    % layers to analyse % Layers are the layers you want to compute the baseline on
+    Layers = F.Analysis.Layers;
 
     % window
+    window = F.Analysis.BaselineWindow; % window is the window span in seconds (ex 50 sec)
     dt = F.dt / 1000 * F.param.NLayers ; % time between two frames of one layer in seconds (ex 0.02 * 20)
     % ignores the delay long
     w = floor(window / dt) ; % number of frames of the window (ex 125 frames)
+
+    % quantile
+    q = F.Analysis.BaselinePercentile / 100; % percentile
 
     baselinePath = F.dir('BaselinePixel');
     disp('creating ''BaselinePixel'' directory'); mkdir(baselinePath);
@@ -43,7 +48,7 @@ function computeBaselinePixel(F, Layers, window)
                     OUT,... output variable
                     m.t,... size of input matrix
                     w,... window
-                    0.1,... quantile
+                    q,... quantile
                     1,... lenght of quantile vector (here only one)
                     1 ... type of quantile calculation
                     );

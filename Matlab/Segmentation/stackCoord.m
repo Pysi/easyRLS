@@ -1,27 +1,32 @@
-function stackCoord(F, Layers)
-% takes coords from specified layers and stack them in a single file
+function stackCoord(F)
+% takes coords from specified layers in pixel and stack them in a single file in microns
 % /!\ for z computation, highest value of 'layers' must correspond to first layer in nrrd
-% TODO record z somewhere, or ask the memory map on which registration has been done
-
-% !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! take care to Z
+% (e.g. z = 20 corresponds to z = 0 µm)
 
     segPath = F.dir('Segmentation');
     
-    coordinates = NaN(0,3);
+    coordinates = NaN(0,3); % 0 neurons (x y z)
     
-    for z = Layers
-%         F.select(z);
-        inSeg = fullfile(segPath, [num2str(z, '%02d') '.mat']);
-        load(inSeg, 'centerCoord', 'numberNeuron');
-%         coordinates = [coordinates ; [centerCoord F.set.z*ones(numberNeuron, 1)]]; % concatenate
-        % to find the z coordinate, we have to know where it is in the memory map
-        zcoord = (Mmap.zCorrect(z, Layers) -1 ) * abs(F.param.Increment)/0.8;
-        coordinates = [coordinates ; [centerCoord zcoord*ones(numberNeuron, 1)]]; % concatenate
+    Layers = F.Analysis.Layers; % loads the layers ids to concatenate
+    if ~issorted(Layers)
+        warning('layers IDs asked not sorted, RAS might not be respected');
+    end
+    assert(F.dx==F.dy, 'pixel sizes are not defined or not equal');
+    
+    for zid = Layers
+        inSeg = fullfile(segPath, [num2str(zid, '%02d') '.mat']);
+        load(inSeg, 'centerCoord', 'numberNeuron'); % loads coordinates in pixel
+        zorder = (Mmap.zCorrect(zid, Layers) -1 ) ; % converts the id to an order
+        % (example : layer 20 is the number 0)
+        zmum = zorder * abs(F.param.Increment); % converts z in µm
+        coordinates = [coordinates ; ...
+            [F.dx * centerCoord ... % x and y pixel size are supposed to be equal
+            zmum * ones(numberNeuron, 1)]];
+        % concatenates all z for corresponding x and y
     end
     
-    numberNeuron = size(coordinates, 1);
+    numberNeuron = size(coordinates, 1); % updates total number of neurons
     
     outCoord = fullfile(segPath, 'coordinates.mat');
     save(outCoord, 'coordinates', 'numberNeuron');
-    
 end

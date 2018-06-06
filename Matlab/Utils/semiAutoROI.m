@@ -1,4 +1,4 @@
-function semiAutoROI(F, tag)
+function semiAutoROI(F)
 %semiAutoROI(F, Layers, t, tag) lets you modify an automatic ROI
 % F is the current focus instance
 % tag could be :
@@ -11,7 +11,7 @@ function semiAutoROI(F, tag)
 % if the tag has an extension and that this extension is 'dcimg'
 % semiAutoROI will work on dcimg (particular case)
 
-    m = adapted4DMatrix(F,tag);
+    m = adapted4DMatrix(F,'source');
 
 % % % % % % % % % % % % % % % % % % % % % % % % load existing or initialize
     try % try to load existing mask.mat

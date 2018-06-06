@@ -78,17 +78,19 @@ classdef Mmap < handle
     methods (Static)        
         % --- redefining z --- TODO take into account not well ordered Zs
         % (return RAS whatever the input is, with warning in not RAS asked)
+        % better: return in the same order as asked TODO make this clearer
+        % and uniform across all mmap (ondcimg, ontif)
         function new_z = zCorrect(old_z, Z)
         %zCorrect returns z compatible with mmap
         % examples :
         % EX1
         % Z = [ 3 4 5 6 7 8 9 10 ]
-        % input is 4 5 6
-        % output should be 2 3 4
+        % input is 4 5 6            | 3 4 | 4 3 
+        % output should be 2 3 4    | 1 2 | 2 1
         % EX2
         % Z = [ 10 9 8 7 6 5 4 3 ]
-        % input is 4 5 6
-        % output should be 5 6 7
+        % input is 4 5 6            | 10 9 | 9 10
+        % output should be 5 6 7    | 1  2 | 2 1
 
             new_z = NaN(size(old_z)); % values corrected ex [2 3 4]
             for i = 1:length(old_z)

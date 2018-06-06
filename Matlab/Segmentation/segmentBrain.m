@@ -28,5 +28,7 @@ function segmentBrain(F, tag)
         save(outSeg, 'centerCoord', 'neuronShape', 'numberNeuron');
         imwrite(CD, outIMG);
     end
+    
+    stackCoord(F); % gets all the coordinates and convert them to micrometers
 
 end

@@ -1,4 +1,4 @@
-function phaseMapPixel(F, fstim)
+function phaseMapPixel(F)
 %phaseMapPixel computes the phase map per pixel using the fft
 
 % inputs
@@ -13,6 +13,9 @@ function phaseMapPixel(F, fstim)
 % imaginary part of fft peak
 
 % % % % % % % THIS IS A DRAFT VERSION % % % % % % % % %
+
+    % stimulus frequency
+    fstim = F.Analysis.StimulusFrequency; % frequency of stimulus
 
     % get the layers on which compute phasemap in the RAS order (inferior → superior)
     Zlay = sort(F.Analysis.Layers, 'descend');
