@@ -15,7 +15,7 @@ function phaseMapNeuron(F)
 % % % % % % % THIS IS A DRAFT VERSION % % % % % % % % %
 
     % stimulus frequency
-    fstim = Analysis.StimulusFrequency; % frequency of stimulus
+    fstim = F.Analysis.StimulusFrequency; % frequency of stimulus
     
     % get the layers on which compute phasemap in the RAS order (inferior → superior)
     Zlay = sort(F.Analysis.Layers, 'descend');
