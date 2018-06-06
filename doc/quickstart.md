@@ -119,6 +119,8 @@ The graystack is a t-averaged stack after drift correction. In our case, the dri
 #### segmentBrain
 The data are segmented for a per-neuron analysis, faster than the per-pixel analysis. The algorithm used is of the watershed kind. The following functions take an argument which can be either 'neuron' or 'pixel'.
 
+The segmentBrain function also concatenates all the coordinates and convert them in µm in the 'coordinates.m' file.
+
 #### computeBaseline
 The baseline is computed as the 10th percentile of the data on a moving window (the percentile can be changed in the parameters, see 'template'). The algorithm used is implemented in the 'caTools' R library ([runquantile](https://www.rdocumentation.org/packages/caTools/versions/1.17.1/topics/runquantile) funtion) and loaded in matlab with 'loadlibrary'. It is only computed on the ROI given in the mask. It produces a collection of 3D stacks (one per layer) and stored before computing the DFF. It requires a special viewer poorly named stackViewer2D.
 
@@ -132,10 +134,31 @@ $$ \frac{\Delta f}{f} = \frac{\text{Signal} - \text{Baseline}}{\text{Baseline} -
 It is stored as single precision values and can also be viewed with stackViewer2D.
 
 #### computePhaseMap
-The phasemap mesures the spectral response at the stimulus frequency. The phaseMapViewer allows to view the complex number in hsv space.
+The phasemap mesures the spectral response at the stimulus frequency. The phaseMapViewer allows to view the complex numbers in hsv space.
+
+TODO detail descrete Fourier transform
 
 #### mapToRefBrain
+mapRoRefBrain is a wrapper function for cmtk tools. You can first run 'chooseRefBrain' to select the reference brain you want to work with. It will search a nhdr file with absolute path link and copy it in your analysis folder. It allows:
 
+- to avoid copying one reference brain per analysis
+- to keep track of the reference brain you're working with
+- to force reference brain organisation
+- to have a sinle text file describing the reference brain
+
+You can also manually copy it.
+
+mapToRefBrain currently contains four subfunctions listed below.
+
+- affine (computes an affine registration)
+- warp (computes a non-rigid transformation)
+- reformat (applies one of the computed transformation)
+- convertcood (applies the transformation on the coordinates)
+
+Once you converted the coordinates in the reference brain, you can run exportToHDF5.
+
+#### exportToHDF5
+This function exports the data in a HDF5 file compatible with fishualizer program.
 
 ### Workflow
 See 'sample analysis' and 'sample workflow' in the template to have a model to run the workflow.
