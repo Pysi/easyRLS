@@ -35,6 +35,8 @@ Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasema
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
 % TODO correct the phasemap function to take into account other frequencies
 
+Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_RAS.nhdr'; % choose refbrain to map onto
+
 % loads the parameters in the current focus
 F.Analysis = Analysis;
 
