@@ -48,8 +48,7 @@ computePhaseMap(F, 'pixel');
     Focused.phaseMapViewer(F, 'pixel')
     
 %% choose reference brain
-chooseRefBrain(F, fullfile(path.RefBrains, 'RefBrain.nhdr'));
-% TODO automatically create nhdr corresponding to the ref brain nrrd or nhdr
+chooseRefBrain(F);
 %% do affine transformation
 mapToRefBrain(F, 'affine', 'affine', 'graystack')%'refStack')
 %% do non-rigid transformation

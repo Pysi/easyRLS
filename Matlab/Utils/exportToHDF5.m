@@ -1,15 +1,20 @@
 function exportToHDF5(F)
 % export to hdf5 file
 
+    % shorten refBrainName
+    sp = split(F.Analysis.RefBrain, '.');
+    refBrainName = sp{1};
+    
+    mkdir(F.dir('HDF5'));
     fileName = fullfile(F.dir('HDF5'), [erase(F.name, ' ') '.h5']);
 
     load(fullfile(F.dir('Segmentation'), 'coordinates.mat'), 'coordinates', 'numberNeuron');
-    load(fullfile(F.dir('RefBrain'), 'refCoordinates.mat'), 'refCoordinates');
+    load(fullfile(F.dir('Registration'), ['coordinates_' refBrainName '.mat']), 'refCoordinates');
     timeFrames = 3000;
     calciumActivity = [];
 
     % concatenate neurons activity
-    for iz = 3:12
+    for iz = F.Analysis.Layers
         dffPath = fullfile(F.dir('DFFNeuron'), [num2str(iz, '%02d') '.mat']);
         load(dffPath, 'mmap');
         mdff = recreateMmap(F,mmap); clear('mmap');
