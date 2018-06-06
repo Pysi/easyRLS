@@ -58,5 +58,6 @@ mapToRefBrain(F, 'reformat', 'affine', 'graystack')%'refStack')
 %% apply registration on neurons coordinates
 mapToRefBrain(F, 'convertcoord', 'affine', '')
 %% export values to hdf5 → Thijs
-exportToHDF5(F);
+stackCoord(F, Analysis.Layers)
+exportToHDF5(F, Analysis.Layers);
 %% END

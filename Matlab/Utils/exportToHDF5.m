@@ -22,15 +22,27 @@ function exportToHDF5(F)
         calciumActivity = [calciumActivity; mdff.Data.bit(:,:)'];
     end
 
+    % == load and interpolate stimulus according to image acquisition time
+    % poins
+    load(fullfile(F.dir('Run'), 'Stimulus.txt'))
+    time_exp = Stimulus(:, 2);
+    Stimulus = Stimulus(:, 3);
+
+    range = timeFrames;
+    time_range = linspace(min(time_exp), max(time_exp), range);
+    Stimulus = interp1(time_exp, Stimulus, time_range);
+    
+% == write to HDF5 file
     h5create(fileName,'/Data/Coordinates', [numberNeuron 3]); % xyz = 3 coordinates
     h5write(fileName,'/Data/Coordinates', coordinates ./ 1000); % µm → mm
     h5writeatt(fileName,'/Data/Coordinates','unit', 'mm')
     h5writeatt(fileName,'/Data/Coordinates','orientation', 'RAS')
-
-    h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
-    h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
-    h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
-    h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')
+    
+% add again when mapping to reference brain  Volker
+%     h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
+%     h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
+%     h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
+%     h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')
 
     h5create(fileName,'/Data/Times', [1 timeFrames]);
     dtframe = F.dt / 1000 * F.param.NLayers ;
@@ -44,8 +56,8 @@ function exportToHDF5(F)
     h5write(fileName,'/Data/Values', calciumActivity);
     h5writeatt(fileName,'/Data/Values','type', 'DFF, single')
 
-    % h5create(fileName,'/Data/Stimulus', [Range,1]);
-    % h5write(fileName,'/Data/Stimulus', Stimulus);
+    h5create(fileName,'/Data/Stimulus', [1 , range]);
+    h5write(fileName,'/Data/Stimulus', Stimulus);
 
     % h5create(fileName, '/Data/ZBrainAtlas_Labels', [NCells, labels_size(2)]);
     % h5write(fileName, '/Data/ZBrainAtlas_Labels', Labels);

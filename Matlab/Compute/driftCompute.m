@@ -24,6 +24,15 @@ end
 % the 3rd dimension
 
 bbox = F.Analysis.DriftBox; % define bounding box to look into
+% --- Select ROI for drift correction ---
+%         disp('Please select ROI for drift correction')
+%         roi = imrect;
+%         wait(roi);
+%         pos = getPosition(roi);
+%         bbox = [round(pos(1))  round(pos(1) + pos(3)) ...
+%             round(pos(2))  round(pos(2) + pos(4))];
+%         Ref.region(bbox);
+
 X = bbox(1):bbox(2);
 Y = bbox(3):bbox(4);
 
