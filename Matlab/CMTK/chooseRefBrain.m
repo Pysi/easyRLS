@@ -30,8 +30,5 @@ function chooseRefBrain(F, refbrain)
             
             
     end
-    
-    sp = split(F.Analysis.RefBrain, '.');
-    F.Analysis.RefBrainName = sp{1};
 
 end
