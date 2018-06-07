@@ -29,7 +29,7 @@ function mapToRefBrain(F, mode, transformation, mov)
             if isempty(transformation) % if empty, set to default non-rigid transformation
                 transformation = autoTransName('warp', mov, refBrainName);
             end
-            initial = fullfile(F.dir('Registration'), string([autoTransName('affine', mov, refBrainName); '.xform']));
+            initial = fullfile(F.dir('Registration'), string([autoTransName('affine', mov, refBrainName) '.xform']));
             % if does not exist
             if ~exist(initial, 'file')          
                 initial = "";

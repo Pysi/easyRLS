@@ -38,11 +38,10 @@ function exportToHDF5(F)
     h5writeatt(fileName,'/Data/Coordinates','unit', 'mm')
     h5writeatt(fileName,'/Data/Coordinates','orientation', 'RAS')
     
-% add again when mapping to reference brain  Volker
-%     h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
-%     h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
-%     h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
-%     h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')
+    h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
+    h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
+    h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
+    h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')
 
     h5create(fileName,'/Data/Times', [1 timeFrames]);
     dtframe = F.dt / 1000 * F.param.NLayers ;

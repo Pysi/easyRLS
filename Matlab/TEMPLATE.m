@@ -20,7 +20,7 @@ run = 0;
 
 F = NT.Focus(root, study, date, run);
 
-%% sample parameters
+% sample parameters
 
 Analysis.Layers = 3:20;         % Layers to analyse
 Analysis.RefLayers = 8:10;       % reference layers for drift correction
@@ -157,5 +157,5 @@ function addPrograms(root)
     else
         disp('Platform not supported')
     end
-
+    disp('done');
 end
