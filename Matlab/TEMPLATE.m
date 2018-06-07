@@ -15,8 +15,8 @@ addPrograms('/home/ljp/');
 
 root = '/home/ljp/Science/Projects/RLS/';
 study = '';
-date = '2018-05-00';
-run = 0;
+date = '2018-05-22';
+run = 20;
 
 F = NT.Focus(root, study, date, run);
 
@@ -40,10 +40,13 @@ Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_RAS.nhdr'; % choose refbrain to map on
 % loads the parameters in the current focus
 F.Analysis = Analysis;
 
-%% sample functions (to run the analysis function by function)
+%% quick focus
 
 F = NT.Focus(root, study, '2018-05-00', 0);         % define focus
 F.Analysis = Analysis;                              % loads analysis parameters
+
+%% sample functions (to run the analysis function by function)
+
 % --- manual part
 semiAutoROI(F); 
 % --- preparatory stuff
@@ -64,8 +67,6 @@ computePhaseMap(F, 'pixel');
 
 %% sample viewer (collection of all viewer functions)
 
-F = NT.Focus(root, study, '2018-05-22', 20);
-F.Analysis = Analysis;
 Focused.stackViewer(F, 'dcimg');
 seeDriftCorrection(F);
 Focused.stackViewer(F, 'corrected');
