@@ -66,6 +66,7 @@ computePhaseMap(F, 'pixel');
 
 F = NT.Focus(root, study, '2018-05-22', 20);
 F.Analysis = Analysis;
+Focused.stackViewer(F, 'dcimg');
 seeDriftCorrection(F);
 Focused.stackViewer(F, 'corrected');
 Focused.stackViewer(F, 'graystack')
