@@ -22,7 +22,7 @@ function writeNHDR(F, tag)
     end
     
 
-    tmp = split(tag, filesep); % get the tag (before implementing autotag)
+    tmp = split(F.tag(tag), filesep); % get the tag
     tmp = tmp{end}; % takes only tag of filename
     bin = [ tmp '.bin']; % binary file (relative path)
     nhdr = [ F.tag(tag) '.nhdr']; % nhdr text file
