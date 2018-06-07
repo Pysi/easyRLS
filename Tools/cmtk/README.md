@@ -4,6 +4,7 @@ cmtk stands for Computational Morphometry ToolKit
 
 ## Online documentation
 
+- [atlas registration paper](https://cloud.ljp.upmc.fr/index.php/s/whcRyzleyEBp6pq)
 - [CMTK user guide (pdf)](https://www.nitrc.org/docman/view.php/212/708/UserGuideCMTK.pdf)
 - [NITRC project page](https://www.nitrc.org/projects/cmtk)
 - [all documents](https://www.nitrc.org/docman/?group_id=212)
