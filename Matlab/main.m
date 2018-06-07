@@ -50,7 +50,7 @@ computePhaseMap(F, 'pixel');
 %% choose reference brain
 chooseRefBrain(F);
 %% do affine transformation
-mapToRefBrain(F, 'affine', 'affine', 'graystack');
+mapToRefBrain(F, 'affine', '', 'graystack');
 %% do non-rigid transformation
 mapToRefBrain(F, 'warp', 'affine', 'refStack');
 %% apply registration
