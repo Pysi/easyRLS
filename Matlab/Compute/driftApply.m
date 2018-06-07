@@ -13,7 +13,7 @@ function driftApply(F)
     m = adapted4DMatrix(F, 'source');
 
     % define output files
-    mkdir(F.dir('corrected'));
+    Focused.mkdir(F, 'corrected');
     output = [F.tag('corrected') '.bin'];
     outputInfo = [F.tag('corrected') '.mat'];
 

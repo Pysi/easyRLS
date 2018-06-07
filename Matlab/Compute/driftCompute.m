@@ -74,7 +74,7 @@ end
 
 % --- Save ---
 % save bbox and drifts
-disp('making ''Drift'' directory'); mkdir(F.dir('Drift'));
+Focused.mkdir(F, 'Drift');
 save(fullfile(F.dir('Drift'), 'DriftBox.mat'), 'bbox');
 save(fullfile(F.dir('Drift'), 'Drifts.mat'), 'dx', 'dy');
 savefig(fullfile(F.dir('Drift'), 'driftCorrection.fig'));

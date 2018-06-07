@@ -5,7 +5,7 @@ function segmentBrain(F, tag)
     load(F.tag('mask'), 'mask'); % get mask
 
     segPath = F.dir('Segmentation');
-    disp('creating ''Segmented'' directory'); mkdir(segPath);
+    Focused.mkdir(F, 'Segmentation');
     
     % for nuclear lineage
     switch lower(F.Analysis.Lineage)

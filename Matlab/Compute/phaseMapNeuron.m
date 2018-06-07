@@ -23,9 +23,9 @@ function phaseMapNeuron(F)
     % get path of dff per pixel
     dffPath = F.dir('DFFNeuron');
 
-    % create phasemap folder
-    mkdir(F.dir('PhaseMapNeuron'));
-
+   % create phasemap folder
+    Focused.mkdir(F, 'PhaseMapNeuron');
+    
     % get path to record data
     labels = {'pmn_amplitude', 'pmn_phase', 'pmn_deltaphi'};% 'pmn_realpart', 'pmn_imaginary'};
     out = struct();

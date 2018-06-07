@@ -6,7 +6,7 @@ function exportToHDF5(F)
     refBrainName = sp{1};
     
     % make dirctory 'HDF5' and create a h5 file in it
-    mkdir(F.dir('HDF5'));
+    Focused.mkdir(F, 'HDF5');
     fileName = fullfile(F.dir('HDF5'), [erase(F.name, ' ') '.h5']);
 
     % load coordinates, reference coordinates, and initialize data

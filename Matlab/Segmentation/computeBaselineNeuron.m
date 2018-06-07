@@ -13,7 +13,7 @@ function computeBaselineNeuron(F)
     q = F.Analysis.BaselinePercentile / 100; % percentile
     
     baselinePath = F.dir('BaselineNeuron');
-    disp('creating ''BaselineNeuron'' directory'); mkdir(baselinePath);
+    Focused.mkdir(F, 'BaselineNeuron');
     segPath = F.dir('Segmentation');
         
     % sigstack (x,y,z,t) ((xy,z,t))

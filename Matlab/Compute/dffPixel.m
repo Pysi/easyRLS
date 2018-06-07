@@ -8,7 +8,7 @@ Layers = F.Analysis.Layers;
 
 % create dff directory
 dffPath = F.dir('DFFPixel');
-disp('creating ''dff_pixel'' directory'); mkdir(dffPath);
+Focused.mkdir(F, 'DFFPixel');
 
 % load background and convert to uint16
 load(F.tag('background'), 'background');

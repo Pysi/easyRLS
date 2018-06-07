@@ -14,7 +14,7 @@ function computeBaselinePixel(F)
     q = F.Analysis.BaselinePercentile / 100; % percentile
 
     baselinePath = F.dir('BaselinePixel');
-    disp('creating ''BaselinePixel'' directory'); mkdir(baselinePath);
+    Focused.mkdir(F, 'BaselinePixel');
         
     % sigstack (x,y,z,t) ((xy,z,t))
     m = Focused.Mmap(F, 'corrected');

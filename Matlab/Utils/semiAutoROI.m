@@ -9,8 +9,6 @@ function semiAutoROI(F)
     minmax = [400 1200]; % minmax values for display
     discretize = 50; % lower values means more point on contour
     
-    
-    
     % get global parameters
     Z = F.Analysis.Layers;
     t = F.Analysis.RefIndex;
@@ -25,8 +23,7 @@ function semiAutoROI(F)
         disp('found mask file, loading it')
         load(F.tag('mask'), 'mask'); % get the mask
     catch % if no mask variable to load, initialize to NaN
-        disp('creating ''Mask'' directory')
-        mkdir(F.dir('Mask'));
+        Focused.mkdir(F, 'Mask');
         disp('creating new mask file')
         mask = false(m.x,m.y,20); % default total number of layers
     end

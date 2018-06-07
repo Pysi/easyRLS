@@ -24,7 +24,7 @@ function phaseMapPixel(F)
     dffPath = F.dir('DFFPixel');
 
     % create phasemap folder
-    mkdir(F.dir('PhaseMapPixel'));
+    Focused.mkdir(F, 'PhaseMapPixel');
 
     % get path to record data
     labels = {'pmp_amplitude', 'pmp_phase', 'pmp_deltaphi', 'pmp_realpart', 'pmp_imaginary'};

@@ -3,7 +3,7 @@ function createGrayStack(F)
 
     m = Focused.Mmap(F, 'corrected');
 
-    mkdir(F.dir('graystack'));
+    Focused.mkdir(F, 'graystack');
     output = [F.tag('graystack') '.bin'];
     outputInfo = [F.tag('graystack') '.mat'];
 

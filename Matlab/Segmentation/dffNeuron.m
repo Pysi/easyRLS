@@ -6,7 +6,7 @@ function dffNeuron(F)
 Layers = F.Analysis.Layers;
 % create dff directory
 dffPath = F.dir('DFFNeuron');
-disp('creating ''DFFNeuron'' directory'); mkdir(dffPath);
+Focused.mkdir(F, 'DFFNeuron');
 
 % load background
 load(F.tag('background'), 'background');

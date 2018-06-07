@@ -3,6 +3,9 @@ function computeBackground(F)
 % tag might be 'corrected'
 % RefIndex is the reference index used for drift correction
 
+    % create folder
+    Focused.mkdir(F, 'Background');
+
     RefIndex = F.Analysis.RefIndex;
 
     % loads mmap
@@ -15,7 +18,6 @@ function computeBackground(F)
         background(z) = single(Img.background);
     end
 
-    mkdir(F.dir('Background'));
     save(F.tag('background'), 'background');
 
 end
