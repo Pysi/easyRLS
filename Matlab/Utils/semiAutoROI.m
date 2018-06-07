@@ -7,7 +7,7 @@ function semiAutoROI(F)
 
     % set local parameters
     minmax = [400 1200]; % minmax values for display
-    discretize = 200; % lower values means more point on contour
+    discretize = 50; % lower values means more point on contour
     
     
     
