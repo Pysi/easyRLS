@@ -37,7 +37,7 @@ function semiAutoROI(F)
         tmp2 = mask(:,:,z); % load mask layer
 
         % show layer
-        hold off; imshow(img, minmax);
+        hold off; f = imshow(img, minmax);
 
         if ~max(max( tmp2 )) % if mask layer is null
             % autocompute mask (TODO add slider)
@@ -57,7 +57,7 @@ function semiAutoROI(F)
         hold on; contour(tmp2);
 
         % get new contour
-        tmp2 = editContour(tmp2, discretize);
+        tmp2 = editContour(f, tmp2, discretize);
         if strcmp(tmp2, 'exit') % if exit
             fprintf('layer %d was not saved\n', z);
             return
@@ -77,7 +77,7 @@ end
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % functions
 
-function newContour = editContour(oldContour, discretize)
+function newContour = editContour(f, oldContour, discretize)
 % getContour lets manually edit the contour
 
     tmp2 = oldContour;
@@ -92,10 +92,15 @@ function newContour = editContour(oldContour, discretize)
 
 
     boundary_2 = poly.wait;
-    if isempty(boundary_2)
+    if ~ishandle(f) % if figure was quit
        fprintf('EXIT\n');
        newContour = 'exit';
        return
+    end
+    if isempty(boundary_2) % if poly was deleted
+        disp('draw your own poly');
+        poly = impoly;
+        boundary_2 = poly.wait;
     end
     BW = poly2mask(boundary_2(:,1), boundary_2(:,2), size(tmp2,1), size(tmp2,2));
 
