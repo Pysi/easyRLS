@@ -50,14 +50,13 @@ computePhaseMap(F, 'pixel');
 %% choose reference brain
 chooseRefBrain(F);
 %% do affine transformation
-mapToRefBrain(F, 'affine', 'affine', 'graystack')%'refStack')
+mapToRefBrain(F, 'affine', 'affine', 'graystack');
 %% do non-rigid transformation
-mapToRefBrain(F, 'warp', 'affine', 'refStack')
+mapToRefBrain(F, 'warp', 'affine', 'refStack');
 %% apply registration
-mapToRefBrain(F, 'reformat', 'affine', 'graystack')%'refStack')
+mapToRefBrain(F, 'reformat', 'affine', 'graystack');
 %% apply registration on neurons coordinates
-mapToRefBrain(F, 'convertcoord', 'affine', '')
+mapToRefBrain(F, 'convertcoord', 'affine', '');
 %% export values to hdf5 → Thijs
-stackCoord(F, Analysis.Layers)
-exportToHDF5(F, Analysis.Layers);
+exportToHDF5(F);
 %% END

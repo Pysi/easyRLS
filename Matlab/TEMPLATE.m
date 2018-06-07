@@ -77,7 +77,7 @@ analyse(root, study, date, Analysis, RUNS, @workflowNeuron)
 function prepare(root, study, date, Analysis, RUNS) % manual part
     for run = RUNS
         F = NT.Focus(root, study, date, run);
-        fprintf("Preparing %s", F.name);
+        fprintf("Preparing %s\n", F.name);
         F.Analysis = Analysis;
         Fprepare(F);
     end
@@ -93,7 +93,7 @@ function analyse(root, study, date, Analysis, RUNS, workflow) % automatic part
     for run = RUNS
         try
             F = NT.Focus(root, study, date, run);
-            fprintf("Analysing %s", F.name);
+            fprintf("Analysing %s\n", F.name);
             F.Analysis = Analysis;
             Fanalyse(F, workflow);
         catch me
