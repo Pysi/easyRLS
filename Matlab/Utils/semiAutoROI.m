@@ -5,6 +5,13 @@ function semiAutoROI(F)
 %     - the tag of the binary you want to work on ('corrected' for instance)
 %     - the name of a dcimg if you want to work on a dcimg (Run00.dcimg for instance)
 
+    % set local parameters
+    minmax = [400 1200]; % minmax values for display
+    discretize = 200; % lower values means more point on contour
+    
+    
+    
+    % get global parameters
     Z = F.Analysis.Layers;
     t = F.Analysis.RefIndex;
     
@@ -30,7 +37,7 @@ function semiAutoROI(F)
         tmp2 = mask(:,:,z); % load mask layer
 
         % show layer
-        hold off; imshow(img, [400 1500]);
+        hold off; imshow(img, minmax);
 
         if ~max(max( tmp2 )) % if mask layer is null
             % autocompute mask (TODO add slider)
@@ -50,7 +57,7 @@ function semiAutoROI(F)
         hold on; contour(tmp2);
 
         % get new contour
-        tmp2 = editContour(tmp2);
+        tmp2 = editContour(tmp2, discretize);
         if strcmp(tmp2, 'exit') % if exit
             fprintf('layer %d was not saved\n', z);
             return
@@ -70,14 +77,14 @@ end
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % functions
 
-function newContour = editContour(oldContour)
+function newContour = editContour(oldContour, discretize)
 % getContour lets manually edit the contour
 
     tmp2 = oldContour;
 
     [B, ~] = bwboundaries(tmp2,'noholes');
     boundary = B{1};
-    boundary = boundary(1:50:end, :); % reduce the number of points by 100
+    boundary = boundary(1:discretize:end, :); % reduce the number of points by discretize
     for k = 1:length(B)
         plot(boundary(:,2), boundary(:,1), 'r', 'LineWidth', 2)
     end
