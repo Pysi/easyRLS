@@ -12,7 +12,6 @@ function CMTK_affine(ref, mov, out)
         "--sampling 3"
         "--coarsest 25"
         "--omit-original-data"
-        "--exploration 25"
         "--accuracy 3"
         ], " ");
     verbose = '-v';
