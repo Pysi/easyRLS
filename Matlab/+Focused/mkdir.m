@@ -7,7 +7,7 @@ function mkdir(F, dir)
             if F.Analysis.Overwrite
                 fprintf('overwriting %s\n', F.dir(dir));
             else
-                error('can not overwrite %s\n', F.dir(dir));
+                error('can not overwrite %s\nset "Overwrite" to "true" or delete de repertory', F.dir(dir));
             end
         otherwise
             fprintf('directory %s created\n', dir);
