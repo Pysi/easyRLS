@@ -15,7 +15,7 @@ addPrograms('/home/ljp/');
 
 root = '/home/ljp/Science/Projects/RLS/';
 study = '';
-date = '0000-00-00';
+date = '2018-05-00';
 run = 0;
 
 F = NT.Focus(root, study, date, run);
@@ -29,7 +29,7 @@ Analysis.RefStack = '';         % external reference stack if exists
 
 Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
 Analysis.BaselinePercentile = 10;       % percentile for baseline computation
-Analysis.DriftBox = [ 53 566 45 914 ];  % bounding box for drift correction
+Analysis.DriftBox = [ 53 555 45 888 ];  % bounding box for drift correction
 Analysis.Lineage = 'Cytoplasmic';       % possible values : 'Nuclear', 'Cytoplasmic'
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
@@ -40,38 +40,60 @@ Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_RAS.nhdr'; % choose refbrain to map on
 % loads the parameters in the current focus
 F.Analysis = Analysis;
 
-%% sample analysis
+%% sample functions (to run the analysis function by function)
 
-F = NT.Focus(root, study, '0000-00-00', 0);
+F = NT.Focus(root, study, '2018-05-00', 0);         % define focus
+F.Analysis = Analysis;                              % loads analysis parameters
+% --- manual part
+semiAutoROI(F); 
+% --- preparatory stuff
+Focused.driftCompute(F);
+driftApply(F);
+computeBackground(F);
+createGrayStack(F)
+segmentBrain(F, 'graystack');
+% --- per neuron
+computeBaseline(F, 'neuron');
+computeDFF(F, 'neuron');
+computePhaseMap(F, 'neuron');
+% --- per pixel
+computeBaseline(F, 'pixel');
+computeDFF(F, 'pixel');
+computePhaseMap(F, 'pixel');
+
+
+%% sample viewer (collection of all viewer functions)
+
+F = NT.Focus(root, study, '2018-05-22', 20);
 F.Analysis = Analysis;
-Fprepare(F);
-Fanalyse(F, @workflowNeuron);
-Fanalyse(F, @workflowPixel);
+seeDriftCorrection(F);
+Focused.stackViewer(F, 'corrected');
+Focused.stackViewer(F, 'graystack')
+stackViewer2D(F, 'BaselineNeuron');
+stackViewer2D(F, 'DFFNeuron');
+Focused.phaseMapViewer(F, 'neuron')
 
-%% sample viewer
+%% sample workflow (prepare runs)
 
-F = NT.Focus(root, study, '2018-05-00', 0);
-F.Analysis = Analysis;
-stackViewer2D(F, 'BaselinePixel');
+date = '2018-05-22'; % select date
 
-%% sample workflow
+RUNS = [ 6 ]; % select runs to prepare (adjust ROI)
+prepare(root, study, date, Analysis, RUNS) % run the loop
 
-date = '2018-05-25'; % select date
+%% sample workflow (launch analysis)
+date = '2018-05-22'; % select date
+RUNS = [ 7 ]; % select a set of runs 
+Analysis.Lineage = 'cytoplasmic'; % overwrite parameters
+Analysis.Stimulus = 'step'; % overwrite parameters
 
-RUNS = [ 3 4 7 8 11 12 15 ]; % select runs to prepare (adjust ROI)
-prepare(root, study, date, Analysis, RUNS)
+TTT=tic;
+analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
+analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+TIME=toc(TTT);
+fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
 
-RUNS = [ 3 4 7 8 ]; % run cytoplasmic runs
-Analysis.Lineage = 'cytoplasmic';
-Analysis.Stimulus = 'sinus';
-analyse(root, study, date, Analysis, RUNS, @workflowNeuron)
 
-RUNS = [11 12 15]; % run nuclear runs
-Analysis.Lineage = 'nuclear';
-Analysis.Stimulus = 'step';
-analyse(root, study, date, Analysis, RUNS, @workflowNeuron)
-
-%% workflow function
+%% workflow functions
 
 % prepare several runs
 function prepare(root, study, date, Analysis, RUNS) % manual part
