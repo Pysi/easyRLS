@@ -56,7 +56,7 @@ mapToRefBrain(F, 'warp', 'affine', 'refStack');
 %% apply registration
 mapToRefBrain(F, 'reformat', 'affine', 'graystack');
 %% apply registration on neurons coordinates
-mapToRefBrain(F, 'convertcoord', 'affine', '');
+mapToRefBrain(F, 'convertcoord', 'affine', 'graystack');
 %% export values to hdf5 → Thijs
 exportToHDF5(F);
 %% END

@@ -9,11 +9,9 @@ function mapToRefBrain(F, mode, transformation, mov)
     sp = split(F.Analysis.RefBrain, '.');
     refBrainName = sp{1};
 
-    if exist('mov', 'var')
-        refPath = fullfile(F.dir('RefBrains'), F.Analysis.RefBrain); % points to the refbrain in the refbrain folder
-        movPath = [F.tag(mov) '.nhdr']; % ex: if mov is 'graystack' tag, movPath will point to 'graystack.nhdr'
-    end
-
+    refPath = fullfile(F.dir('RefBrains'), F.Analysis.RefBrain); % points to the refbrain in the refbrain folder
+    movPath = [F.tag(mov) '.nhdr']; % ex: if mov is 'graystack' tag, movPath will point to 'graystack.nhdr'
+    
     switch mode
 
         % affine registration

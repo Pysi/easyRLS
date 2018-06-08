@@ -11,6 +11,7 @@ function stackCoord(F)
     if ~issorted(Layers)
         warning('layers IDs asked not sorted, RAS might not be respected');
     end
+    Layers = flip(Layers); % put the layers in the bottom to top (RAS) order
     assert(F.dx==F.dy, 'pixel sizes are not defined or not equal');
     
     for zid = Layers

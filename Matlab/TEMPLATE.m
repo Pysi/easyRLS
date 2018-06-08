@@ -64,7 +64,9 @@ computePhaseMap(F, 'neuron');
 computeBaseline(F, 'pixel');
 computeDFF(F, 'pixel');
 computePhaseMap(F, 'pixel');
-
+mapToRefBrain(F, 'affine', '', 'graystack');
+mapToRefBrain(F, 'convertcoord', 'affine', 'graystack');
+exportToHDF5(F);
 
 %% sample viewer (collection of all viewer functions)
 
