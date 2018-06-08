@@ -43,8 +43,7 @@ F.Analysis = Analysis;
 
 %% quick focus
 
-F = NT.Focus(root, study, '2018-05-00', 0);         % define focus
-F.Analysis = Analysis;                              % loads analysis parameters
+F = NT.Focus(root, study, '2018-05-29', 22, Analysis);         % define focus
 
 %% sample functions (to run the analysis function by function)
 
@@ -64,6 +63,7 @@ computePhaseMap(F, 'neuron');
 computeBaseline(F, 'pixel');
 computeDFF(F, 'pixel');
 computePhaseMap(F, 'pixel');
+% --- export
 mapToRefBrain(F, 'affine', '', 'graystack');
 mapToRefBrain(F, 'convertcoord', 'affine', 'graystack');
 exportToHDF5(F);
