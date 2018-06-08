@@ -33,6 +33,7 @@ Analysis.DriftBox = [ 53 555 45 888 ];  % bounding box for drift correction
 Analysis.Lineage = 'Cytoplasmic';       % possible values : 'Nuclear', 'Cytoplasmic'
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
+Analysis.Overwrite = false;             % defines if it has tpo be overwritten
 % TODO correct the phasemap function to take into account other frequencies
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_RAS.nhdr'; % choose refbrain to map onto
@@ -67,6 +68,7 @@ computePhaseMap(F, 'pixel');
 
 %% sample viewer (collection of all viewer functions)
 
+Focused.stackViewer(F, 'ROImask');
 Focused.stackViewer(F, 'dcimg');
 seeDriftCorrection(F);
 Focused.stackViewer(F, 'corrected');
@@ -87,6 +89,7 @@ date = '2018-05-22'; % select date
 RUNS = [ 7 ]; % select a set of runs 
 Analysis.Lineage = 'cytoplasmic'; % overwrite parameters
 Analysis.Stimulus = 'step'; % overwrite parameters
+clearvars -except Analysis root study
 
 TTT=tic;
 analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
