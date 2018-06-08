@@ -10,6 +10,7 @@ function mapToRefBrain(F, mode, transformation, mov)
     refBrainName = sp{1};
 
     refPath = fullfile(F.dir('RefBrains'), F.Analysis.RefBrain); % points to the refbrain in the refbrain folder
+    regPath = fullfile(F.dir('Registration'),refBrainName); % points to the refbrain in the registration folder
     movPath = [F.tag(mov) '.nhdr']; % ex: if mov is 'graystack' tag, movPath will point to 'graystack.nhdr'
     
     switch mode
@@ -19,7 +20,7 @@ function mapToRefBrain(F, mode, transformation, mov)
             if isempty(transformation) % if empty, set to default affine transformation
                 transformation = autoTransName('affine', mov, refBrainName);
             end
-            outPath = fullfile(F.dir('Registration'), [transformation '.xform']);
+            outPath = fullfile(regPath, [transformation '.xform']);
             CMTK_affine(refPath, movPath, outPath); %%% call cmtk wrapper
 
         % non-rigid registration
@@ -27,19 +28,19 @@ function mapToRefBrain(F, mode, transformation, mov)
             if isempty(transformation) % if empty, set to default non-rigid transformation
                 transformation = autoTransName('warp', mov, refBrainName);
             end
-            initial = fullfile(F.dir('Registration'), string([autoTransName('affine', mov, refBrainName) '.xform']));
+            initial = fullfile(regPath, string([autoTransName('affine', mov, refBrainName) '.xform']));
             % if does not exist
             if ~exist(initial, 'file')          
                 initial = "";
                 warning('running warp without initial affine transformation')
             end
-            outPath = fullfile(F.dir('Registration'), [transformation '.xform']);
+            outPath = fullfile(regPath, [transformation '.xform']);
             CMTK_warp(refPath, movPath, outPath, initial); %%% call cmtk wrapper
 
         case "reformat"
             [transformation, reformatedName] = autoTransName(transformation, mov, refBrainName);
-            outPath = fullfile(F.dir('Registration'), [reformatedName '.nrrd']);
-            transPath = fullfile(F.dir('Registration'), string([transformation '.xform']));
+            outPath = fullfile(regPath, [reformatedName '.nrrd']);
+            transPath = fullfile(regPath, string([transformation '.xform']));
             % if does not exist
             if ~exist(transPath, 'file')          
                 error('"%s": transformation not found', transformation)
@@ -52,10 +53,10 @@ function mapToRefBrain(F, mode, transformation, mov)
             load(coordPath, 'coordinates', 'numberNeuron');
             % transformation path
             transformation = autoTransName(transformation, mov, refBrainName);
-            transPath = fullfile(F.dir('Registration'), string([transformation '.xform']));
+            transPath = fullfile(regPath, string([transformation '.xform']));
             refCoordinates = CMTK_convertCoord(coordinates, transPath); %#ok<NASGU> %%% call cmtk wrapper
             % saves coordinates in reference brain
-            refCoordPath = fullfile(F.dir('Registration'), ['coordinates_' refBrainName '.mat']);
+            refCoordPath = fullfile(regPath, ['coordinates_' refBrainName '.mat']);
             save(refCoordPath, 'refCoordinates', 'numberNeuron');
 
         otherwise
