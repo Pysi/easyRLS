@@ -21,9 +21,10 @@ function stackCoord(F)
         % (example : layer 20 is the number 0)
         zmum = zorder * abs(F.param.Increment); % converts z in µm
         coordinates = [coordinates ; ...
-            [F.dx * centerCoord ... % x and y pixel size are supposed to be equal
-            zmum * ones(numberNeuron, 1)]];
-        % concatenates all z for corresponding x and y
+            [F.dx * centerCoord(:,2) ... % x
+             F.dy * centerCoord(:,1) ... % y
+            zmum * ones(numberNeuron, 1)]]; % z
+        % don't forget that x and y are inverted in Matlab
     end
     
     numberNeuron = size(coordinates, 1); % updates total number of neurons
