@@ -17,6 +17,18 @@ function computeBackground(F)
         Img = NT.Image(double(m(:,:,z,RefIndex)));
         background(z) = single(Img.background);
     end
+    
+    % /!\ background verification
+    THRESHOLD = 430;
+    if max(background) > THRESHOLD % very unlikely value for background
+        warning('very unlikely high value for background :\n%s\nsetting values above %d to min', THRESHOLD, num2str(background));
+        miniBackground = min(backgound);
+        for z = m.Z
+            if background(z) > THRESHOLD
+                background(z) = miniBackground;
+            end
+        end
+    end
 
     save(F.tag('background'), 'background');
 
