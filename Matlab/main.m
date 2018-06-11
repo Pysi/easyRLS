@@ -52,11 +52,16 @@ chooseRefBrain(F);
 %% do affine transformation
 mapToRefBrain(F, 'affine', '', 'graystack');
 %% do non-rigid transformation
-mapToRefBrain(F, 'warp', 'affine', 'refStack');
-%% apply registration
+mapToRefBrain(F, 'warp', '', 'graystack');
+%% apply registration affine
 mapToRefBrain(F, 'reformat', 'affine', 'graystack');
+%% apply registration warp
+mapToRefBrain(F, 'reformat', 'warp', 'graystack');
+%% stackCoordinates if it was not done in the segementation step
+stackCoord(F); % gets all the coordinates and convert them to micrometers
 %% apply registration on neurons coordinates
-mapToRefBrain(F, 'convertcoord', 'affine', 'graystack');
+mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
 %% export values to hdf5 → Thijs
+
 exportToHDF5(F);
 %% END
