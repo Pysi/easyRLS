@@ -3,7 +3,6 @@ function chooseRefBrain(F, refbrain)
 % this function is optionnal, you can manually load the refbrain name to Focus analysis
 
     refBrainDir = F.dir('RefBrains');
-    Focused.mkdir(F, 'RefBrains');
 
     switch nargin
         
