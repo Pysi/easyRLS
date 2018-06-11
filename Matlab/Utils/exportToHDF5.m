@@ -55,6 +55,11 @@ function exportToHDF5(F)
     h5create(fileName,'/Data/Stimulus', [1 , NCycles]);
     h5write(fileName,'/Data/Stimulus', Stimulus);
 
+    % return label from zbrain coordinate space for RAS data
+    labels = addLabels(refCoordinates ./ 1000);
+    
+    h5create(fileName,'/Data/Labels', size(labels));
+    h5write(fileName,'/Data/Labels', labels);
     % h5create(fileName, '/Data/ZBrainAtlas_Labels', [NCells, labels_size(2)]);
     % h5write(fileName, '/Data/ZBrainAtlas_Labels', Labels);
 
