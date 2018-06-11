@@ -11,7 +11,7 @@ function exportToHDF5(F)
 
     % load coordinates, reference coordinates, and initialize data
     load(fullfile(F.dir('Segmentation'), 'coordinates.mat'), 'coordinates', 'numberNeuron');
-    load(fullfile(F.dir('Registration'), ['coordinates_' refBrainName '.mat']), 'refCoordinates');
+    load(fullfile(F.dir('Registration'), refBrainName, ['coordinates_' refBrainName '.mat']), 'refCoordinates');
     NCycles = F.param.NCycles;
     calciumActivity = [];
 
