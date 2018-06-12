@@ -2,17 +2,17 @@
 
 ## Install
 
-- [install instructions](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/install.md)
+- [install instructions](./install.md)
 - [quickstart](./quickstart.md)
 
 ## Organisation and principles
-- [folder architecture](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/folder-architecture.md)
-- [data types](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/data-storage.md)
-- [memory mapping](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/memory-mapping.md)
+- [folder architecture](./folder-architecture.md)
+- [data types](./data-storage.md)
+- [memory mapping](./doc/memory-mapping.md)
 
 ## Other
-- [benchmarks](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/benchmarks.md)
+- [benchmarks](./doc/benchmarks.md)
 
 ## Alternatives
 I am building here a list of other programs that work on calcium imaging data
-- [CaImAn](https://github.com/flatironinstitute/CaImAn)
+- [CaImAn](/flatironinstitute/CaImAn)
