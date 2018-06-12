@@ -3,7 +3,7 @@
 ## Install
 
 - [install instructions](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/install.md)
-- quickstart
+- [quickstart](./quickstart.md)
 
 ## Organisation and principles
 - [folder architecture](https://github.com/LaboJeanPerrin/easyRLS/blob/master/doc/folder-architecture.md)
