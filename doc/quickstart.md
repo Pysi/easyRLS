@@ -127,9 +127,7 @@ The baseline is computed as the 10th percentile of the data on a moving window (
 #### computeDFF
 The dff (delta f over f), the relative intensity of the signal, is computed with the following formula.
 
-$$ \frac{\Delta f}{f} = \frac{\text{Signal} - \text{Baseline}}{\text{Baseline} - \text{Background}}$$
-
-![equation](https://latex.codecogs.com/svg.latex?%5Cfrac%7B%5CDelta%7Ef%7D%7Bf%7D%3D%5Cfrac%7B%5Ctext%7BSignal%7D-%5Ctext%7BBaseline%7D%7D%7B%5Ctext%7BBaseline%7D-%5Ctext%7BBackground%7D%7D)
+![\frac{\Delta f}{f} = \frac{\text{Signal} - \text{Baseline}}{\text{Baseline} - \text{Background}}](img/dff.svg)
 
 It is stored as single precision values and can also be viewed with stackViewer2D.
 
