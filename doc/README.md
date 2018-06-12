@@ -15,4 +15,4 @@
 
 ## Alternatives
 I am building here a list of other programs that work on calcium imaging data
-- [CaImAn](/flatironinstitute/CaImAn)
+- [CaImAn](https://github.com/flatironinstitute/CaImAn)
