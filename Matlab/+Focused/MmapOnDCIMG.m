@@ -14,7 +14,7 @@ function m = MmapOnDCIMG(F)
         % define default values
         byteskip = 808;
         clockskip = 8;
-        origSpace = 'ALIT';
+        origSpace = 'ARIT';
         space = 'RAST';
         x = 614;
         y = 1018;
