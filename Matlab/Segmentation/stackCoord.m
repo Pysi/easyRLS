@@ -8,16 +8,12 @@ function stackCoord(F)
     coordinates = NaN(0,3); % 0 neurons (x y z)
     
     Layers = F.Analysis.Layers; % loads the layers ids to concatenate
-    if ~issorted(Layers)
-        warning('layers IDs asked not sorted, RAS might not be respected');
-    end
-    Layers = flip(Layers); % put the layers in the bottom to top (RAS) order
     assert(F.dx==F.dy, 'pixel sizes are not defined or not equal');
     
-    for zid = Layers
+    for zid = Layers % Layers should be sorted (ex 3 4 5 ... 19 20)
         inSeg = fullfile(segPath, [num2str(zid, '%02d') '.mat']);
         load(inSeg, 'centerCoord', 'numberNeuron'); % loads coordinates in pixel
-        zorder = (Mmap.zCorrect(zid, Layers) -1 ) ; % converts the id to an order
+        zorder = (Mmap.zCorrect(zid, flip(Layers)) -1 ) ; % converts the id to an order
         % (example : layer 20 is the number 0)
         zmum = zorder * abs(F.param.Increment); % converts z in µm
         coordinates = [coordinates ; ...

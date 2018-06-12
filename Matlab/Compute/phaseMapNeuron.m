@@ -18,7 +18,7 @@ function phaseMapNeuron(F)
     fstim = F.Analysis.StimulusFrequency; % frequency of stimulus
     
     % get the layers on which compute phasemap in the RAS order (inferior → superior)
-    Zlay = sort(F.Analysis.Layers, 'descend');
+    Zlay = sort(F.Analysis.Layers, 'descend'); % as we are writing a binary file, it has to be in the RAS order
 
     % get path of dff per pixel
     dffPath = F.dir('DFFNeuron');

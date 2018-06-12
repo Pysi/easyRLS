@@ -16,7 +16,7 @@ function exportToHDF5(F)
     calciumActivity = [];
 
     % === concatenate neurons activity
-    for iz = F.Analysis.Layers
+    for iz = F.Analysis.Layers % Layers should be sorted (ex 3 4 5 ... 19 20)
         dffPath = fullfile(F.dir('DFFNeuron'), [num2str(iz, '%02d') '.mat']);
         load(dffPath, 'mmap'); mdff = recreateMmap(F,mmap); clear('mmap'); % loads mmap and recreate it
         calciumActivity = [calciumActivity; mdff.Data.bit(:,:)'];
