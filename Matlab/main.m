@@ -64,6 +64,5 @@ stackCoord(F); % gets all the coordinates and convert them to micrometers
 %% apply registration on neurons coordinates
 mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
 %% export values to hdf5 → Thijs
-
 exportToHDF5(F);
 %% END
