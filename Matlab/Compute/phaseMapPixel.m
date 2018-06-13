@@ -27,7 +27,7 @@ function phaseMapPixel(F)
     Focused.mkdir(F, 'PhaseMapPixel');
 
     % get path to record data (defines what should be output)
-    prefix = 'pmpdff';
+    prefix = 'pmpdff_';
     labels = {'amplitude', 'phase', 'deltaphi', 'realpart', 'imaginary'};
     out = struct();
     outInfo = struct();

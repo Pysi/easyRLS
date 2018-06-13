@@ -27,7 +27,7 @@ function phaseMapNeuron(F)
     Focused.mkdir(F, 'PhaseMapNeuron');
     
     % get path to record data
-    prefix = 'pmndff';
+    prefix = 'pmndff_';
     labels = {'amplitude', 'phase', 'deltaphi'};% 'realpart', 'imaginary'};
     out = struct();
     outInfo = struct();

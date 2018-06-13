@@ -29,10 +29,10 @@ function phaseMapPixelSignal(F)
     Zlay = sort(F.Analysis.Layers, 'descend'); % as we are writing a binary file, it has to be in the RAS order
 
     % create phasemap folder
-    Focused.mkdir(F, 'PhaseMapPixel');
+    Focused.mkdir(F, 'PhaseMapSignalPixel');
 
     % get path to record data (defines what should be output)
-    prefix = 'pmpsig';
+    prefix = 'pmpsig_';
     labels = {'amplitude', 'phase', 'deltaphi', 'realpart', 'imaginary'};
     out = struct();
     outInfo = struct();
