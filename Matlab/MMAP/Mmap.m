@@ -7,7 +7,7 @@ classdef Mmap < handle
         mmap % 4D mmap (x,y,z,t)
         mmaplin % 3D mmap of *the same* binary file (xy, z, t)
         pixtype % uint16 ou single
-        space % RAS or RAST depending on dimension
+        space % ex: RAS or RAST depending on dimension
         x % width (left to right)
         y % height (posterior to anterior)
         z % number of layers (inferior to superior)
@@ -26,7 +26,7 @@ classdef Mmap < handle
             
             load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
             self.pixtype = pixtype; % get type
-            self.space = space; % RAS or RAST
+            self.space = space; % ex: RAS or RAST
             self.mmap = ...
                 memmapfile(binFile,'Format',{self.pixtype,[x,y,z,t],'bit'}, ...
                     'Repeat', 1); % repeat option might prevent from detecting errors (such on t)
@@ -64,7 +64,28 @@ classdef Mmap < handle
                     switch length(S(1).subs)
                         case 4 % 4D
                             out = subsref(self.mmap.Data.bit, new_S);
-                        case 3 % 3D with xy as index
+                            
+                            % if not RAS, return RAS instead !
+                            switch self.space
+                                case {'RAS', 'RAST'}
+                                    % nothing
+                                otherwise
+                                    RAST = 'RAST';
+                                    dim = length(self.space);
+                                    transfo = getTransformation(self.space, RAST(1:dim));
+                                    out = applyTransformation(out, transfo);
+                            end
+                        case 3 % 3D with xy as index                            
+                            % if not RAS, return RAS instead !
+                            switch self.space
+                                case {'RAS', 'RAST'}
+                                    % nothing
+                                otherwise
+                                    RAST = 'RAST';
+                                    dim = 2; % only work on linear index
+                                    [~,i,o] = getTransformation(self.space(1:dim), RAST(1:dim));
+                                    new_S(1).subs{1} = indTransform(new_S(1).subs{1}, [self.x, self.y], i, o);
+                            end
                             out = subsref(self.mmaplin.Data.bit, new_S);
                     end
                 case '.'
