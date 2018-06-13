@@ -22,8 +22,8 @@ function createGrayStack(F)
     t = 1; %#ok<NASGU>
     Z = m.Z;
     T = 1; %#ok<NASGU>
-    space = 'RAS';
-    pixtype = 'uint16';
+    space = 'RAS'; % (not m.space because mmap always returns RAS)
+    pixtype = m.pixtype;
 
     % create corresponding info
     save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
