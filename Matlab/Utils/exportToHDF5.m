@@ -35,7 +35,12 @@ function exportToHDF5(F)
     h5writeatt(fileName,'/Data/Coordinates','unit', 'mm')
     h5writeatt(fileName,'/Data/Coordinates','orientation', 'RAS')
     
-    h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
+    if numberNeuron > size(refCoordinates,1) % TODO put NaN instead of absent neurons
+        display('Note: Not all neurons are converted to refbrain space')
+        h5create(fileName,'/Data/RefCoordinates', [size(refCoordinates,1) 3]);
+    else
+        h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
+    end
     h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
     h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
     h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')

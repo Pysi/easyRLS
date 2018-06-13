@@ -10,7 +10,8 @@ clear; clc
 
 %% add programs
 addPrograms('/home/ljp/');
-a
+root = '/home/ljp/'
+
 %% sample focus
 
 root = '/home/ljp/Science/Projects/RLS/';
@@ -182,7 +183,6 @@ function workflowPixel(F)
 end
 
 %% adding programs
-root = '/home/ljp/'
 function addPrograms(root)
 %addPrograms adds the matlab programs to the path and loads the caTools library
 % root is the root of the programs (ex /home/ljp/programs)
