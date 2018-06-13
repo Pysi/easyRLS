@@ -40,12 +40,27 @@ function semiAutoROI(F)
             % autocompute mask (TODO add slider)
 
             % Auto brain countour (Geoffrey)
-            bg_img = mean2(img);
-            H = fspecial('disk',20);
-            tmp1 = imfilter(img,H,'replicate');
-            tmp2 = img*0;
-            tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
-            tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);  
+            if F.Analysis.Lineage == 'cytoplasmic'
+                bg_img = mean2(img);
+                H = fspecial('disk',20);
+                tmp1 = imfilter(img,H,'replicate');
+                tmp2 = img*0;
+                tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
+                tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);
+            else
+                tmp0 = img;
+                tmp0(rangefilt(img) < mean2(rangefilt(img)/((Z(end)+1)/(Z(end) - z + 1)))) = 0;
+                [B, L] = bwboundaries(tmp0);
+                tmp0(L == 0) = 0;
+                tmp0 = tmp0*
+                
+                bg_img = mean2(img);
+                H = fspecial('disk',20);
+                tmp1 = imfilter(img,H,'replicate');
+                tmp2 = img*0;
+                tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
+                tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);
+                
 
     %         sliderize(z, img, tmp2); % TODO make this work
         end
