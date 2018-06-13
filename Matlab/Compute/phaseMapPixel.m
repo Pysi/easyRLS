@@ -27,13 +27,15 @@ function phaseMapPixel(F)
     Focused.mkdir(F, 'PhaseMapPixel');
 
     % get path to record data (defines what should be output)
-    labels = {'pmp_amplitude', 'pmp_phase', 'pmp_deltaphi', 'pmp_realpart', 'pmp_imaginary'};
+    prefix = 'pmpdff';
+    labels = {'amplitude', 'phase', 'deltaphi', 'realpart', 'imaginary'};
     out = struct();
     outInfo = struct();
     for label = labels
-        mkdir(F.dir(label{:})); % create corresponding directory
-        out.(label{:}) = fopen([F.tag(label{:}) '.bin'], 'wb');
-        outInfo.(label{:}) = [F.tag(label{:}) '.mat'];
+        fulltag = [prefix label{:}]; 
+        mkdir(F.dir(fulltag)); % create corresponding directory
+        out.(label{:}) = fopen([F.tag(fulltag) '.bin'], 'wb');
+        outInfo.(label{:}) = [F.tag(fulltag) '.mat'];
     end
     
     % Define stimulation parameters
@@ -84,11 +86,11 @@ function phaseMapPixel(F)
             Y = fft(mdff.Data.bit(:, i));
 
             % extract peak from dff
-            pmp_amplitude = max(abs(Y));
-            pmp_phase     = angle(Y(ind_fstim,:));
-            pmp_realpart  = real(Y(ind_fstim,:));
-            pmp_imaginary = imag(Y(ind_fstim,:));
-            pmp_deltaphi  = (pmp_phase - phase_delay + pi);
+            amplitude = max(abs(Y));
+            phase     = angle(Y(ind_fstim,:));
+            realpart  = real(Y(ind_fstim,:));
+            imaginary = imag(Y(ind_fstim,:));
+            deltaphi  = (phase - phase_delay + pi);
                 % -phase_delay = Shift positive of the fluorescence
                 % +pi = because of the fourier transform is done against a cosinus
                 
@@ -113,10 +115,11 @@ function phaseMapPixel(F)
     z = length(Zlay); Z = Zlay; % Zlay prevents overwriting by Z
     t = 1; T = 1;
     for label = labels
+        fulltag = [prefix label{:}];
         fclose(out.(label{:}));
         save(outInfo.(label{:}),'x','y','z','t','Z','T','space','pixtype')
         % TODO write info and nhdr (/!\ on single)
-        writeNHDR(F, label{:});
+        writeNHDR(F, fulltag);
     end
     
 end

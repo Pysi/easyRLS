@@ -41,11 +41,13 @@ computeDFF(F, 'pixel');
     stackViewer2D(F, 'DFFNeuron');
     stackViewer2D(F, 'DFFPixel');
 %% --- %% compute phase map neuron / pixel
-computePhaseMap(F, 'neuron');
-computePhaseMap(F, 'pixel');
+computePhaseMap(F, 'neuron', 'dff');
+computePhaseMap(F, 'pixel', 'dff');
+computePhaseMap(F, 'pixel', 'signal');
     %% display it
-    Focused.phaseMapViewer(F, 'neuron')
-    Focused.phaseMapViewer(F, 'pixel')
+    Focused.phaseMapViewer(F, 'dff neuron')
+    Focused.phaseMapViewer(F, 'dff pixel')
+    Focused.phaseMapViewer(F, 'signal pixel')
     
 %% choose reference brain
 chooseRefBrain(F);
