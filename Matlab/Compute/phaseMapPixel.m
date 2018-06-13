@@ -75,14 +75,16 @@ function phaseMapPixel(F)
        	for label = labels
             BUFFER.(label{:}) = zeros(x,y); % a buffer for the layer
         end
-
+        
+        i = 0;
         % run across all image pixels
-        for i = indices 
+        for index = indices' 
+            i = i + 1;
             % Calculate fourier transformation
-            Y = fft(mdff.Data.bit(:,index));
+            Y = fft(mdff.Data.bit(:, i));
 
             % extract peak from dff
-            pmp_amplitude = abs(Y(ind_fstim,:));
+            pmp_amplitude = max(abs(Y));
             pmp_phase     = angle(Y(ind_fstim,:));
             pmp_realpart  = real(Y(ind_fstim,:));
             pmp_imaginary = imag(Y(ind_fstim,:));
@@ -92,13 +94,13 @@ function phaseMapPixel(F)
                 
             % fills buffer
             for label = labels
-                BUFFER.(label{:})(i) = eval(label{:}); % a buffer for the layer
+                BUFFER.(label{:})(index) = eval(label{:}); % a buffer for the layer
             end
         end
         
         % write buffers in binary files
         for label = labels 
-            fwrite(out.(label{:}), eval(label{:}), 'single'); 
+            fwrite(out.(label{:}), BUFFER.(label{:}), 'single'); 
         end 
         
         toc;
