@@ -21,6 +21,10 @@ function stackViewer(F, tag)
     switch tag
         case 'refStack'
             minmax = [400 4000];
+        case 'pmpsig_amplitude'
+            minmax = [0 30];
+        case 'pmpdff_amplitude'
+            minmax = [0 80];
         otherwise
             minmax = [400 1000];
     end
