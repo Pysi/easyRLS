@@ -84,12 +84,17 @@ function phaseMapPixelSignal(F)
         % run across all image pixels
         for i = indices' 
             % Calculate fourier transformation
-            Y = fft(squeeze(m(i,iz,:)));
+%             tic;Y = fft(squeeze(m(i,iz,:)));if toc > 0.01; toc; end
+            tic; ysig = single(squeeze(m(i,iz,:))); if toc > 0.1; toc; end
+            y_zscore = (ysig - nanmean(ysig)) ./ std(ysig);
+
+            Y = fft(y_zscore);
+            
             
             % calculate response amplitude
             %     [pxx_p,f_p] = periodogram(DFF_pix(:,1:L)',hamming(L),[fstim fstim*2]',fs,'power');
             %     amplitude = sqrt(pxx_p(1,:)*2*2);
-            [pxx,ff] = periodogram(single(squeeze(m(i,iz,:)))',hamming(m.t),m.t,fs,'power');
+            [pxx,ff] = periodogram(y_zscore',hamming(m.t),m.t,fs,'power');
             pxx_p = pxx((single(ff) == single(fstim)),:);
             amplitude = sqrt(pxx_p(1,:)*2)*2; % amplitude peak-to-peak
 
@@ -113,7 +118,7 @@ function phaseMapPixelSignal(F)
             fwrite(out.(label{:}), BUFFER.(label{:}), 'single'); 
         end 
         
-        toc;
+%         toc;
         
     end 
         
