@@ -15,8 +15,8 @@ addPrograms('/home/ljp/');
 
 root = '/home/ljp/Science/Projects/RLS/';
 study = '';
-date = '2018-05-22';
-run = 20;
+date = '2018-05-21';
+run = 0;
 
 F = NT.Focus(root, study, date, run);
 
@@ -62,7 +62,7 @@ computePhaseMap(F, 'neuron');
 % --- per pixel
 computeBaseline(F, 'pixel');
 computeDFF(F, 'pixel');
-computePhaseMap(F, 'pixel');
+computePhaseMap(F, 'pixel', 'signal');
 % --- export
 mapToRefBrain(F, 'affine', '', 'graystack');
 mapToRefBrain(F, 'convertcoord', 'affine', 'graystack');
@@ -70,14 +70,14 @@ exportToHDF5(F);
 
 %% sample viewer (collection of all viewer functions)
 
+Focused.stackViewer(F, 'source');
 Focused.stackViewer(F, 'ROImask');
-Focused.stackViewer(F, 'dcimg');
 seeDriftCorrection(F);
 Focused.stackViewer(F, 'corrected');
 Focused.stackViewer(F, 'graystack')
 stackViewer2D(F, 'BaselineNeuron');
 stackViewer2D(F, 'DFFNeuron');
-Focused.phaseMapViewer(F, 'neuron')
+Focused.phaseMapViewer(F, 'signal pixel')
 
 %% sample workflow (prepare runs)
 
