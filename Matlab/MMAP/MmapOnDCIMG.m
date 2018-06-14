@@ -5,7 +5,7 @@ classdef MmapOnDCIMG < handle
 % it makes possible to use a dcimg as a standard RAS stack
     properties
         mmaplin % 3D mmap of the dcimage (xy+clockskip, z, t)
-        space % RAS or RAST depending on dimension
+        space % RAST
         x % width (left to right)
         y % height (posterior to anterior)
         z % number of layers (inferior to superior)
@@ -107,10 +107,12 @@ classdef MmapOnDCIMG < handle
                                 xy = 1:self.x*self.y;
                             end
                             
+                            % translate the xy index back to RA(ST)
+                            xy = indTransform(xy, [self.x, self.y], self.inv(1:2), self.ord(1:2)); % only 2D index transformation
+                            
                             newS(1).subs{1} = xy; % xy
                             
                             out = subsref(self.mmaplin.Data.bit, newS);
-                            warning('space is %s', self.space);
                             
                         otherwise
                             error('not implemented');

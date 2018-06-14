@@ -29,16 +29,18 @@ function phaseMapPixelSignal(F)
     Zlay = sort(F.Analysis.Layers, 'descend'); % as we are writing a binary file, it has to be in the RAS order
 
     % create phasemap folder
-    Focused.mkdir(F, 'PhaseMapPixel');
+    Focused.mkdir(F, 'PhaseMapSignalPixel');
 
     % get path to record data (defines what should be output)
-    labels = {'pmp_amplitude', 'pmp_phase', 'pmp_deltaphi', 'pmp_realpart', 'pmp_imaginary'};
+    prefix = 'pmpsig_';
+    labels = {'amplitude', 'phase', 'deltaphi', 'realpart', 'imaginary'};
     out = struct();
     outInfo = struct();
     for label = labels
-        mkdir(F.dir(label{:})); % create corresponding directory
-        out.(label{:}) = fopen([F.tag(label{:}) '.bin'], 'wb');
-        outInfo.(label{:}) = [F.tag(label{:}) '.mat'];
+        fulltag = [prefix label{:}];
+        [~,~] = mkdir(F.dir(fulltag)); % create corresponding directory
+        out.(label{:}) = fopen([F.tag(fulltag) '.bin'], 'wb');
+        outInfo.(label{:}) = [F.tag(fulltag) '.mat'];
     end
     
     % Define stimulation parameters
@@ -62,7 +64,7 @@ function phaseMapPixelSignal(F)
 % % % % % % LOOP % % % % % 
     % run across the layers
     for iz = Zlay
-        fprintf('\nphasemap per pixel on signal stack for layer %d\t', iz);tic;
+        fprintf('phasemap per pixel on signal stack for layer %d\t', iz);tic;
 
         % focus on the current layer
         % F.select(iz); % this is not useful anymore, and does not work when no tif
@@ -83,13 +85,20 @@ function phaseMapPixelSignal(F)
         for i = indices' 
             % Calculate fourier transformation
             Y = fft(squeeze(m(i,iz,:)));
+            
+            % calculate response amplitude
+            %     [pxx_p,f_p] = periodogram(DFF_pix(:,1:L)',hamming(L),[fstim fstim*2]',fs,'power');
+            %     amplitude = sqrt(pxx_p(1,:)*2*2);
+            [pxx,ff] = periodogram(single(squeeze(m(i,iz,:)))',hamming(m.t),m.t,fs,'power');
+            pxx_p = pxx((single(ff) == single(fstim)),:);
+            amplitude = sqrt(pxx_p(1,:)*2)*2; % amplitude peak-to-peak
 
             % extract peak from dff
-            pmp_amplitude = abs(Y(ind_fstim));
-            pmp_phase     = angle(Y(ind_fstim));
-            pmp_realpart  = real(Y(ind_fstim));
-            pmp_imaginary = imag(Y(ind_fstim));
-            pmp_deltaphi  = (pmp_phase - phase_delay + pi);
+%             amplitude = abs(Y(ind_fstim));
+            phase     = angle(Y(ind_fstim));
+            realpart  = real(Y(ind_fstim));
+            imaginary = imag(Y(ind_fstim));
+            deltaphi  = (phase - phase_delay + pi);
                 % -phase_delay = Shift positive of the fluorescence
                 % +pi = because of the fourier transform is done against a cosinus
                 
@@ -114,10 +123,11 @@ function phaseMapPixelSignal(F)
     z = length(Zlay); Z = Zlay; % Zlay prevents overwriting by Z
     t = 1; T = 1;
     for label = labels
+        fulltag = [prefix label{:}];
         fclose(out.(label{:}));
         save(outInfo.(label{:}),'x','y','z','t','Z','T','space','pixtype')
         % TODO write info and nhdr (/!\ on single)
-        writeNHDR(F, label{:});
+        writeNHDR(F, fulltag);
     end
     
 end

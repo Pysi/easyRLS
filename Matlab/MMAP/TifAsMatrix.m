@@ -25,7 +25,7 @@ classdef TifAsMatrix < handle
         % --- constructor ---
         function self = TifAsMatrix(F)
             
-            self.origSpace = 'ALIT'; % TODO get in focus
+            self.origSpace = F.extra.sourceSpace;
             self.space = 'RAST'; % TODO adapt to single stack
             
             [self.f, self.inv, self.ord] = getTransformation(self.origSpace, self.space);
