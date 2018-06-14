@@ -15,8 +15,8 @@ addPrograms('/home/ljp/');
 
 root = '/home/ljp/Science/Projects/RLS/';
 study = '';
-date = '2018-05-21';
-run = 0;
+date = '2018-05-22';
+run = 7;
 
 F = NT.Focus(root, study, date, run);
 
@@ -43,7 +43,8 @@ F.Analysis = Analysis;
 
 %% quick focus
 
-F = NT.Focus(root, study, '2018-05-29', 22, Analysis);         % define focus
+F = NT.Focus(root, study, '2018-05-22', 6, Analysis);         % define focus
+% changeSpace(F,'', 'ARIT');
 
 %% sample functions (to run the analysis function by function)
 
@@ -83,19 +84,20 @@ Focused.phaseMapViewer(F, 'signal pixel')
 
 date = '2018-05-22'; % select date
 
-RUNS = [ 6 ]; % select runs to prepare (adjust ROI)
+RUNS = [ 6 7 20 21 24 ]; % select runs to prepare (adjust ROI)
 prepare(root, study, date, Analysis, RUNS) % run the loop
 
 %% sample workflow (launch analysis)
+clearvars -except Analysis root study
+
 date = '2018-05-22'; % select date
-RUNS = [ 7 ]; % select a set of runs 
+RUNS = [ 6 7 20 21 24 ]; % select a set of runs 
 Analysis.Lineage = 'cytoplasmic'; % overwrite parameters
 Analysis.Stimulus = 'step'; % overwrite parameters
-clearvars -except Analysis root study
 
 TTT=tic;
 analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
-analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+% analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
 TIME=toc(TTT);
 fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
 
