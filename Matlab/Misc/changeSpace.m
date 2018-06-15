@@ -7,4 +7,6 @@ infoFile = matfile( [F.tag(tag) '.mat'], 'Writable', true); % open writable
 
 infoFile.space = outMode; % change mode
 
+writeNHDR(F,tag)
+
 end
