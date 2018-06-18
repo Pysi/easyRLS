@@ -10,19 +10,19 @@ clear; clc
 
 %% add programs
 addPrograms('/home/ljp/');
-
+root = '/home/ljp/'
 %% sample focus
 
 root = '/home/ljp/Science/Projects/RLS/';
 study = '';
-date = '2018-05-22';
-run = 7;
+date = '2018-05-24';
+run = 25;
 
 F = NT.Focus(root, study, date, run);
 
 % sample parameters
 
-Analysis.Layers = 3:20;         % Layers to analyse
+Analysis.Layers = 6:20;         % Layers to analyse
 Analysis.RefLayers = 8:10;       % reference layers for drift correction
 Analysis.RefIndex = 10;         % index of the reference frame for drift correction
 Analysis.RefStack = '';         % external reference stack if exists
@@ -43,8 +43,7 @@ F.Analysis = Analysis;
 
 %% quick focus
 
-F = NT.Focus(root, study, '2018-05-22', 6, Analysis);         % define focus
-% changeSpace(F,'', 'ARIT');
+F = NT.Focus(root, study, '2018-05-29', 7, Analysis);         % define focus
 
 %% sample functions (to run the analysis function by function)
 
@@ -82,22 +81,27 @@ Focused.phaseMapViewer(F, 'signal pixel')
 
 %% sample workflow (prepare runs)
 
-date = '2018-05-22'; % select date
+date = '2018-06-07'; % select date
 
-RUNS = [ 6 7 20 21 24 ]; % select runs to prepare (adjust ROI)
+RUNS = [ 3 ]; % select runs to prepare (adjust ROI)
 prepare(root, study, date, Analysis, RUNS) % run the loop
 
 %% sample workflow (launch analysis)
-clearvars -except Analysis root study
+clearvars -except Analysis root study 
 
-date = '2018-05-22'; % select date
-RUNS = [ 6 7 20 21 24 ]; % select a set of runs 
-Analysis.Lineage = 'cytoplasmic'; % overwrite parameters
-Analysis.Stimulus = 'step'; % overwrite parameters
+date = '2018-06-07'; % select date
+RUNS = [ 3 ]; % select a set of runs 
+%RUNS = [ 11]; % select a set of runs 
+
+Analysis.Lineage = 'Cytoplasmic'; % overwrite parameters
+Analysis.Stimulus = 'sinus'; % overwrite parameters
 
 TTT=tic;
-analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
-% analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+%analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
+analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+%analyse(root, study, date, Analysis, RUNS, @workflowChangeSpace) % run per pixel analysis
+%analyse(root, study, date, Analysis, RUNS, @workflowRevertMask) % run per pixel analysis
+
 TIME=toc(TTT);
 fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
 
@@ -155,12 +159,28 @@ end
 
 % workflow for per pixel analysis (workflowNeuron must have been runned first)
 function workflowPixel(F)
+    Focused.driftCompute(F);
+    driftApply(F);
+    computeBackground(F);
+    createGrayStack(F)
+
     computeBaselinePixel(F);
-    dffPixel(F);
-    switch F.Analysis.Stimulus
-        case 'sinus'
-            phaseMapPixel(F);
-    end
+    computeDFF(F, 'pixel');
+%     switch F.Analysis.Stimulus
+%         case 'sinus'
+%             phaseMapPixel(F);
+%     end
+end
+
+
+% workflow for space direction correction
+function workflowChangeSpace(F)
+  changeSpace(F, 'corrected', 'LAST') 
+end
+
+% workflow revertMask
+function workflowRevertMask(F)
+  revertMask(F,'LAST','RAST');
 end
 
 %% adding programs
