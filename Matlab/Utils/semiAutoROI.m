@@ -45,8 +45,13 @@ function semiAutoROI(F)
             tmp1 = imfilter(img,H,'replicate');
             tmp2 = img*0;
             tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
-            tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);  
-
+            tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);
+            count = 4;
+            while mean2(tmp2) == 0
+                count = count+1;
+                tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
+                tmp2 = bwareaopen(tmp2,round((size(img,1)*size(img,2))/count));
+            end
     %         sliderize(z, img, tmp2); % TODO make this work
         end
 
