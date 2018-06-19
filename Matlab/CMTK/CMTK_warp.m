@@ -17,7 +17,7 @@ function CMTK_warp(ref, mov, out, initial)
         "--sampling 3.2"
         "--accuracy 3.2"
         "--omit-original-data"
-        "--energy-weight 1e-1"
+%        "--energy-weight 1e-1"
 %         "--smoothness-constraint-weight 1e-1"
 %         "--grid-refine 2"
 %         "--min-stepsize 0.25"
