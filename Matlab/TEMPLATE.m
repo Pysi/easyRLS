@@ -15,14 +15,14 @@ root = '/home/ljp/'
 
 root = '/home/ljp/Science/Projects/RLS/';
 study = '';
-date = '2018-05-24';
-run = 25;
+date = '2018-06-11';
+run = 3;
 
 F = NT.Focus(root, study, date, run);
 
 % sample parameters
 
-Analysis.Layers = 6:20;         % Layers to analyse
+Analysis.Layers = 3:20;         % Layers to analyse
 Analysis.RefLayers = 8:10;       % reference layers for drift correction
 Analysis.RefIndex = 10;         % index of the reference frame for drift correction
 Analysis.RefStack = '';         % external reference stack if exists
@@ -30,13 +30,13 @@ Analysis.RefStack = '';         % external reference stack if exists
 Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
 Analysis.BaselinePercentile = 10;       % percentile for baseline computation
 Analysis.DriftBox = [ 53 555 45 888 ];  % bounding box for drift correction
-Analysis.Lineage = 'Cytoplasmic';       % possible values : 'Nuclear', 'Cytoplasmic'
+Analysis.Lineage = 'Nuclear';       % possible values : 'Nuclear', 'Cytoplasmic'
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
-Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
+Analysis.Stimulus = 'step';            % type of stimulus (step/sinus)
 Analysis.Overwrite = false;             % defines if it has tpo be overwritten
 % TODO correct the phasemap function to take into account other frequencies
 
-Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_RAS.nhdr'; % choose refbrain to map onto
+Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_148layers.nhdr'; % choose refbrain to map onto
 
 % loads the parameters in the current focus
 F.Analysis = Analysis;
@@ -81,24 +81,24 @@ Focused.phaseMapViewer(F, 'signal pixel')
 
 %% sample workflow (prepare runs)
 
-date = '2018-06-07'; % select date
+date = '2018-06-14'; % select date
 
-RUNS = [ 3 ]; % select runs to prepare (adjust ROI)
+RUNS = [ 19 15 ]; % select runs to prepare (adjust ROI)
 prepare(root, study, date, Analysis, RUNS) % run the loop
 
 %% sample workflow (launch analysis)
 clearvars -except Analysis root study 
 
-date = '2018-06-07'; % select date
-RUNS = [ 3 ]; % select a set of runs 
+date = '2018-06-11' % select date
+RUNS = [  3 ] % select a set of runs 
 %RUNS = [ 11]; % select a set of runs 
 
-Analysis.Lineage = 'Cytoplasmic'; % overwrite parameters
-Analysis.Stimulus = 'sinus'; % overwrite parameters
+Analysis.Lineage = 'Nuclear'; % overwrite parameters  % possible values : 'Nuclear', 'Cytoplasmic'
+Analysis.Stimulus = 'step'; % overwrite parameters
 
 TTT=tic;
-%analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
-analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
+%analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
 %analyse(root, study, date, Analysis, RUNS, @workflowChangeSpace) % run per pixel analysis
 %analyse(root, study, date, Analysis, RUNS, @workflowRevertMask) % run per pixel analysis
 
@@ -159,17 +159,17 @@ end
 
 % workflow for per pixel analysis (workflowNeuron must have been runned first)
 function workflowPixel(F)
-    Focused.driftCompute(F);
-    driftApply(F);
-    computeBackground(F);
-    createGrayStack(F)
-
-    computeBaselinePixel(F);
-    computeDFF(F, 'pixel');
-%     switch F.Analysis.Stimulus
-%         case 'sinus'
-%             phaseMapPixel(F);
-%     end
+%     Focused.driftCompute(F);
+%     driftApply(F);
+%     computeBackground(F);
+%     createGrayStack(F)
+% 
+%     computeBaselinePixel(F);
+%     computeDFF(F, 'pixel');
+    switch F.Analysis.Stimulus
+        case 'sinus'
+            computePhaseMap(F, 'pixel', 'dff');
+    end
 end
 
 

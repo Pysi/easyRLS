@@ -11,7 +11,7 @@ function phaseMapViewer(mAmplitude, mPhase, titleFig, maximum)
     img(:,:,1) = mod(mPhase(:,:,z,1),2*pi)./(2*pi); 		% hue
     img(:,:,3) = mAmplitude(:,:,z,1)./maximum; 	% value
     img = hsv2rgb(img);
-    img = rot90(img); % rotate image to display head up
+ %   img = rot90(img); % rotate image to display head up
     h = imshow(img);
     title([titleFig '   ' 'z=' num2str(z)]);
     % set(gca,'Ydir','normal') (reverse)
@@ -36,7 +36,7 @@ function phaseMapViewer(mAmplitude, mPhase, titleFig, maximum)
         img(:,:,1) = mod(mPhase(:,:,z,1),2*pi)./(2*pi); 		% hue
         img(:,:,3) = mAmplitude(:,:,z,1)./maximum; 	% value
         img = hsv2rgb(img);
-        img = rot90(img); % rotate image to display head up
+     %   img = rot90(img); % rotate image to display head up
         set(h, 'Cdata', img); % replaces the image
         title([titleFig '   ' 'z=' num2str(z)]); % replaces the title
         drawnow; % actualizes the figure

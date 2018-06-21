@@ -60,14 +60,15 @@ for t = m.T % run across the times
     [dx(t), dy(t)] = Ref.fcorr(Img);
     
     % plot 1/50 figures
-    if ~mod(t,50)
+    NN = 500;
+    if ~mod(t,NN)
         try
             figure(seeDrift);
         catch
             error('killing the figure stops the computation');
         end
-        plot(t-49:t,dx(t-49:t),'r.');
-        plot(t-49:t,dy(t-49:t),'g.');
+        plot(t-(NN-1):t,dx(t-(NN-1):t),'r.');
+        plot(t-(NN-1):t,dy(t-(NN-1):t),'g.');
         pause(0.01);
     end   
 end

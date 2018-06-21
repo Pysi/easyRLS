@@ -26,7 +26,7 @@ function stackViewer(F, tag)
         case 'pmpdff_amplitude'
             minmax = [0 80];
         otherwise
-            minmax = [400 1000];
+            minmax = [400 3000];
     end
 
     % call stackViewer

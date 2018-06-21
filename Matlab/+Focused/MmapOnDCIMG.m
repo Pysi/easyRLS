@@ -19,7 +19,7 @@ function m = MmapOnDCIMG(F)
         x = 614;
         y = 1018;
         z = 20;
-        t = 3000;
+        t = F.param.NCycles;
 
         [~, ~, ord] = getTransformation(origSpace, space);
 

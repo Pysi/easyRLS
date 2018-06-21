@@ -40,46 +40,47 @@ function semiAutoROI(F)
             % autocompute mask (TODO add slider)
 
             % Auto brain countour (Geoffrey)
-<<<<<<< HEAD
-            bg_img = mean2(img);
-            H = fspecial('disk',20);
-            tmp1 = imfilter(img,H,'replicate');
-            tmp2 = img*0;
-            tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
-            tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);
-            count = 4;
-            while mean2(tmp2) == 0
-                count = count+1;
-                tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
-                tmp2 = bwareaopen(tmp2,round((size(img,1)*size(img,2))/count));
-            end
-=======
-            if F.Analysis.Lineage == 'cytoplasmic'
-                bg_img = mean2(img);
-                H = fspecial('disk',20);
-                tmp1 = imfilter(img,H,'replicate');
-                tmp2 = img*0;
-                tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
-                tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);
-                count = 4;
-                while mean2(tmp2) == 0
-                    count = count+1;
+% % <<<<<<< HEAD
+%             bg_img = mean2(img);
+%             H = fspecial('disk',20);
+%             tmp1 = imfilter(img,H,'replicate');
+%             tmp2 = img*0;
+%             tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
+%             tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);
+%             count = 4;
+%             while mean2(tmp2) == 0
+%                 count = count+1;
+%                 tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
+%                 tmp2 = bwareaopen(tmp2,round((size(img,1)*size(img,2))/count));
+%             end
+%=======
+            switch F.Analysis.Lineage 
+                case 'cytoplasmic'
+                    bg_img = mean2(img);
+                    H = fspecial('disk',20);
+                    tmp1 = imfilter(img,H,'replicate');
+                    tmp2 = img*0;
                     tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
-                    tmp2 = bwareaopen(tmp2,round((size(img,1)*size(img,2))/count));
-                end
-            else
-                tmp0 = img;
-                tmp0(rangefilt(img) < mean2(rangefilt(img)/((Z(end)+1)/(Z(end) - z + 1)))) = 0;
-                [B, L] = bwboundaries(tmp0);
-                tmp0(L == 0) = 0;
-                bg_img = mean2(img);
-                H = fspecial('disk',1);
-                tmp0 = imfilter(tmp0,H,'replicate');
-                tmp2 = bwareaopen(tmp0,(size(img,1)*size(img,2))/4);
+                    tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);
+                    count = 4;
+                    while mean2(tmp2) == 0
+                        count = count+1;
+                        tmp2(tmp1>bg_img*(1-(0.005*z))) = 1;
+                        tmp2 = bwareaopen(tmp2,round((size(img,1)*size(img,2))/count));
+                    end
+                otherwise
+                    tmp0 = img;
+                    tmp0(rangefilt(img) < mean2(rangefilt(img)/((Z(end)+1)/(Z(end) - z + 1)))) = 0;
+                    [B, L] = bwboundaries(tmp0);
+                    tmp0(L == 0) = 0;
+                    bg_img = mean2(img);
+                    H = fspecial('disk',1);
+                    tmp0 = imfilter(tmp0,H,'replicate');
+                    tmp2 = bwareaopen(tmp0,(size(img,1)*size(img,2))/4);
             end
-                
+%                 
 
->>>>>>> Geoffrey
+%>>>>>>> Geoffrey
     %         sliderize(z, img, tmp2); % TODO make this work
         end
 
