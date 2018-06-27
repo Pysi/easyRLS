@@ -24,7 +24,7 @@ function phaseMapNeuron(F)
     dffPath = F.dir('DFFNeuron');
 
    % create phasemap folder
-    Focused.mkdir(F, 'PhaseMapNeuron');
+    Focused.mkdir(F, 'PhaseMapDFFNeuron');
     
     % get path to record data
     prefix = 'pmndff_';
@@ -69,6 +69,7 @@ function phaseMapNeuron(F)
         dffLayer = fullfile(dffPath, [num2str(iz, '%02d') '.mat']);
         load(dffLayer, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'centerCoord', 'neuronShape', 'numNeurons');
         mdff = recreateMmap(F,mmap);
+        clear mmap;
         
         % initialize buffer
        	for label = labels

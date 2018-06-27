@@ -74,7 +74,7 @@ for z = Z % for each layer of concern
                 tmp0 = img;
                 H = fspecial('disk',100);
                 tmp0 = imfilter(tmp0,H,'replicate');
-                tmp0(rangefilt(img) < 50) = 0;%((Z(end)+1)/(Z(end) - z + 1)) mean2(rangefilt(img)/1.5)
+                tmp0(rangefilt(img) < mean2(rangefilt(img)/1.5)) = 0;%((Z(end)+1)/(Z(end) - z + 1)) mean2(rangefilt(img)/1.5)
                 
                 [B, L] = bwboundaries(tmp0);
                 tmp0(L == 0) = 0;
