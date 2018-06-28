@@ -1,4 +1,4 @@
-function phaseMapPixel(F)
+function phaseMapPixel_PerPackage(F)
 %phaseMapPixel computes the phase map per pixel using the fft
 
 % inputs

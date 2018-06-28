@@ -5,6 +5,10 @@ function CMTK_reformat(ref, mov, out, transformation)
     disp("reformating with arguments:")
 
     % creates the command args
+    environment = "";
+    if endsWith(out,'.nhdr') % avoid compression
+        environment = "CMTK_WRITE_UNCOMPRESSED=true";
+    end
     tool = "cmtk reformatx";
     options = join([
         ""
@@ -13,7 +17,7 @@ function CMTK_reformat(ref, mov, out, transformation)
     output = ['-o ' escape(out)];
 
     % concantenate args
-    args = [tool options verbose output "--floating" escape(mov) escape(ref) escape(transformation)];
+    args = [environment tool options verbose output "--floating" escape(mov) escape(ref) escape(transformation)];
 
     % displays args
     disp(args')
