@@ -10,20 +10,20 @@ clear; clc
 
 %% add programs
 addPrograms('/home/ljp/');
-root = '/home/ljp/'
+% root = '/home/ljp/'
 %% sample focus
 
-root = '/home/ljp/Science/Projects/RLS/';
+root = '/home/ljp/Science/Projects/RLS1P/';
 study = '';
-date = '2018-06-11';
-run = 3;
+date = '2018-06-21';
+run = 9;
 
 F = NT.Focus(root, study, date, run);
 
 % sample parameters
 
 Analysis.Layers = 3:20;         % Layers to analyse
-Analysis.RefLayers = 8:10;       % reference layers for drift correction
+Analysis.RefLayers = 20;% 8:10;       % reference layers for drift correction
 Analysis.RefIndex = 10;         % index of the reference frame for drift correction
 Analysis.RefStack = '';         % external reference stack if exists
 
@@ -32,18 +32,21 @@ Analysis.BaselinePercentile = 10;       % percentile for baseline computation
 Analysis.DriftBox = [ 53 555 45 888 ];  % bounding box for drift correction
 Analysis.Lineage = 'Nuclear';       % possible values : 'Nuclear', 'Cytoplasmic'
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
-Analysis.Stimulus = 'step';            % type of stimulus (step/sinus)
+Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
 Analysis.Overwrite = false;             % defines if it has tpo be overwritten
 % TODO correct the phasemap function to take into account other frequencies
 
-Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_148layers.nhdr'; % choose refbrain to map onto
+Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_178layers.nhdr'; % choose refbrain to map onto
 
 % loads the parameters in the current focus
 F.Analysis = Analysis;
 
 %% quick focus
 
-F = NT.Focus(root, study, '2018-05-29', 7, Analysis);         % define focus
+F = NT.Focus(root, study, '2018-06-21', 28, Analysis);         % define focus
+Flist{1} = NT.Focus(root, study, '2018-06-21', 9, Analysis);         % define focus
+Flist{2} = NT.Focus(root, study, '2018-06-21', 24, Analysis);         % define focus
+Flist{3} = NT.Focus(root, study, '2018-06-21', 28, Analysis);         % define focus
 
 %% sample functions (to run the analysis function by function)
 
@@ -52,6 +55,7 @@ semiAutoROI(F);
 % --- preparatory stuff
 Focused.driftCompute(F);
 driftApply(F);
+        driftComputeAndApply(F) % calculates the drift for every layer independently
 computeBackground(F);
 createGrayStack(F)
 segmentBrain(F, 'graystack');
@@ -63,10 +67,16 @@ computePhaseMap(F, 'neuron');
 computeBaseline(F, 'pixel');
 computeDFF(F, 'pixel');
 computePhaseMap(F, 'pixel', 'signal');
+computePhaseMap(F, 'pixel', 'dff');
+
 % --- export
 mapToRefBrain(F, 'affine', '', 'graystack');
 mapToRefBrain(F, 'convertcoord', 'affine', 'graystack');
 exportToHDF5(F);
+
+% --- reformat phasemap
+
+
 
 %% sample viewer (collection of all viewer functions)
 
@@ -78,29 +88,61 @@ Focused.stackViewer(F, 'graystack')
 stackViewer2D(F, 'BaselineNeuron');
 stackViewer2D(F, 'DFFNeuron');
 Focused.phaseMapViewer(F, 'signal pixel')
+Focused.phaseMapViewer(F, 'dff pixel')
 
 %% sample workflow (prepare runs)
 
-date = '2018-06-14'; % select date
+date = '2018-06-21'; % select date
 
-RUNS = [ 19 15 ]; % select runs to prepare (adjust ROI)
+RUNS = [ 28 ]; % select runs to prepare (adjust ROI)
 prepare(root, study, date, Analysis, RUNS) % run the loop
 
 %% sample workflow (launch analysis)
 clearvars -except Analysis root study 
 
-date = '2018-06-11' % select date
-RUNS = [  3 ] % select a set of runs 
+date = '2018-06-21' % select date
+RUNS = [ 9  24  28  ] % select a set of runs 
 %RUNS = [ 11]; % select a set of runs 
 
 Analysis.Lineage = 'Nuclear'; % overwrite parameters  % possible values : 'Nuclear', 'Cytoplasmic'
-Analysis.Stimulus = 'step'; % overwrite parameters
+Analysis.Stimulus = 'sinus'; % overwrite parameters % type of stimulus (step/sinus)
+Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
+
+Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_178layers.nhdr'; % choose refbrain to map onto
 
 TTT=tic;
-analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+% analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
 %analyse(root, study, date, Analysis, RUNS, @workflowChangeSpace) % run per pixel analysis
 %analyse(root, study, date, Analysis, RUNS, @workflowRevertMask) % run per pixel analysis
+analyse(root, study, date, Analysis, RUNS, @workflowDriftcor) % run per pixel analysis
+analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
+
+%analyse(root, study, date, Analysis, RUNS, @workflowRegistration) % run per pixel analysis
+
+TIME=toc(TTT);
+fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
+
+% sample workflow (launch analysis)
+clearvars -except Analysis root study 
+
+date = '2018-06-21' % select date
+RUNS = [ 3  8  25  29  35  ] % select a set of runs 
+%RUNS = [ 11]; % select a set of runs 
+
+Analysis.Lineage = 'Nuclear'; % overwrite parameters  % possible values : 'Nuclear', 'Cytoplasmic'
+Analysis.Stimulus = 'step'; % overwrite parameters % type of stimulus (step/sinus)
+Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_178layers.nhdr'; % choose refbrain to map onto
+
+TTT=tic;
+% analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+%analyse(root, study, date, Analysis, RUNS, @workflowChangeSpace) % run per pixel analysis
+%analyse(root, study, date, Analysis, RUNS, @workflowRevertMask) % run per pixel analysis
+analyse(root, study, date, Analysis, RUNS, @workflowDriftcor) % run per pixel analysis
+%analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
+
+%analyse(root, study, date, Analysis, RUNS, @workflowRegistration) % run per pixel analysis
 
 TIME=toc(TTT);
 fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
@@ -142,34 +184,38 @@ function Fanalyse(F, workflow)
     workflow(F);
 end
 
-% workflow for per neuron analysis
-function workflowNeuron(F)
-    Focused.driftCompute(F);
-    driftApply(F);
+% workflow drift correction
+function workflowDriftcor(F)
+    PrepareNewAnalysis(F)  % rename Analysis folder to Analysis_old; create new Analysis folder; copy Mask folder to new Analysis folder
+    driftComputeAndApply(F)
     computeBackground(F);
     createGrayStack(F)
+end
+
+
+% workflow for per neuron analysis
+function workflowNeuron(F)
+   % Focused.driftCompute(F);
+    %driftApply(F);
+    %computeBackground(F);
+    %createGrayStack(F)
     segmentBrain(F, 'graystack');
-    computeBaselineNeuron(F);
-    dffNeuron(F);
-    switch F.Analysis.Stimulus
-        case 'sinus'
-            phaseMapNeuron(F);
-    end
+    computeBaseline(F, 'neuron');
+    computeDFF(F, 'neuron');
+    %dffNeuron(F);
 end
 
 % workflow for per pixel analysis (workflowNeuron must have been runned first)
 function workflowPixel(F)
 %     Focused.driftCompute(F);
 %     driftApply(F);
-%     computeBackground(F);
-%     createGrayStack(F)
-% 
-%     computeBaselinePixel(F);
-%     computeDFF(F, 'pixel');
-    switch F.Analysis.Stimulus
-        case 'sinus'
-            computePhaseMap(F, 'pixel', 'dff');
-    end
+
+     computeBaselinePixel(F);
+     computeDFF(F, 'pixel');
+        switch F.Analysis.Stimulus
+            case 'sinus'
+                computePhaseMap(F, 'pixel', 'dff');
+        end
 end
 
 
@@ -182,6 +228,19 @@ end
 function workflowRevertMask(F)
   revertMask(F,'LAST','RAST');
 end
+
+
+
+% workflow revertMask
+function workflowRegistration(F)
+    mapToRefBrain(F, 'affine', '', 'graystack');
+    mapToRefBrain(F, 'warp', '', 'graystack');
+    mapToRefBrain(F, 'reformat', 'affine', 'graystack');
+    mapToRefBrain(F, 'reformat', 'warp', 'graystack');
+    mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
+    exportToHDF5(F);
+end
+
 
 %% adding programs
 

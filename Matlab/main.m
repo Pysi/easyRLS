@@ -18,6 +18,8 @@ Focused.driftCompute(F);
     seeDriftCorrection(F);
 %% --- %% apply drift if satisfacted
 driftApply(F);
+%% --- Calculate drift and Apply the correction for every layer
+    driftComputeAndApply(F)
     %% view corrected stack
     Focused.stackViewer(F, 'corrected');
 %% --- %% compute background
