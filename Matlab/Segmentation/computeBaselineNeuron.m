@@ -44,6 +44,7 @@ function computeBaselineNeuron(F)
         start_time = tic;
             
         for i = 1:numNeurons % loop over each neuron ~10000 neurons instead of ~300000 pixels
+            tic 
             IN = squeeze(mean(m(ns{i}, iz, :), 1)); % call memory map with linear indexing
             [~, OUT] = calllib('caTools', 'runquantile',...
                     IN,... input matrix (t, index)
@@ -54,7 +55,6 @@ function computeBaselineNeuron(F)
                     1,... lenght of quantile vector (here only one)
                     1 ... type of quantile calculation
                     );
-
             % write baseline to binary file (seems that cast to double is operated by matlab)
             fwrite(fid,...
                 OUT,...

@@ -6,7 +6,7 @@
 
 % see TEMPLATE.m for more information and example
 
-    %% view dcimg / tif
+%% view dcimg / tif
     Focused.stackViewer(F);
 %% --- %% semi auto ROI on dcimg / tif
 semiAutoROI(F); % let you adjust automatic ROI
@@ -62,7 +62,7 @@ mapToRefBrain(F, 'reformat', 'affine', 'graystack');
 %% apply registration warp
 mapToRefBrain(F, 'reformat', 'warp', 'graystack');
 %% stackCoordinates if it was not done in the segementation step
-stackCoord(F); % gets all the coordinates and convert them to micrometers
+%stackCoord(F); % gets all the coordinates and convert them to micrometers
 %% apply registration on neurons coordinates
 mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
 %% export values to hdf5 → Thijs

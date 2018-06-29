@@ -36,7 +36,7 @@ Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
 Analysis.Overwrite = false;             % defines if it has tpo be overwritten
 % TODO correct the phasemap function to take into account other frequencies
 
-Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_178layers.nhdr'; % choose refbrain to map onto
+Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
 
 % loads the parameters in the current focus
 F.Analysis = Analysis;
@@ -150,7 +150,11 @@ analyse(root, study, date, Analysis, RUNS, @workflowDriftcor) % run per pixel an
 %analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
 analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
 
+%analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
+analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+
 %analyse(root, study, date, Analysis, RUNS, @workflowRegistration) % run per pixel analysis
+
 
 TIME=toc(TTT);
 fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
@@ -205,27 +209,70 @@ end
 
 % workflow for per neuron analysis
 function workflowNeuron(F)
-   % Focused.driftCompute(F);
-    %driftApply(F);
-    %computeBackground(F);
-    %createGrayStack(F)
-    segmentBrain(F, 'graystack');
-    computeBaseline(F, 'neuron');
-    computeDFF(F, 'neuron');
-    %dffNeuron(F);
+%      Focused.driftCompute(F);
+%      driftApply(F);
+     computeBackground(F);
+  %   createGrayStack(F)
+    % segmentBrain(F, 'graystack');
+%     computeBaselineNeuron(F);
+%     dffNeuron(F);
+    
+     computeBaselineAndDFF_Neuron(F)
+    
+%     switch F.Analysis.Stimulus
+%         case 'sinus'
+%             phaseMapNeuron(F);
+%     end
+%    chooseRefBrain(F);
+%     mapToRefBrain(F, 'affine', '', 'graystack');
+%     mapToRefBrain(F, 'warp', '', 'graystack');
+%     mapToRefBrain(F, 'reformat', 'affine', 'graystack');
+%     mapToRefBrain(F, 'reformat', 'warp', 'graystack');
+%     mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
+%     exportToHDF5(F);
+
 end
+
+
+% workflow for per neuron analysis
+function workflowNeuron2(F)
+     Focused.driftCompute(F);
+     driftApply(F);
+     computeBackground(F);
+     createGrayStack(F)
+     segmentBrain(F, 'graystack');
+%     computeBaselineNeuron(F);
+%     dffNeuron(F);
+    
+     computeBaselineAndDFF_Neuron(F)
+    
+%     switch F.Analysis.Stimulus
+%         case 'sinus'
+%             phaseMapNeuron(F);
+%     end
+%    chooseRefBrain(F);
+%     mapToRefBrain(F, 'affine', '', 'graystack');
+%     mapToRefBrain(F, 'warp', '', 'graystack');
+%     mapToRefBrain(F, 'reformat', 'affine', 'graystack');
+%     mapToRefBrain(F, 'reformat', 'warp', 'graystack');
+%     mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
+%     exportToHDF5(F);
+
+end
+
 
 % workflow for per pixel analysis (workflowNeuron must have been runned first)
 function workflowPixel(F)
-%     Focused.driftCompute(F);
-%     driftApply(F);
-
+    Focused.driftCompute(F);
+    driftApply(F);
+    computeBackground(F);
+    createGrayStack(F)
      computeBaselinePixel(F);
      computeDFF(F, 'pixel');
-        switch F.Analysis.Stimulus
-            case 'sinus'
-                computePhaseMap(F, 'pixel', 'dff');
-        end
+    switch F.Analysis.Stimulus
+        case 'sinus'
+            computePhaseMap(F, 'pixel', 'dff');
+    end
 end
 
 
