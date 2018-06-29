@@ -30,7 +30,7 @@ Analysis.RefStack = '';         % external reference stack if exists
 Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
 Analysis.BaselinePercentile = 10;       % percentile for baseline computation
 Analysis.DriftBox = [ 53 555 45 888 ];  % bounding box for drift correction
-Analysis.Lineage = 'Nuclear';       % possible values : 'Nuclear', 'Cytoplasmic'
+Analysis.Lineage = 'Cytoplasmic';       % possible values : 'Nuclear', 'Cytoplasmic'
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
 Analysis.Overwrite = false;             % defines if it has tpo be overwritten
@@ -108,6 +108,14 @@ Analysis.Lineage = 'Nuclear'; % overwrite parameters  % possible values : 'Nucle
 Analysis.Stimulus = 'sinus'; % overwrite parameters % type of stimulus (step/sinus)
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
 
+switch Analysis.Lineage
+    case 'Nuclear'
+        Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_178layers.nh
+        dr'; % choose refbrain to map onto
+    case 'Cytoplasmic'
+        Analysis.RefBrain = 'zBrain_Elavl3-GCaMP5G-178layers.nhdr'; % choose refbrain to map onto
+end
+
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_178layers.nhdr'; % choose refbrain to map onto
 
 TTT=tic;
@@ -146,6 +154,8 @@ analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron ana
 
 TIME=toc(TTT);
 fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
+
+
 
 
 %% workflow functions
@@ -224,23 +234,30 @@ function workflowChangeSpace(F)
   changeSpace(F, 'corrected', 'LAST') 
 end
 
+
 % workflow revertMask
 function workflowRevertMask(F)
   revertMask(F,'LAST','RAST');
 end
 
 
-
-% workflow revertMask
+% workflow Registration
 function workflowRegistration(F)
+    %== do affine transformation
     mapToRefBrain(F, 'affine', '', 'graystack');
+    %== do non-rigid transformation
     mapToRefBrain(F, 'warp', '', 'graystack');
+    %== apply registration affine
     mapToRefBrain(F, 'reformat', 'affine', 'graystack');
+    %== apply registration warp
     mapToRefBrain(F, 'reformat', 'warp', 'graystack');
+    %== stackCoordinates if it was not done in the segementation step
+    % stackCoord(F); % gets all the coordinates and convert them to micrometers
+    %== apply registration on neurons coordinates
     mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
+    %% export values to hdf5 → Thijs
     exportToHDF5(F);
 end
-
 
 %% adding programs
 
