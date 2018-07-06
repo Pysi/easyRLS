@@ -115,10 +115,15 @@ function phaseMapPixel_PerPackage(F)
             i = find(I);
             % Calculate fourier transformation
             Y = fft(mdff.Data.bit(:, i),[],1);
+            Y1 = abs(Y);
+            Y1m =mean(Y1([100:200 300:400 550:650],:),1);
+            Y1s = std(Y1([100:200 300:400 550:650],:),[],1);
+            %Y1 = (Y1-Y1m)./Y1s;
+            Y1 = (Y1-Y1m)./Y1m;
 
             % extract peak from dff
             %amplitude = max(abs(Y));
-            amplitude = abs(Y(ind_fstim,:));
+            amplitude = abs(Y1(ind_fstim,:));
             phase     = angle(Y(ind_fstim,:));
             realpart  = real(Y(ind_fstim,:));
             imaginary = imag(Y(ind_fstim,:));
