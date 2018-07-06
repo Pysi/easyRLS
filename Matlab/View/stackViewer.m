@@ -1,4 +1,4 @@
-function stackViewer(m, titleFig, mask, minmax)
+function f = stackViewer(m, titleFig, mask, minmax)
 %stackViewer(m, titleFig, mask) is analog to imageJ 'hyperstack'
 % it allows to visualize the brain and browse z and t directions
 % it realises a rotation of 90° before printing to get an intuitive repair

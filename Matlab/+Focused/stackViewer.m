@@ -1,4 +1,4 @@
-function stackViewer(F, tag)
+function handle = stackViewer(F, tag)
 %Focused.stackViewer is the focused wrapper for stackViewer
 % it creates the memory map and optionally loads the mask
 
@@ -19,10 +19,12 @@ function stackViewer(F, tag)
     end
         
     switch tag
+        case 'corrected'
+            minmax = [400 1200];
         case 'refStack'
             minmax = [400 4000];
         case 'pmpsig_amplitude'
-            minmax = [0 30];
+            minmax = [0 1];
         case 'pmpdff_amplitude'
             minmax = [0 80];
         case 'pmpdff_realpart'
@@ -32,6 +34,6 @@ function stackViewer(F, tag)
     end
 
     % call stackViewer
-    stackViewer(m, titleFig, mask, minmax)
+    handle = stackViewer(m, titleFig, mask, minmax);
 
 end
