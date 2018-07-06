@@ -7,6 +7,17 @@ outdir = fullfile(F.dir('AveragedPhaseMaps'), 'stack');
 mkdir(outdir);
 runs = fopen(fullfile(outdir, 'runs'), 'w');
 
+F = manip{1};
+% get path
+regPath = F.get.regPath(F);
+[~, refo] = F.get.autoTransName(F, 'warp', 'phasemap');
+
+cd(fullfile(regPath, refo)); % go to folder
+
+file = dir('realpart.nrrd');
+Ia(:,:,:,1) = double(nrrdread(file.name))*0;
+Ib(:,:,:,1) = double(nrrdread(file.name))*0;
+
 % load realpart an imaginary part
 for k = (1:size(manip, 2))
     F = manip{k}; % current focus
@@ -15,19 +26,19 @@ for k = (1:size(manip, 2))
     
     % get path
     regPath = F.get.regPath(F);
-    [~, refo] = F.get.autoTransName(F, 'affine', 'phasemap');
+    [~, refo] = F.get.autoTransName(F, 'warp', 'phasemap');
     
     cd(fullfile(regPath, refo)); % go to folder
     
     file = dir('realpart.nrrd');
-    Ia(:,:,:,k) = double(nrrdread(file.name));
+    Ia(:,:,:,1) = Ia(:,:,:,1) + double(nrrdread(file.name));
     
     file = dir('imaginary.nrrd');
-    Ib(:,:,:,k) = double(nrrdread(file.name));
+    Ib(:,:,:,1) = Ib(:,:,:,1) + double(nrrdread(file.name));
     
     % Save phase registered phase map
-    clear i
-    Z(:,:,:,k) = Ia(:,:,:,k) + 1i * Ib(:,:,:,k);
+   % clear i
+   % Z(:,:,:,k) = Ia(:,:,:,k) + 1i * Ib(:,:,:,k);
     
 %     v_max = 0.3;
 %     clear imhsv
@@ -42,8 +53,10 @@ end
 
 % Calculate mean
 clear i
-Ia_mean = mean(Ia,4);
-Ib_mean = mean(Ib,4);
+Ia_mean = Ia/size(manip, 2);
+Ib_mean = Ib/size(manip, 2);
+% Ia_mean = mean(Ia,4);
+% Ib_mean = mean(Ib,4);
 
 % Save RGB images
 v_max = 20;

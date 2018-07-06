@@ -6,8 +6,8 @@ function reformatPhasemap(F)
     regPath = F.get.regPath(F);
 
     % get graystack affine transformation to reference brain TODO set 'current transformation'
-    transPath = F.get.transPath(F, 'affine', 'graystack');
-    [~, refo] = F.get.autoTransName(F, 'affine', 'phasemap');
+    transPath = F.get.transPath(F, 'warp', 'graystack');
+    [~, refo] = F.get.autoTransName(F, 'warp', 'phasemap');
 
     prefix = 'pmpdff_';
     labels = {'realpart', 'imaginary'};
