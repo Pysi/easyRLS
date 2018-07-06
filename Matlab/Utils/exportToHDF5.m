@@ -14,6 +14,21 @@ function exportToHDF5(F)
     load(fullfile(F.dir('Registration'), refBrainName, ['coordinates_' refBrainName '.mat']), 'refCoordinates');
     NCycles = F.param.NCycles;
     calciumActivity = [];
+    
+    % create delay vector
+    n_layers = 18; % ground truth!
+    delays_z = (0:0.02:0.34) + 0.04;  % delays for layers 3 - 20
+     unique_z_coordinates = sort(unique(coordinates(:, 3)), 'descend');  % find unique z coordinates max to min
+    if length(unique_z_coordinates) == n_layers % assert if length(unique z coordinates) == 18
+        n_cells = size(coordinates, 1)
+        delays_neurons = zeros(n_cells, 1);
+        for i_z = 1:n_layers % it will go from max z to min z, which corresponds to min t delayto max t delay
+            current_neurons = find(coordinates(:, 3) == unique_z_coordinates(i_z));
+            delays_neurons(current_neurons) = delays_z(i_z);  % match z coordinates with delays_z
+        end
+    end
+        
+        
 
     % === concatenate neurons activity
     for iz = F.Analysis.Layers % Layers should be sorted (ex 3 4 5 ... 19 20)
@@ -34,6 +49,9 @@ function exportToHDF5(F)
     h5write(fileName,'/Data/Coordinates', coordinates ./ 1000); % µm → mm
     h5writeatt(fileName,'/Data/Coordinates','unit', 'mm')
     h5writeatt(fileName,'/Data/Coordinates','orientation', 'RAS')
+    
+    h5create(fileName,'/Data/TimeDelays',[n_cells, 1]);
+    h5write(fileName,'/Data/TimeDelays', delays_neurons);
     
     h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
     h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
