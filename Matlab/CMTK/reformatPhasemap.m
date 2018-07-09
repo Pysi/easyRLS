@@ -1,4 +1,4 @@
-function reformatPhasemap(F)
+function reformatPhasemap(F,trans_mode)
 % use CMTK to reformat the imaginary and real part of phasemap
 
     % get path of reference brain
@@ -6,8 +6,8 @@ function reformatPhasemap(F)
     regPath = F.get.regPath(F);
 
     % get graystack affine transformation to reference brain TODO set 'current transformation'
-    transPath = F.get.transPath(F, 'warp', 'graystack');
-    [~, refo] = F.get.autoTransName(F, 'warp', 'phasemap');
+    transPath = F.get.transPath(F, trans_mode, 'graystack');
+    [~, refo] = F.get.autoTransName(F, trans_mode, 'phasemap');
 
     prefix = 'pmpdff_';
     labels = {'realpart', 'imaginary'};

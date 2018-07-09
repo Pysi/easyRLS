@@ -68,8 +68,8 @@ mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
 %% export values to hdf5 → Thijs
 exportToHDF5(F);
 %% END
-
-reformatPhasemap(F)
+trans_mode = 'affine'
+reformatPhasemap(F,trans_mode)
 % sinus '- eyes'
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
 Flist{1} = NT.Focus(root, study, '2018-06-21', 9, Analysis);         % define focus
@@ -85,4 +85,5 @@ averagePhaseMaps(Flist)
 Flist{1} = NT.Focus(root, study, '2018-05-25', 11, Analysis);         % define focus
 Flist{2} = NT.Focus(root, study, '2018-05-25', 15, Analysis);         % define focus
 
-averagePhaseMaps(Flist)
+trans_mode = 'warp'
+averagePhaseMaps(Flist,trans_mode)

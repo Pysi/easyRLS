@@ -1,6 +1,6 @@
-function averagePhaseMaps(Flist)
+function averagePhaseMaps(Flist,trans_mode)
 % average reformated phasemaps for the focus in flist
-
+trans_mode
 manip = Flist; % this is a list of focus
 F = manip{1}; % sample focus
 outdir = fullfile(F.dir('AveragedPhaseMaps'), 'stack');
@@ -10,7 +10,7 @@ runs = fopen(fullfile(outdir, 'runs'), 'w');
 F = manip{1};
 % get path
 regPath = F.get.regPath(F);
-[~, refo] = F.get.autoTransName(F, 'warp', 'phasemap');
+[~, refo] = F.get.autoTransName(F, trans_mode, 'phasemap');
 
 cd(fullfile(regPath, refo)); % go to folder
 
@@ -26,7 +26,7 @@ for k = (1:size(manip, 2))
     
     % get path
     regPath = F.get.regPath(F);
-    [~, refo] = F.get.autoTransName(F, 'warp', 'phasemap');
+    [~, refo] = F.get.autoTransName(F, trans_mode, 'phasemap');
     
     cd(fullfile(regPath, refo)); % go to folder
     
@@ -61,7 +61,7 @@ Ib_mean = Ib/size(manip, 2);
 % Save RGB images
 v_max = 20;
 clear imhsv
-for l = 1:178
+for l = 1:198
     imhsv(:,:,1) =   mod(atan2(Ib_mean(:,:,l),Ia_mean(:,:,l)) , 2*pi) / (2*pi);
     imhsv(:,:,2) =   Ia_mean(:,:,l,1)*0+1;
     imhsv(:,:,3) =   sqrt( Ia_mean(:,:,l).^2 + Ib_mean(:,:,l).^2 )/v_max;

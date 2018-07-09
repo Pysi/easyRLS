@@ -1,4 +1,4 @@
-function PlotPhaseMap(F,max,SHOW)
+function PlotPhaseMap(F,max,SHOW,SHOWfit)
 
 cd(F.dir('PhaseMapDFFPixel'))
 % create output folder
@@ -53,8 +53,9 @@ end
     xData = A_pp';
     yData = Pdf';
     
-    ex_ind = find(xData>40,1);
-
+   % ex_ind = find(xData>40,1);
+    ex_ind = length(xData);
+   
     [fitresult, gof] = fit( xData(5:ex_ind), yData(5:ex_ind), ft, opts );
     fitresult_norm = fitresult;
     fitresult_norm.a = 1; 
@@ -69,7 +70,7 @@ end
          figure;plot(xData,cdf)
     end
  % === plot fit result  
- if (SHOW)
+ if (SHOWfit)
     figure;
     h  = plot( fitresult, A_pp, Pdf ); hold on
     plot([conv95 conv95] , [0.0001 1],'-k','Linewidth',2)

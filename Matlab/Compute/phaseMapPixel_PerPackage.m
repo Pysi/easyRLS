@@ -125,9 +125,12 @@ function phaseMapPixel_PerPackage(F)
             %amplitude = max(abs(Y));
             amplitude = abs(Y1(ind_fstim,:));
             phase     = angle(Y(ind_fstim,:));
-            realpart  = real(Y(ind_fstim,:));
-            imaginary = imag(Y(ind_fstim,:));
+          %  realpart  = real(Y(ind_fstim,:));
+          %  imaginary = imag(Y(ind_fstim,:));
             deltaphi  = (phase - phase_delay + pi);
+            realpart  = real(amplitude.*exp(j.*deltaphi));
+            imaginary = imag(amplitude.*exp(j.*deltaphi));
+            
                 % -phase_delay = Shift positive of the fluorescence
                 % +pi = because of the fourier transform is done against a cosinus
 

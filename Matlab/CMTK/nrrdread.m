@@ -162,6 +162,9 @@ switch (meta.encoding)
   meta.encoding = 'raw';
   data = readData(fidTmp, meta, datatype);
   
+  delete(tmpFile)
+  delete(tmpBase)
+  
  case {'txt', 'text', 'ascii'}
   
   data = fscanf(fidIn, '%f');
