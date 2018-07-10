@@ -45,7 +45,18 @@ function mapToRefBrain(F, mode, transformation, mov)
             if ~exist(transPath, 'file')          
                 error('"%s": transformation not found', transformation)
             end
-            CMTK_reformat(refPath, movPath, outPath, transPath); %%% call cmtk wrapper       
+            CMTK_reformat(refPath, movPath, outPath, transPath); %%% call cmtk wrapper  
+            
+        case "getZBrainContour"
+            [transformation, reformatedName] = autoTransName(transformation, mov, refBrainName);
+            refMaskPath = fullfile(F.dir('RefBrains'), 'zBrainMask' ,['zBrainMask_RAS.nhdr']);
+            outPath = fullfile(F.dir('Mask'), ['zBrainMask.nrrd']);
+            transPath = fullfile(regPath, string([transformation '.xform']));
+            % if does not exist
+            if ~exist(transPath, 'file')          
+                error('"%s": transformation not found', transformation)
+            end
+            CMTK_getZBrainContour(refMaskPath, movPath, outPath, transPath); %%% call cmtk wrapper 
 
         case "convertcoord"
             % loads coordinates in micrometers

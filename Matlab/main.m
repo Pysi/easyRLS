@@ -65,8 +65,12 @@ mapToRefBrain(F, 'reformat', 'warp', 'graystack');
 %stackCoord(F); % gets all the coordinates and convert them to micrometers
 %% apply registration on neurons coordinates
 mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
+%% apply registration on neurons coordinates
+mapToRefBrain(F, 'getZBrainContour', 'warp', 'graystack');
 %% export values to hdf5 → Thijs
 exportToHDF5(F);
+
+
 %% END
 trans_mode = 'affine'
 reformatPhasemap(F,trans_mode)
