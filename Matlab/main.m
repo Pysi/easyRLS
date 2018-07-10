@@ -50,7 +50,9 @@ computePhaseMap(F, 'pixel', 'signal');
     Focused.phaseMapViewer(F, 'dff neuron')
     Focused.phaseMapViewer(F, 'dff pixel')
     Focused.phaseMapViewer(F, 'signal pixel')
-    
+    %% plot it
+    PlotPhaseMap(F, 20, 0, 0)
+    PlotPhaseMapRegistred(F,'wrap')    
 %% choose reference brain
 chooseRefBrain(F);
 %% do affine transformation
