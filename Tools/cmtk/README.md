@@ -90,6 +90,12 @@ note that smaller values lead to more local deformations
 ### Fast warp registration on zbb or zBrain (~60s)
 options= 'warp -v --fast --grid-spacing 40 --refine 2 --jacobian-weight 0.001 --coarsest 6.4 --sampling 3.2 --accuracy 3.2 --omit-original-data '
 
+### Guide for choosing affine and warp registration parameters
+
+http://flybrain.mrc-lmb.cam.ac.uk/dokuwiki/doku.php?id=warping_manual:registration_parameters
+
+It is written for munger which is a cmtk wrapper but the guide lines are the same if you use directly cmtk
+
 
 ## Alternatives
 
