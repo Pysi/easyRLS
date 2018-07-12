@@ -79,15 +79,27 @@ function phaseMapNeuron(F)
         % run across all neurons
         for i = 1:numNeurons % index of neuron in dff
 
+            
             % Calculate fourier transformation
             Y = fft(mdff.Data.bit(:,i));
+            
+            Y1 = abs(Y);
+            Y1m =mean(Y1([100:200 300:400 550:650],:));
+            Y1s = std(Y1([100:200 300:400 550:650],:));
+            %Y1 = (Y1-Y1m)./Y1s;
+            Y1 = (Y1-Y1m)./Y1m;
 
             % extract peak from dff
-            amplitude = abs(Y(ind_fstim,:));
+            amplitude = abs(Y1(ind_fstim,:));
             phase     = angle(Y(ind_fstim,:));
-            realpart  = real(Y(ind_fstim,:));
-            imaginary = imag(Y(ind_fstim,:));
-            deltaphi = (phase - phase_delay + pi);
+%             realpart  = real(Y(ind_fstim,:));
+%             imaginary = imag(Y(ind_fstim,:));
+%            deltaphi = (phase - phase_delay + pi);
+            deltaphi  = (phase - phase_delay + pi);
+            realpart  = real(amplitude.*exp(j.*deltaphi));
+            imaginary = imag(amplitude.*exp(j.*deltaphi));
+
+
                 % -phase_delay = Shift positive of the fluorescence
                 % +pi = because of the fourier transform is done against a cosinus
                 
