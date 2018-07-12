@@ -28,7 +28,7 @@ function phaseMapNeuron(F)
     
     % get path to record data
     prefix = 'pmndff_';
-    labels = {'amplitude', 'phase', 'deltaphi'};% 'realpart', 'imaginary'};
+    labels = {'amplitude',  'deltaphi', 'realpart', 'imaginary'}; %'phase',
     out = struct();
     outInfo = struct();
     for label = labels
@@ -106,6 +106,7 @@ function phaseMapNeuron(F)
             
             % fills buffer
             for label = labels
+                
                 BUFFER.(label{:})(neuronShape{i}) = eval(label{:}); % a buffer for the layer
             end
 
