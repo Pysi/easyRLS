@@ -45,39 +45,45 @@ function exportToHDF5(F)
     Stimulus = interp1(time_exp, Stimulus, time_range);
     
     % === write to HDF5 file
-    h5create(fileName,'/Data/Coordinates', [numberNeuron 3]); % xyz = 3 coordinates
-    h5write(fileName,'/Data/Coordinates', coordinates ./ 1000); % µm → mm
+    h5create(fileName,'/Data/Coordinates', [numberNeuron 3], 'Datatype', 'single'); % xyz = 3 coordinates
+    h5write(fileName,'/Data/Coordinates', single(coordinates ./ 1000)); % µm → mm
     h5writeatt(fileName,'/Data/Coordinates','unit', 'mm')
     h5writeatt(fileName,'/Data/Coordinates','orientation', 'RAS')
     
-    h5create(fileName,'/Data/TimeDelays',[n_cells, 1]);
-    h5write(fileName,'/Data/TimeDelays', delays_neurons);
+    h5create(fileName,'/Data/TimeDelays',[n_cells, 1], 'Datatype', 'single');
+    h5write(fileName,'/Data/TimeDelays', single(delays_neurons));
     
-    h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3]);
-    h5write(fileName, '/Data/RefCoordinates', refCoordinates ./ 1000);
+%     h5create(fileName,'/Data/PM_Phase',[n_cells, 1], 'Datatype', 'single');
+%     h5write(fileName,'/Data/PM_Phase', phase_array);
+%     
+%     h5create(fileName,'/Data/PM_Amplitude',[n_cells, 1], 'Datatype', 'single');
+%     h5write(fileName,'/Data/PM_Amplitude', amplitude_array);
+    
+    h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3], 'Datatype', 'single');
+    h5write(fileName, '/Data/RefCoordinates', single(refCoordinates ./ 1000));
     h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
     h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')
 
-    h5create(fileName,'/Data/Times', [1 NCycles]);
+    h5create(fileName,'/Data/Times', [1 NCycles], 'Datatype', 'single');
     dtframe = F.dt / 1000 * F.param.NLayers ;
-    h5write(fileName,'/Data/Times', 0: dtframe : dtframe*(NCycles-1)  ); % ms → s 
+    h5write(fileName,'/Data/Times', single(0: dtframe : dtframe*(NCycles-1))  ); % ms → s 
     h5writeatt(fileName,'/Data/Times','unit', 's')
 
     %h5create(FileName,'/Data/Behavior', [Range,3]);
     %h5write(FileName,'/Data/Behavior', Behavior);
 
-    h5create(fileName,'/Data/Values', [numberNeuron, NCycles]);
-    h5write(fileName,'/Data/Values', calciumActivity);
+    h5create(fileName,'/Data/Values', [numberNeuron, NCycles], 'Datatype', 'single');
+    h5write(fileName,'/Data/Values', single(calciumActivity));
     h5writeatt(fileName,'/Data/Values','type', 'DFF, single')
 
-    h5create(fileName,'/Data/Stimulus', [1 , NCycles]);
-    h5write(fileName,'/Data/Stimulus', Stimulus);
+    h5create(fileName,'/Data/Stimulus', [1 , NCycles], 'Datatype', 'single');
+    h5write(fileName,'/Data/Stimulus', single(Stimulus));
 
     % return label from zbrain coordinate space for RAS data
     labels = addLabels(refCoordinates ./ 1000);
     
-    h5create(fileName,'/Data/Labels', size(labels));
-    h5write(fileName,'/Data/Labels', labels);
+    h5create(fileName,'/Data/Labels', size(labels), 'Datatype', 'single');
+    h5write(fileName,'/Data/Labels', single(labels));
     % h5create(fileName, '/Data/ZBrainAtlas_Labels', [NCells, labels_size(2)]);
     % h5write(fileName, '/Data/ZBrainAtlas_Labels', Labels);
 
