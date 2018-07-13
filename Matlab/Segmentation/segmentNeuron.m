@@ -1,4 +1,4 @@
-function [centerCoord, neuronShape, CD] = segmentNeuron(Img, Mask, nuc)
+function [centerCoord, neuronShape, CD] = segmentNeuron(Img, Mask, nuc,algorithm)
 %segmentNeuron returns the list of the center coordinates and the list of
 %the pixels belonging to the neuron
 % it is "copy and paste" from the Raphael's script
@@ -24,13 +24,13 @@ thIntensity = 0;            % intensity filter VB
 
 
 
-algorithm = 'RC'   % VB or RC
+%algorithm = 'RC'   % VB or RC
 switch algorithm
     case 'VB'
         
 % Parameters for algorith VB
 thIntensity = 10;
-sizeRange = [3 150];        % Size filter (pixels)
+sizeRange = [3 500];        % Size filter (pixels)
 ecc_th = 1;
 thCorr = -1;
 
@@ -264,6 +264,7 @@ thCorr = -1;
     fprintf('\tComputing ...');
     tic
 
+    Wat(find(isnan(Wat))) = 0;
     L = watershed(Wat);
 
     fprintf(' %.02f sec\n', toc);

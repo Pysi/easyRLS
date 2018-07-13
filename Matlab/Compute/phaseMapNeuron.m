@@ -58,6 +58,7 @@ function phaseMapNeuron(F)
 
 % % % % % % LOOP % % % % % 
     % run across the layers
+    k=0;
     for iz = Zlay
         fprintf('phasemap per neuron for layer %d\t', iz);tic;
 
@@ -78,6 +79,8 @@ function phaseMapNeuron(F)
 
         % run across all neurons
         for i = 1:numNeurons % index of neuron in dff
+            k=k+1;
+
 
             
             % Calculate fourier transformation
@@ -99,6 +102,11 @@ function phaseMapNeuron(F)
             realpart  = real(amplitude.*exp(j.*deltaphi));
             imaginary = imag(amplitude.*exp(j.*deltaphi));
 
+            PhaseMapNeuron{iz}(i,1) = iz;
+            PhaseMapNeuron{iz}(i,2) = amplitude;
+            PhaseMapNeuron{iz}(i,3) = deltaphi;
+            
+
 
                 % -phase_delay = Shift positive of the fluorescence
                 % +pi = because of the fourier transform is done against a cosinus
@@ -106,7 +114,6 @@ function phaseMapNeuron(F)
             
             % fills buffer
             for label = labels
-                
                 BUFFER.(label{:})(neuronShape{i}) = eval(label{:}); % a buffer for the layer
             end
 
@@ -118,7 +125,11 @@ function phaseMapNeuron(F)
             fwrite(out.(label{:}), BUFFER.(label{:}), 'single');
         end
     end 
-        
+      
+    PhaseMapNeuronM = [];
+    for iz = sort(Zlay,'ascend')
+        PhaseMapNeuronM = [ PhaseMapNeuronM; PhaseMapNeuron{iz} ];
+    end
     % close binary files and write info (.mat and .nhdr)
     space = 'RAS';
     pixtype = 'single';
@@ -131,5 +142,7 @@ function phaseMapNeuron(F)
         % TODO write info and nhdr (/!\ on single)
         writeNHDR(F, fulltag);
     end
+    save( fullfile(F.dir('PhaseMapDFFNeuron') , 'PhaseMapNeuron.mat'),'PhaseMapNeuronM' );
+
     
 end

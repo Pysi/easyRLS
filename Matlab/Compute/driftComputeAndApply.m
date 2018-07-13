@@ -1,4 +1,4 @@
-function driftComputeAndApply(F)
+function driftComputeAndApply(F,Visible)
 %driftApply(F) creates a binary file with the translated values
     
     % setup
@@ -58,13 +58,15 @@ Y = bbox(3):bbox(4);
 
 % --- Drift correction ---
 % creates a figure to plot the drift correction
-seeDrift = figure; hold on;
+seeDrift = figure('visible',Visible); hold on;
 title([F.name '   dx=red, dy=green   for layer',num2str(min(Z))]);
 
     
-    
-    w = waitbar(0, {'Applying computed drift', ['frame ' num2str(0) '/' num2str(m.t)]});
-
+switch Visible
+    case 'on'
+        w = waitbar(0, {'Applying computed drift', ['frame ' num2str(0) '/' num2str(m.t)]});
+    case 'off'
+end
     for z = Z
         Ref{z} = NT.Image(mRef( X,Y,z, RefIndex ) );
     end
@@ -75,35 +77,52 @@ title([F.name '   dx=red, dy=green   for layer',num2str(min(Z))]);
         for z = Z % along z
             % load reference image and load it in Raphael's image object
             % load the image to compare with the ref image
-            Img = NT.Image( m(X,Y,z,t) ) ;
+            Img_raw = NT.Image( m(:,:,z,t) ) ;
+            Img =NT.Image(Img_raw.pix(X,Y));
+ 	        
             % compute the DX and DY with the Fourier transform
             [dx(z,t), dy(z,t)] = Ref{z}.fcorr(Img);
 
             fwrite(fid,...
-                imtranslate(m(:,:,z,t),...
+                imtranslate(Img_raw.pix,...
                 [-dy(z,t), -dx(z,t)]),... %  'x' of a matlab image is 'y'
                 'uint16'); % apply dy on rows (y) and dx on columns (x)
         end
-        waitbar(t/m.t, w, {'Applying computed drift', ['frame ' num2str(t) '/' num2str(m.t)]})
+        switch Visible
+            case 'on'
+                waitbar(t/m.t, w, {'Applying computed drift', ['frame ' num2str(t) '/' num2str(m.t)]})
+            case 'off'
+        end
     
         % plot 1/50 figures
-        NN = 500;
+        NN = 50;
         if ~mod(t,NN)
-            try
-                figure(seeDrift);
-            catch
-                error('killing the figure stops the computation');
+            switch Visible
+                case 'on'
+                    try
+                        figure(seeDrift);
+                    catch
+                        error('killing the figure stops the computation');
+                    end
+                case 'off'
+                    set(0,'CurrentFigure',seeDrift)
             end
             plot(t-(NN-1):t,dx(min(Z),t-(NN-1):t),'r.');
             plot(t-(NN-1):t,dy(min(Z),t-(NN-1):t),'g.');
             pause(0.01);
+            
+            z
+            t
         end   
 
     
     end
     fclose(fid);
-
-    close(w)
+switch Visible
+    case 'on'
+         close(w)
+    case 'off'
+end
 
     x=m.x; %#ok<*NASGU>
     y=m.y;
@@ -125,7 +144,7 @@ title([F.name '   dx=red, dy=green   for layer',num2str(min(Z))]);
     Focused.mkdir(F, 'Drift');
     save(fullfile(F.dir('Drift'), 'DriftBox.mat'), 'bbox');
     save(fullfile(F.dir('Drift'), 'Drifts.mat'), 'dx', 'dy');
-    savefig(fullfile(F.dir('Drift'), 'driftCorrection.fig'));
+    savefig(seeDrift,fullfile(F.dir('Drift'), 'driftCorrection.fig'));
 
 
 end

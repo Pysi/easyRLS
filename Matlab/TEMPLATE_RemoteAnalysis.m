@@ -6,14 +6,14 @@ feature('DefaultCharacterSet', 'UTF-8')
 addPrograms('/home/ljp/');
 
 %% set Data location
-root = '/home/ljp/Science/Projects/RLS/';
+root = '/home/ljp/Science/Projects/RLS1P/';
 
 %% sample focus
 
-root = '/home/ljp/Science/Projects/RLS/';
+root = '/home/ljp/Science/Projects/RLS1P/';
 study = '';
-date = '2018-05-24';
-run = 7;
+date = '2018-06-29';
+run = 4;
 
 F = NT.Focus(root, study, date, run);
 
@@ -29,11 +29,11 @@ Analysis.BaselinePercentile = 10;       % percentile for baseline computation
 Analysis.DriftBox = [ 53 555 45 888 ];  % bounding box for drift correction
 Analysis.Lineage = 'Nuclear';       % possible values : 'Nuclear', 'Cytoplasmic'
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
-Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
-Analysis.Overwrite = false;             % defines if it has tpo be overwritten
+Analysis.Stimulus = 'step';            % type of stimulus (step/sinus)
+Analysis.Overwrite = true;             % defines if it has tpo be overwritten
 % TODO correct the phasemap function to take into account other frequencies
 
-Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_RAS.nhdr'; % choose refbrain to map onto
+Analysis.RefBrain = 'zBrain_Elavl3-GCaMP5G-198layers.nhdr'; % choose refbrain to map onto
 
 % loads the parameters in the current focus
 F.Analysis = Analysis;
@@ -41,20 +41,22 @@ F.Analysis = Analysis;
 %% sample workflow (launch analysis)
 clearvars -except Analysis root study 
 
-date = '2018-05-24'; % select date
-RUNS = [ 21 25  ]; % select a set of runs
+date = '2018-06-29'; % select date
+RUNS = [ 3  4  8  9  ]; % select a set of runs
 %RUNS = [ 7 12 16 25  ]; % select a set of runs 
 %RUNS = [ 11]; % select a set of runs 
 
 Analysis.Lineage = 'Nuclear'; % overwrite parameters % possible values : 'Nuclear', 'Cytoplasmic'
-Analysis.Stimulus = 'sinus'; % overwrite parameters  % type of stimulus (step/sinus)
+Analysis.Stimulus = 'step'; % overwrite parameters  % type of stimulus (step/sinus)
 
 TTT=tic;
 %analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
-analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
+%analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
 %analyse(root, study, date, Analysis, RUNS, @workflowChangeSpace) % run per pixel analysis
 %analyse(root, study, date, Analysis, RUNS, @workflowRevertMask) % run per pixel analysis
 %analyse(root, study, date, Analysis, RUNS, @workflowDFF) % run per pixel analysis
+analyse(root, study, date, Analysis, RUNS, @workflowDriftcor) % run per pixel analysis
+
 
 TIME=toc(TTT);
 fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
@@ -96,6 +98,15 @@ end
 function Fanalyse(F, workflow)
     workflow(F);
 end
+
+% workflow drift correction
+function workflowDriftcor(F)
+%    PrepareNewAnalysis(F)  % rename Analysis folder to Analysis_old; create new Analysis folder; copy Mask folder to new Analysis folder
+    driftComputeAndApply(F,'off')
+    computeBackground(F);
+    createGrayStack(F)
+end
+
 
 % workflow for per neuron analysis
 function workflowNeuron(F)

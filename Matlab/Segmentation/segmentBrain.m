@@ -1,4 +1,4 @@
-function segmentBrain(F, tag)
+function segmentBrain(F, tag,algorithm)
 %segmentBrain segments the brain layer by layer using segmentNeuron
 
     m = Focused.Mmap(F, tag); % get gray stack
@@ -21,7 +21,7 @@ function segmentBrain(F, tag)
         Img = m(:,:,z,1);
         Mask = mask(:,:,z);
 
-        [centerCoord, neuronShape, CD] = segmentNeuron(Img, Mask, nuc);  %#ok<ASGLU>
+        [centerCoord, neuronShape, CD] = segmentNeuron(Img, Mask, nuc,algorithm);  %#ok<ASGLU>
         numberNeuron = length(centerCoord);                     %#ok<NASGU>
         outSeg = fullfile(segPath, [num2str(z, '%02d') '.mat']);
         outIMG = fullfile(segPath, [num2str(z, '%02d') '.png']);

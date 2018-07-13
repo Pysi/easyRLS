@@ -15,6 +15,8 @@ function exportToHDF5(F)
     NCycles = F.param.NCycles;
     calciumActivity = [];
     
+  
+    
     % create delay vector
     n_layers = 18; % ground truth!
     delays_z = (0:0.02:0.34) + 0.04;  % delays for layers 3 - 20
@@ -53,11 +55,16 @@ function exportToHDF5(F)
     h5create(fileName,'/Data/TimeDelays',[n_cells, 1], 'Datatype', 'single');
     h5write(fileName,'/Data/TimeDelays', single(delays_neurons));
     
-%     h5create(fileName,'/Data/PM_Phase',[n_cells, 1], 'Datatype', 'single');
-%     h5write(fileName,'/Data/PM_Phase', phase_array);
-%     
-%     h5create(fileName,'/Data/PM_Amplitude',[n_cells, 1], 'Datatype', 'single');
-%     h5write(fileName,'/Data/PM_Amplitude', amplitude_array);
+    
+    % load PhaseMap
+    try
+        load(fullfile( F.dir('PhaseMapDFFNeuron'), 'PhaseMapNeuron.mat'  ))
+        h5create(fileName,'/Data/PhaseMapNeuron',[n_cells, 3], 'Datatype', 'single');
+        h5write(fileName,'/Data/PhaseMapNeuron', PhaseMapNeuronM);
+       % h5writeatt(fileName,'/Data/PhaseMapNeuron','index', 'array order','index, amplitude , deltaphi')
+    catch
+        'Warning: Phase map for neurons not calculated'
+    end
     
     h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3], 'Datatype', 'single');
     h5write(fileName, '/Data/RefCoordinates', single(refCoordinates ./ 1000));

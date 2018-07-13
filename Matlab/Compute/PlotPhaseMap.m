@@ -2,7 +2,7 @@ function PlotPhaseMap(F,max,SHOW,SHOWfit)
 
 cd(F.dir('PhaseMapDFFPixel'))
 % create output folder
-mkdir( [F.dir('PhaseMapDFFPixel') '/PhaseMap_rgb' ])
+mkdir( [F.dir('PhaseMapDFFPixel') '/rgb.stack' ])
 
 maximum = max;
 
@@ -105,7 +105,7 @@ if (SHOW)
     title([titleFig '   ' 'z=' num2str(z)]);
 end
     %% save phase map
-    cd([F.dir('PhaseMapDFFPixel') '/PhaseMap_rgb' ])
+    cd([F.dir('PhaseMapDFFPixel') '/rgb.stack' ])
     % Save RGB images
     imwrite(img,[  'layer' num2str(z,'%02d') '.tif']);
 end

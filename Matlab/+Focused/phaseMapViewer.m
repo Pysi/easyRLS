@@ -1,6 +1,11 @@
-function phaseMapViewer(F, np)
+function phaseMapViewer(F, np,max)
 %+Focused version of phaseMapViewer
 
+if exist('max')
+    Max = max;
+else
+    Max = 20;
+end
     switch np
         case 'signal neuron'
             phaseMapViewer(...
@@ -25,7 +30,7 @@ function phaseMapViewer(F, np)
                 Focused.Mmap(F, 'pmpdff_amplitude'),...
                 Focused.Mmap(F, 'pmpdff_deltaphi'),...
                 [F.name ' phaseMap'],...
-                20);
+                Max);
     end
 
 end 

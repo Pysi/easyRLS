@@ -29,7 +29,7 @@ createGrayStack(F)
     %% view gray stack
     Focused.stackViewer(F, 'graystack')
 %% --- %% segment neurons %% --- %%
-segmentBrain(F, 'graystack');
+segmentBrain(F, 'graystack','VB');
 %% --- %% compute baseline per neuron / pixel
 computeBaseline(F, 'neuron');
 computeBaseline(F, 'pixel');
@@ -48,7 +48,7 @@ computePhaseMap(F, 'pixel', 'dff');
 computePhaseMap(F, 'pixel', 'signal');
     %% display it
     Focused.phaseMapViewer(F, 'dff neuron')
-    Focused.phaseMapViewer(F, 'dff pixel')
+    Focused.phaseMapViewer(F, 'dff pixel',100)
     Focused.phaseMapViewer(F, 'signal pixel')
     %% plot it
     PlotPhaseMap(F, 20, 0, 0)
@@ -67,15 +67,18 @@ mapToRefBrain(F, 'reformat', 'warp', 'graystack');
 %stackCoord(F); % gets all the coordinates and convert them to micrometers
 %% apply registration on neurons coordinates
 mapToRefBrain(F, 'convertcoord', 'warp', 'graystack');
-%% apply registration on neurons coordinates
-mapToRefBrain(F, 'getZBrainContour', 'warp', 'graystack');
 %% export values to hdf5 → Thijs
 exportToHDF5(F);
-
+%% get zBrain contour in graystack space
+mapToRefBrain(F, 'getZBrainContour', 'warp', 'graystack');
+%% Reformat phase map
+reformatPhasemap(F,'warp',20)
+%% Overlay zBrain labels on registered phase map
+zBrainLabelsOnPhaseMap(F,0,'','warp'); %'Avg' to overlay on average phase map
 
 %% END
-trans_mode = 'affine'
-reformatPhasemap(F,trans_mode)
+
+%%
 % sinus '- eyes'
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
 Flist{1} = NT.Focus(root, study, '2018-06-21', 9, Analysis);         % define focus

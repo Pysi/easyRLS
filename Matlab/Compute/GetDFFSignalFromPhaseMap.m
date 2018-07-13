@@ -1,9 +1,11 @@
 
 % get Focus
 root = '/home/ljp/Science/Projects/RLS/';
+root = '/media/Coolcat/Science/Projects/RLS/'
+
 study = '';
-date = '2018-06-14';
-run = 12;
+date = '2018-05-24';
+run = 19;
 
 F = NT.Focus(root, study, date, run);
 
@@ -18,12 +20,13 @@ img = NaN(mgray.x, mgray.y);
 
 %% set parameters
 tag = 'DFFPixel'
-z = 20; 
+z = 10; 
 t = 3000;
 
 
 
 %% select layer to view    
+z=16
 inputInfo = fullfile(F.dir(tag), [num2str(z, '%02d') '.mat']);
 m{z}.matfile = matfile(inputInfo); % readable matfile (prevents from loading all indices at the same time)
 mmap = recreateMmap(F,m{z}.matfile.mmap); % recreates mmap, will be actualized when z changes
@@ -42,16 +45,16 @@ figure;imshow(img)
 % 171 86
 % 71 542
 
-cursor_info(1).Position(1) = 366;
-cursor_info(1).Position(2) = 486;
+% cursor_info(1).Position(1) = 366;
+% cursor_info(1).Position(2) = 486;
+% 
+% cursor_info(2).Position(1) = 171;
+% cursor_info(2).Position(2) = 86;
+% 
+% cursor_info(3).Position(1) = 71;
+% cursor_info(3).Position(2) = 542;
 
-cursor_info(2).Position(1) = 171;
-cursor_info(2).Position(2) = 86;
-
-cursor_info(3).Position(1) = 71;
-cursor_info(3).Position(2) = 542;
-
-
+imfreehandd
 i = 1
 Iselected = sub2ind( size(img)  , cursor_info(i).Position(1) , 1018-cursor_info(i).Position(2)+1 );
 Iselected_map =  find(indices==Iselected) ;
