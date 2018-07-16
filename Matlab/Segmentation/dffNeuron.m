@@ -26,8 +26,7 @@ T = m.T;
         
         % basestack (t, xy)
         basePath = fullfile(F.dir('BaselineNeuron'), [num2str(iz, '%02d') '.mat']);
-        load(basePath, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'centerCoord', 'neuronShape', 'numNeurons');
-        mbas = recreateMmap(F,mmap); clear('mmap');
+        load(basePath, 'centerCoord','neuronShape', 'numNeurons'); % load neuron info
                 
         output = fullfile(dffPath, [num2str(iz, '%02d') '.bin']);
         outputInfo = fullfile(dffPath, [num2str(iz, '%02d') '.mat']);
@@ -46,6 +45,9 @@ T = m.T;
             signal(in,1,:) = mean(sig, 1);
         end
         signal = single(permute(squeeze(signal), [2 1]));
+        
+        % get the baseline stack
+        load(basePath, 'mmap'); mbas = recreateMmap(F,mmap); clear('mmap');
         
         % compute dff
         % (signal - baseline) / (baseline - background)
