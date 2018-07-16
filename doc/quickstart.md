@@ -160,3 +160,40 @@ This function exports the data in a HDF5 file compatible with fishualizer progra
 
 ### Workflow
 See 'sample analysis' and 'sample workflow' in the template to have a model to run the workflow.
+
+---------------------------------------
+
+### Debugging
+To look in detail to the computation, one has to be careful to the indices. (indexing in matlab, imageJ, linear indexing... are not the same). You can use the `dispRealCoordinates` function to display the coordinates in all *styles*.
+
+Example per pixel:
+
+    >> dispRealCoordinates(F, 'BaselinePixel', cursor_info, 11)
+    cursor info:
+         x = 255 y = 349
+    in imageJ:
+         x = 359 y = 669
+    in Matlab:
+         x = 255 y = 670
+    linear indexing :
+         index = 156305
+    position in mmap:
+         index = 78090
+ 
+Here, 'linear indexing' corresponds to the linear index of the point in a RAS matrix. 'Position in mmap' corresponds to the position of this point in the m(t,xy) memory map for baseline or dff.
+
+Example per neuron:
+
+    >> dispRealCoordinates(F, 'BaselineNeuron', cursor_info, 11)
+    cursor info:
+         x = 255 y = 349
+    in imageJ:
+         x = 359 y = 669
+    in Matlab:
+         x = 255 y = 670
+    linear indexing :
+         index = 156305
+    neuron number:
+         index = 1958
+
+'Neuron number' is the number of the neuron in the layer, and also the position in the mm(t, n) memory map.

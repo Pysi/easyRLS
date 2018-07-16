@@ -44,6 +44,11 @@ TODO: [runquantile](https://www.rdocumentation.org/packages/caTools/versions/1.1
 
 The result given looks like this :
 
+![baseline](img/baseline.png)
+
+![baseline](img/baseline_noise.png)
+
+### Background computation
 
 
 ### DFF computation
@@ -56,5 +61,3 @@ $$ \frac{\Delta f}{f} = \frac{\text{Signal} - \text{Baseline}}{\text{Baseline} -
 TODO: background
 
 
-
-TODO: images
