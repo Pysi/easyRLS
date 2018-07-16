@@ -12,14 +12,23 @@ switch tag
     otherwise
         error('%s not implemented', tag);
 end
+SIZE_x = x;
+SIZE_y = y;
 
-cx = cursor_info.Position(1);
-cy = cursor_info.Position(2);
-ind = sub2ind([x y], cy, cx);
+% position of cursor in naturally oriented image
+CUR_x = cursor_info.Position(1);
+CUR_y = cursor_info.Position(2);
 
-fprintf("cursor info:\n\t x = %d y = %d\n", cx, cy);
-fprintf("in imageJ:\n\t x = %d y = %d\n", x-cx, y-cy);
-fprintf("in Matlab:\n\t x = %d y = %d\n", cx, y-cy+1);
+% position in a matlab matrix
+POS_x = CUR_x ;
+POS_y = SIZE_y - CUR_y + 1;
+
+% linear indexing in matlab
+ind = sub2ind([SIZE_x SIZE_y], POS_x, POS_y);
+
+fprintf("cursor info:\n\t x = %d y = %d\n", CUR_x, CUR_y);
+fprintf("in imageJ:\n\t x = %d y = %d\n", SIZE_x - CUR_x, SIZE_y - CUR_y);
+fprintf("in Matlab:\n\t x = %d y = %d\n", POS_x, POS_y);
 fprintf("linear indexing :\n\t index = %d\n", ind);
 
 if exist('indices', 'var')
