@@ -1,8 +1,8 @@
-function phaseMapViewer(F, np,max)
+function phaseMapViewer(F, np,varargin)
 %+Focused version of phaseMapViewer
 
-if exist('max')
-    Max = max;
+if length(varargin)==1
+    Max = varargin{1};
 else
     Max = 20;
 end
