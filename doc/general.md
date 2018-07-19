@@ -35,6 +35,13 @@ Currently, the region of interest is found base on the intensity level, and a gr
 
 ### Neuron segmentation
 
+The segmentation uses a watershed algorithm. The result looks like this (pink is outside segmentation):
+![segmented](img/segmented.png)
+
+
+When doing the mean of the pixel's signals on a neuron, we get something like this :
+![mean_per_neuron](img/mean_per_neuron.png)
+
 
 ### Baseline computation
 
