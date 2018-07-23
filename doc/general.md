@@ -35,6 +35,13 @@ Currently, the region of interest is found base on the intensity level, and a gr
 
 ### Neuron segmentation
 
+The segmentation uses a watershed algorithm. The result looks like this (pink is outside segmentation):
+![segmented](img/segmented.png)
+
+
+When doing the mean of the pixel's signals on a neuron, we get something like this :
+![mean_per_neuron](img/mean_per_neuron.png)
+
 
 ### Baseline computation
 
@@ -50,14 +57,14 @@ The result given looks like this :
 
 ### Background computation
 
+The background is computed by a custom function (see NeuroTools) by taking the limit in the ecdf (see image below).
+
+![ecdf](img/ecdf.png)
+
 
 ### DFF computation
 
+![\frac{\Delta f}{f} = \frac{\text{Signal} - \text{Baseline}}{\text{Baseline} - \text{Background}}](img/dff.svg)
 
-$$ \frac{\Delta f}{f} = \frac{\text{Signal} - \text{Baseline}}{\text{Baseline} - \text{Background}}$$
-
-![equation](https://latex.codecogs.com/svg.latex?%5Cfrac%7B%5CDelta%7Ef%7D%7Bf%7D%3D%5Cfrac%7B%5Ctext%7BSignal%7D-%5Ctext%7BBaseline%7D%7D%7B%5Ctext%7BBaseline%7D-%5Ctext%7BBackground%7D%7D)
-
-TODO: background
 
 
