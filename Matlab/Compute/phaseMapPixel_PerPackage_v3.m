@@ -142,54 +142,79 @@ N = length(Motor_inter)
             i = find(I);
             
 % phase of stimulus   
-fw_index = 234:246; % frequency band of stimulus 
+% fw_index = 234:246; % frequency band of stimulus 
+
+is = 2251;
+ie = 3000;
+Window = is:ie;
+
+Window = [2061:2940];
 
 Stim = Motor_inter(iz:20:end)';
-Stim_fft = fft(Stim);
+Stim_fft = fft(Stim(Window));
 realStim_fft = abs(Stim_fft);
-[pks fw_index]=findpeaks(realStim_fft(1:end/2),'MinPeakHeight',4000);
+[pks fw_index]=findpeaks(realStim_fft(1:end/2),'MinPeakHeight',2000);
+
+%fw_index = find(realStim_fft(1:end/2) > 4000);
 fw_index=fw_index';
 phase_Stim_fw = angle(Stim_fft(fw_index));
-f_Stim_tw = f(fw_index)';
+N=length(Window);
+f_window = fs*[0:1:N/2]/N;
+f_Stim_tw = f_window(fw_index)';
+disp(['Frequency = ', num2str(f_Stim_tw)]);
 
-DFF_fft = fft(mdff.Data.bit(:, i),[],1);
-phase_DFF_fft_tw = angle(DFF_fft(fw_index,:)) ;
+DFF_fft = fft(mdff.Data.bit(Window, i),[],1);
+phase_DFF_fft_fw = angle(DFF_fft(fw_index,:)) ;
 
-deltaphi_tw = phase_DFF_fft_tw - phase_Stim_fw ;
+deltaphi_fw = phase_DFF_fft_fw - phase_Stim_fw ;
 
-deltaphi_tw_cor = deltaphi_tw./(f_Stim_tw) * 0.2;   % (i) transform deltaphi for every frequency in a time delay and then (ii) calculate the phase shift that corresponds to this time delay at the wanted stimulus frequency of 0.2Hz 
+deltaphi_fw_cor = deltaphi_fw;%./(f_Stim_tw) * 0.2;   % (i) transform deltaphi for every frequency in a time delay and then (ii) calculate the phase shift that corresponds to this time delay at the wanted stimulus frequency of 0.2Hz 
 
 
 
-            % Calculate fourier transformation
-            Y = fft(mdff.Data.bit(:, i),[],1);
-            Y1 = abs(Y);
-            Y1m =mean(Y1([100:200 300:400 550:650],:),1);
-            Y1s = std(Y1([100:200 300:400 550:650],:),[],1);
+            % Calculate response amplitde in units of signal-to-noise
+      %      Y = fft(mdff.Data.bit(:, i),[],1);
+            Y1 = abs(DFF_fft);
+%             Y1m =mean(Y1([100:200 300:400 550:650],:),1);
+%             Y1s = std(Y1([100:200 300:400 550:650],:),[],1);
+
+             Y1m =mean(Y1([100:200 300:400 ],:),1);
+             Y1s = std(Y1([100:200 300:400 ],:),[],1);
+             
+ window_noise = 80:120;
+ %window_noise = [40:60 80:110];
+               Y1m =mean(Y1(window_noise,:),1);
+             Y1s = std(Y1(window_noise,:),[],1);
+
             %Y1 = (Y1-Y1m)./Y1s;
             Y1 = (Y1-Y1m)./Y1m;
             
 
 
 
-Z = Y1(fw_index,:).*( cos(deltaphi_tw_cor)  + j *sin(deltaphi_tw_cor)   ) ;
+Z = Y1(fw_index,:).*( cos(deltaphi_fw_cor)  + j *sin(deltaphi_fw_cor)   ) ;
 
-Z_mean = mean(Z,2);
+Z_mean = mean(Z,1);
 
-A_mean = abs(Z);
-deltaphi_mean = angle(Z);
+A_mean = abs(Z_mean);
+deltaphi_mean = angle(Z_mean);
 
+deltaphi_mean = mod(deltaphi_mean,2*pi);
             
 
             % extract peak from dff
             %amplitude = max(abs(Y));
-            amplitude = abs(Y1(ind_fstim,:));
-            phase     = angle(Y(ind_fstim,:));
+            %amplitude = abs(Y1(fw_index,:));
+            amplitude = A_mean;
+            phase     = angle(DFF_fft(fw_index,:));
           %  realpart  = real(Y(ind_fstim,:));
           %  imaginary = imag(Y(ind_fstim,:));
             deltaphi  = (phase - phase_delay + pi);
+             phase     = deltaphi;
             
 deltaphi  = deltaphi_mean;
+
+
 
             
             realpart  = real(amplitude.*exp(j.*deltaphi));
@@ -200,7 +225,7 @@ deltaphi  = deltaphi_mean;
 
             % fills buffer
             for label = labels
-                label
+                %label
                 BUFFER.(label{:})(index(i)) = eval(label{:}); % a buffer for the layer
             end
         end

@@ -7,7 +7,7 @@ function computePhaseMap(F, per, on)
                 case 'neuron'
                     phaseMapNeuron(F);
                 case 'pixel'
-                    phaseMapPixel_PerPackage(F);
+                    phaseMapPixel_PerPackage_v5(F);
                 otherwise
                     warning('phasemap not computed');
             end

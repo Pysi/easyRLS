@@ -60,7 +60,7 @@ end
     
     % fill image
     if ~viewNeuron
-        img(indices) = mmap.Data.bit(t,:);
+        img(indices) =  mmap.Data.bit(t,:)  ;
     else % display neuron by neuron
         for i = 1:nn
             img(ns{i}) = snap(i);

@@ -1,11 +1,11 @@
 
 % get Focus
 root = '/home/ljp/Science/Projects/RLS/';
-root = '/media/Coolcat/Science/Projects/RLS/'
+%root = '/media/Coolcat/Science/Projects/RLS/'
 
 study = '';
 date = '2018-05-24';
-run = 19;
+run =7;
 
 F = NT.Focus(root, study, date, run);
 
@@ -13,20 +13,20 @@ F.Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phase
 
 
 %% show phasemap
-Focused.phaseMapViewer(F, 'dff pixel')
+Focused.phaseMapViewer(F, 'dff pixel',10)
 %% get grey stack image
 mgray = Focused.Mmap(F, 'graystack');
 img = NaN(mgray.x, mgray.y);
 
 %% set parameters
 tag = 'DFFPixel'
-z = 10; 
+z = 20; 
 t = 3000;
 
 
 
 %% select layer to view    
-z=16
+z=20
 inputInfo = fullfile(F.dir(tag), [num2str(z, '%02d') '.mat']);
 m{z}.matfile = matfile(inputInfo); % readable matfile (prevents from loading all indices at the same time)
 mmap = recreateMmap(F,m{z}.matfile.mmap); % recreates mmap, will be actualized when z changes
@@ -54,8 +54,8 @@ figure;imshow(img)
 % cursor_info(3).Position(1) = 71;
 % cursor_info(3).Position(2) = 542;
 
-imfreehandd
-i = 1
+%imfreehandd
+i = 2
 Iselected = sub2ind( size(img)  , cursor_info(i).Position(1) , 1018-cursor_info(i).Position(2)+1 );
 Iselected_map =  find(indices==Iselected) ;
 

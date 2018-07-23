@@ -11,6 +11,7 @@ function driftCompute(F)
     mRef = false;
     
     if RefStack % if we want to use a reference stack which is outside the stack
+        disp(['########## We want to use a reference stack which is outside the stack => ', RefStack, ' ##########']);
         mRef = Focused.Mmap(F, RefStack);
         RefIndex = false;
     end

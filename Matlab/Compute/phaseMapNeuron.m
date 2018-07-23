@@ -104,7 +104,7 @@ function phaseMapNeuron(F)
 
             PhaseMapNeuron{iz}(i,1) = iz;
             PhaseMapNeuron{iz}(i,2) = amplitude;
-            PhaseMapNeuron{iz}(i,3) = deltaphi;
+            PhaseMapNeuron{iz}(i,3) = mod(deltaphi, 2*pi);
             
 
 

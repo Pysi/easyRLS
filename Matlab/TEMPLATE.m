@@ -10,14 +10,15 @@ clear; clc
 
 %% add programs
 addPrograms('/home/ljp/');
+%addPrograms('/media/RED/ljp');
 % root = '/home/ljp/'
 %% sample focus
 
-root = '/home/ljp/Science/Projects/RLS1P/';
-%root = '/media/Coolcat/Projects/RLS/'
+root = '/home/ljp/Science/Projects/RLS/';
+%root = '/media/RED/ljp/Science/Projects/RLS1P/';
 study = '';
-date = '2018-06-21';
-run = 24;
+date = '2018-05-24';
+run = 7;
 
 F = NT.Focus(root, study, date, run);
 
@@ -26,15 +27,19 @@ F = NT.Focus(root, study, date, run);
 Analysis.Layers = 3:20;         % Layers to analyse
 Analysis.RefLayers = 20;% 8:10;       % reference layers for drift correction
 Analysis.RefIndex = 10;         % index of the reference frame for drift correction
-Analysis.RefStack = '';         % external reference stack if exists
-
+% refStackpath = '/home/ljp/Science/Projects/RLS/Data/2018-05-24/Run 08/Analysis/graystack.stack/graystack.nhdr';   
+% try mkdir(F.dir('refStack'))
+% catch 'Warning: Folder exists and gets overwritten'
+% end
+% copyfile F.dir('graystack') F.dir('refStack')
+Analysis.RefStack = 'refStack';         % external reference stack if exists
 Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
 Analysis.BaselinePercentile = 10;       % percentile for baseline computation
 Analysis.DriftBox = [ 53 555 45 888 ];  % bounding box for drift correction
 Analysis.Lineage = 'Nuclear';       % possible values : 'Nuclear', 'Cytoplasmic'
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
-Analysis.Overwrite = false;             % defines if it has tpo be overwritten
+Analysis.Overwrite = true;             % defines if it has tpo be overwritten
 % TODO correct the phasemap function to take into account other frequencies
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
@@ -69,15 +74,12 @@ computeBaseline(F, 'pixel');
 computeDFF(F, 'pixel');
 computePhaseMap(F, 'pixel', 'signal');
 computePhaseMap(F, 'pixel', 'dff');
-
 % --- export
 mapToRefBrain(F, 'affine', '', 'graystack');
 mapToRefBrain(F, 'convertcoord', 'affine', 'graystack');
 exportToHDF5(F);
 
 % --- reformat phasemap
-
-
 
 %% sample viewer (collection of all viewer functions)
 
@@ -89,101 +91,41 @@ Focused.stackViewer(F, 'graystack')
 stackViewer2D(F, 'BaselineNeuron');
 stackViewer2D(F, 'DFFNeuron');
 Focused.phaseMapViewer(F, 'signal pixel')
-Focused.phaseMapViewer(F, 'dff pixel')
+Focused.phaseMapViewer(F, 'dff pixel',5)
+Focused.phaseMapViewer(F, 'dff neuron')
 
 %% sample workflow (prepare runs)
 
-date = '2018-06-21'; % select date
-
-RUNS = [ 24 ]; % select runs to prepare (adjust ROI)
+date = '2018-06-14'; % select date
+RUNS = [ 12 ]; % select runs to prepare (adjust ROI)
 prepare(root, study, date, Analysis, RUNS) % run the loop
 
-
-
 %% === sample workflow (launch analysis)
-clearvars -except Analysis root study 
 
+clearvars -except Analysis root study 
 Analysis.Overwrite = true;             % defines if it has tpo be overwritten
 
-
-root = '/home/ljp/Science/Projects/RLS1P/';
-
-date = '2018-06-21' % select date
-RUNS = [ 9  24  28 ] % select a set of runs 
-%RUNS = [ 11]; % select a set of runs 
-
-Analysis.Lineage = 'Nuclear'; % overwrite parameters  % possible values : 'Nuclear', 'Cytoplasmic'
-Analysis.Stimulus = 'sinus'; % overwrite parameters % type of stimulus (step/sinus)
-Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
-
-Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
-
-TTT=tic;
-% analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowChangeSpace) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowRevertMask) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowDriftcor) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
-
-%analyse(root, study, date, Analysis, RUNS, @workflowRegistration) % run per pixel analysis
-analyse(root, study, date, Analysis, RUNS, @workflowReformatPhasemap) % run per pixel analysis
-
-TIME=toc(TTT);
-fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
-
-%
-% === sample workflow (launch analysis)
-clearvars -except Analysis root study 
-
-%root = '/media/Coolcat/Projects/RLS/';
-root = '/home/ljp/Science/Projects/RLS1P/';
-
-
-date = '2018-06-28' % select date
-RUNS = [ 16  26 ] % select a set of runs 
-%RUNS = [ 11]; % select a set of runs 
-
-Analysis.Lineage = 'Nuclear'; % overwrite parameters  % possible values : 'Nuclear', 'Cytoplasmic'
-Analysis.Stimulus = 'sinus'; % overwrite parameters % type of stimulus (step/sinus)
-Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
-
-Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
-
-TTT=tic;
-% analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowChangeSpace) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowRevertMask) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowDriftcor) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
-%analyse(root, study, date, Analysis, RUNS, @workflowNeuron) % run per neuron analysis
-
-%analyse(root, study, date, Analysis, RUNS, @workflowRegistration) % run per pixel analysis
-analyse(root, study, date, Analysis, RUNS, @workflowReformatPhasemap) % run per pixel analysis
-
-
-
-TIME=toc(TTT);
-fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
-
-
-
-% === sample workflow (launch analysis)
-clearvars -except Analysis root study 
-
-%root = '/media/Coolcat/Projects/RLS/';
-root = '/home/ljp/Science/Projects/RLS1P/';
-
+%root = '/home/ljp/Science/Projects/RLS/';
+root = '/media/RED/ljp/Science/Projects/RLS1P/';
 
 date = '2018-05-25' % select date
-RUNS = [ 11  15 ] % select a set of runs 
-%RUNS = [ 11]; % select a set of runs 
+RUNS = [ 15 ] % select a set of runs 
 
 Analysis.Lineage = 'Nuclear'; % overwrite parameters  % possible values : 'Nuclear', 'Cytoplasmic'
-Analysis.Stimulus = 'sinus'; % overwrite parameters % type of stimulus (step/sinus)
+Analysis.Stimulus = 'step'; % overwrite parameters % type of stimulus (step/sinus)
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
+
+% switch Analysis.Lineage
+%     case 'Nuclear'
+%         Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_178layers.nhdr'
+%         dr'; % choose refbrain to map onto
+%     case 'Cytoplasmic'
+%         Analysis.RefBrain = 'zBrain_Elavl3-GCaMP5G-178layers.nhdr'; % choose refbrain to map onto
+% end
+% 
+% Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_178layers.nhdr'; % choose refbrain to map onto
 
 TTT=tic;
 % analyse(root, study, date, Analysis, RUNS, @workflowPixel) % run per pixel analysis
@@ -195,8 +137,6 @@ TTT=tic;
 
 %analyse(root, study, date, Analysis, RUNS, @workflowRegistration) % run per pixel analysis
 analyse(root, study, date, Analysis, RUNS, @workflowReformatPhasemap) % run per pixel analysis
-
-
 
 TIME=toc(TTT);
 fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
@@ -204,10 +144,10 @@ fprintf('total time for date %s and runs %s : %d\n', date, num2str(RUNS), TIME)
 %% Workflow average PhaseMaps:
 
 %% ===== Paralysed + Eyes =====
-root = '/media/Coolcat/Projects/RLS/';
+root = '/home/ljp/Science/Projects/RLS/';
 
-date = '2018-06-14' % select date
-RUNS = [ 12  8  3  ] % select a set of runs 
+date = '2018-05-24' % select date
+RUNS = [ 7 12 16 21 25 ] % select a set of runs 
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
 
@@ -216,36 +156,24 @@ for i = 1: length(RUNS)
 end
 
 
-date = '2018-06-11' % select date
-RUNS = [ 4  ] % select a set of runs 
+date = '2018-06-14' % select date
+RUNS = [ 15 ] % select a set of runs 
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
 L = length(Flist);
 for i = 1 : length(RUNS)
     Flist{L + i} = NT.Focus(root, study, date, RUNS(i), Analysis);         % define focus
 end
-
-root = '/home/ljp/Science/Projects/RLS1P/';
-
-date = '2018-06-21' % select date
-RUNS = [ 9 ] % select a set of runs 
-
-Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
-L = 0% length(Flist);
-for i = 1: length(RUNS)
-    Flist{L + i} = NT.Focus(root, study, date, RUNS(i), Analysis);         % define focus
-end
+disp(L)
 
 % execute average
-averagePhaseMaps(Flist)
-
-
+averagePhaseMaps(Flist, 'warp')
 
 %% ===== Paralysed - Eyes =====
-root = '/media/Coolcat/Projects/RLS/';
+root = '/media/RED/ljp/Science/Projects/RLS1P/';
 
-date = '2018-06-11' % select date
-RUNS = [ 4  ] % select a set of runs 
+date = '2018-06-21' % select date
+RUNS = [ 28 24 9  ] % select a set of runs 
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
 
@@ -253,33 +181,28 @@ for i = 1: length(RUNS)
     Flist{i} = NT.Focus(root, study, date, RUNS(i), Analysis);         % define focus
 end
 
-
-date = '2018-06-14' % select date
-RUNS = [ 3  8  12  ] % select a set of runs 
+date = '2018-06-28' % select date
+RUNS = [ 16 26  ] % select a set of runs 
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
 L = length(Flist);
 for i = 1 : length(RUNS)
     Flist{L + i} = NT.Focus(root, study, date, RUNS(i), Analysis);         % define focus
 end
-%%
 
-root = '/home/ljp/Science/Projects/RLS1P/';
+root = '/home/ljp/Science/Projects/RLS/';
 
-date = '2018-06-21' % select date
-RUNS = [ 9  24  28  ] % select a set of runs 
+date = '2018-06-11' % select date
+RUNS = [ 4 ] % select a set of runs 
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
-L = 0%length(Flist);
+L = length(Flist);
 for i = 1: length(RUNS)
     Flist{L + i} = NT.Focus(root, study, date, RUNS(i), Analysis);         % define focus
 end
 
-
-root = '/home/ljp/Science/Projects/RLS1P/';
-
-date = '2018-06-28' % select date
-RUNS = [ 16  26  ] % select a set of runs 
+date = '2018-06-14' % select date
+RUNS = [ 3 8 12 ] % select a set of runs 
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
 L = length(Flist);
@@ -328,7 +251,7 @@ end
 
 % workflow drift correction
 function workflowDriftcor(F)
-    PrepareNewAnalysis(F)  % rename Analysis folder to Analysis_old; create new Analysis folder; copy Mask folder to new Analysis folder
+    %PrepareNewAnalysis(F)  % rename Analysis folder to Analysis_old; create new Analysis folder; copy Mask folder to new Analysis folder
     driftComputeAndApply(F)
     computeBackground(F);
     createGrayStack(F)
@@ -341,22 +264,22 @@ function workflowNeuron(F)
     %driftApply(F);
     %computeBackground(F);
     %createGrayStack(F)
-    segmentBrain(F, 'graystack');
-    computeBaseline(F, 'neuron');
+    %segmentBrain(F, 'graystack', 'RC');
+    %computeBaseline(F, 'neuron');
     computeDFF(F, 'neuron');
     %dffNeuron(F);
 end
 
 % workflow for per pixel analysis (workflowNeuron must have been runned first)
 function workflowPixel(F)
-      computePhaseMap(F, 'pixel', 'dff');
 %     PlotPhaseMap(F,0,0)
 
 %     Focused.driftCompute(F);
 %     driftApply(F);
 
-%     computeBaselinePixel(F);
-%     computeDFF(F, 'pixel');
+     computeBaselinePixel(F);
+     computeDFF(F, 'pixel');
+     computePhaseMap(F, 'pixel', 'dff');
 %         switch F.Analysis.Stimulus
 %             case 'sinus'
 %                 computePhaseMap(F, 'pixel', 'dff');
@@ -389,7 +312,8 @@ end
 % ReformatPhasemap
 function workflowReformatPhasemap(F)
   computePhaseMap(F, 'pixel', 'dff');
-  reformatPhasemap(F,'warp');
+  reformatPhasemap(F,'warp', 20);
+  PlotPhaseMap(F, 20, 0, 0);
 end
 
 

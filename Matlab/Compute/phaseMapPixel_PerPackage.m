@@ -14,6 +14,10 @@ function phaseMapPixel_PerPackage(F)
 
 % % % % % % % THIS IS A DRAFT VERSION % % % % % % % % %
 
+% load stimulus data
+
+
+
     % stimulus frequency
     fstim = F.Analysis.StimulusFrequency; % frequency of stimulus
 
