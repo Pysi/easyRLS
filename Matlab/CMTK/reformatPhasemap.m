@@ -47,7 +47,5 @@ function reformatPhasemap(F,trans_mode,max)
         imhsv(:,:,3) =   sqrt( Ia(:,:,l).^2 + Ib(:,:,l).^2 )/v_max;
         imwrite(hsv2rgb(imhsv),[outdir filesep 'layer' num2str(l,'%02d') '.tif']);
     end
-
-
-
+    
 end

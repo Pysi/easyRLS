@@ -1,4 +1,4 @@
-function PlotPhaseMapRegistred(F,trans_mode)
+function PlotPhaseMapRegistred(F,trans_mode, max)
 % average reformated phasemaps for the focus in flist
 disp(trans_mode);
 outdir = [F.get.regPath(F), '/', trans_mode, '_phasemap_ON_zBrain_Elavl3-H2BRFP_198layers_RGB'];
@@ -27,7 +27,7 @@ file = dir('imaginary.nrrd');
 Ib(:,:,:) = double(nrrdread(file.name));
 
 % Save RGB images
-v_max = 20;
+v_max = max;
 clear imhsv
 for l = 1:198
     deltaphi = mod(atan2(Ib(:,:,l),Ia(:,:,l)) , 2*pi) / (2*pi);

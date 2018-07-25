@@ -5,7 +5,7 @@ function computePhaseMap(F, per, on)
         case 'dff'
             switch per
                 case 'neuron'
-                    phaseMapNeuron(F);
+                    phaseMapNeuron_v2(F);
                 case 'pixel'
                     phaseMapPixel_PerPackage_v5(F);
                 otherwise

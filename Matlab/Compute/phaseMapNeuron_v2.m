@@ -1,4 +1,4 @@
-function phaseMapPixel_PerPackage(F)
+function phaseMapNeuron_v2(F)
 %phaseMapPixel computes the phase map per pixel using the fft
 
 % inputs
@@ -33,7 +33,7 @@ fstim = F.Analysis.StimulusFrequency; % frequency of stimulus
 Motor_time_offset = acos( Motor(1) / min(Motor))*(1/(2*pi*fstim) ); % Compute the time motor offset, when the first motor position is recorded.
 Time = (Time - Time(1)) + Motor_time_offset;  % time in seconds   % The added constant is the time when the first motor position is recorded. The motor is acquired at 10Hz. The extra 40ms were added to best overlay the motor signal with a -cos function, which is our control signal
 
-Tq = linspace(0.012,1199.988,60000);
+Tq = linspace(0,1199.988,60000);
 Time2 = [0; Time]; % We add the fisrt time point in order to get a motor trace which begin at time 0, as the recording of the activity.
 Motor2 = [-10; Motor]; % We add the fisrt time point in order to get a motor trace which begin at time 0, as the recording of the activity.
 Motor_inter = interp1(Time2,Motor2,Tq,'spline');
@@ -43,8 +43,14 @@ clear Tq;
 Zlay = sort(F.Analysis.Layers, 'descend'); % as we are writing a binary file, it has to be in the RAS order
 
 % get path of dff per pixel
-dffPath = F.dir('DFFPixel');
-Focused.mkdir(F, 'PhaseMapDFFPixel');
+dffPath = F.dir('DFFNeuron');
+
+% create phasemap folder
+Focused.mkdir(F, 'PhaseMapDFFNeuron');
+
+% % get path of dff per pixel
+% dffPath = F.dir('DFFPixel');
+% Focused.mkdir(F, 'PhaseMapDFFPixel');
 
 % get path to record data (defines what should be output)
 prefix = 'pmpdff_';
@@ -63,31 +69,34 @@ end
 for iz = Zlay
     fprintf('\nphasemap per pixel for layer %d\t', iz);tic;
     
+    %     % Load DFF
+    %     dffLayer = fullfile(dffPath, [num2str(iz, '%02d') '.mat']);
+    %     load(dffLayer, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
+    %     mdff = recreateMmap(F,mmap);
+    
     % Load DFF
     dffLayer = fullfile(dffPath, [num2str(iz, '%02d') '.mat']);
-    load(dffLayer, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'indices', 'numIndex');
+    load(dffLayer, 'mmap', 'x', 'y', 'z', 't', 'Z', 'T', 'centerCoord', 'neuronShape', 'numNeurons');
     mdff = recreateMmap(F,mmap);
+    clear mmap;
     
     % creates a buffer to write phasemap for each label
     for label = labels
         BUFFER.(label{:}) = zeros(x,y); % a buffer for the layer
     end
     
-    i = 0;
+%     i = 0;
     % run across all image pixels
-    packageSize = 10;
-    index = indices';
+%    packageSize = 10;
+%    index = indices';
     
     % Time Windows
     Windows{1} = [51:950];
     Windows{2} = [1051:1950];
     Windows{3} = [2051:2950];
     
-    for k = 1 : packageSize
-        
-        I = indices * 0;
-        I(k:packageSize:end) = 1;
-        i = find(I);
+%     for k = 1 : packageSize
+    for i = 1:numNeurons % index of neuron in dff
         
         phase_Stim_fw = zeros(size(Windows,2),1);
         phase_DFF_fft_fw = zeros(size(Windows,2),size(i,1));
@@ -124,96 +133,51 @@ for iz = Zlay
             
             % Compute the Ampliture with the deniosing
             Y1 = abs(DFF_fft);
-            %window_noise = [200:650];
-            %window_noise = [40:60 80:110];
             window_noise = [200:300];
-            %window_noise = [100:200 300:400];
-            %window_noise = [100:200 300:400 550:650];
             Y1m = mean(Y1(window_noise,:),1);
-            Y1 = (Y1-Y1m)./Y1m;
+            if Y1m ~= 0
+                Y1 = (Y1-Y1m)./Y1m;
+            end 
             Y2(TW,:) = Y1(fw_index,:);
-            
-            %clear Y1m DFF_fft f_window fw_index
         end
         
         Z = Y2.*( cos(deltaphi_fw)  + j *sin(deltaphi_fw)   ) ;
-        
-        Z_mean = mean(Z,1);
+        Z_mean = nanmean(Z,1);
         
         A_mean = abs(Z_mean);
         deltaphi_mean = angle(Z_mean);
         deltaphi_mean = mod(deltaphi_mean,2*pi);
-        
-        %  amplitude = abs(Y1(fw_index,:));
-        %  phase     = angle(DFF_fft(fw_index,:));
-        %  realpart  = real(Y(ind_fstim,:));
-        %  imaginary = imag(Y(ind_fstim,:));
-        %  deltaphi  = (phase - phase_delay + pi);
-        % -phase_delay = Shift positive of the fluorescence
-        % +pi = because of the fourier transform is done against a cosinus
-        
+
         amplitude = A_mean;
         phase = deltaphi_mean;
         deltaphi  = deltaphi_mean;
         realpart  = real(amplitude.*exp(j.*deltaphi));
         imaginary = imag(amplitude.*exp(j.*deltaphi));
         
+        PhaseMapNeuron{iz}(i,1) = iz;
+        PhaseMapNeuron{iz}(i,2) = amplitude;
+        PhaseMapNeuron{iz}(i,3) = mod(deltaphi, 2*pi);
         
         % fills buffer
         for label = labels
-            BUFFER.(label{:})(index(i)) = eval(label{:}); % a buffer for the layer
+            BUFFER.(label{:})((neuronShape{i})) = eval(label{:}); % a buffer for the layer
         end
     end
-    
-    %         %%%%%%%%%%%%%%%%% template from calculation on signal
-    %
-    %              % run across all image pixels
-    %         for k = 1:10
-    %              i = indices(k:10:end)' ;
-    %                 % Calculate fourier transformation
-    %     %             tic;Y = fft(squeeze(m(i,iz,:)));if toc > 0.01; toc; end
-    %                 tic; ysig = single(squeeze(m(i,iz,:))); if toc > 0.1; toc; end
-    %                 y_zscore = (ysig - nanmean(ysig,2)) ./ std(ysig,[],2);
-    %
-    %                 Y = fft(y_zscore,[],2);
-    %
-    %
-    %                 % calculate response amplitude
-    %                 %     [pxx_p,f_p] = periodogram(DFF_pix(:,1:L)',hamming(L),[fstim fstim*2]',fs,'power');
-    %                 %     amplitude = sqrt(pxx_p(1,:)*2*2);
-    %                 [pxx,ff] = periodogram(y_zscore',hamming(m.t),m.t,fs,'power');
-    %                 pxx_p = pxx((single(ff) == single(fstim)),:);
-    %                 amplitude = sqrt(pxx_p(1,:)*2)*2; % amplitude peak-to-peak
-    %
-    %                 % extract peak from dff
-    %                  amplitude = abs(Y(:,ind_fstim));
-    %                 phase     = angle(Y(:,ind_fstim));
-    %                 realpart  = real(Y(:,ind_fstim));
-    %                 imaginary = imag(Y(:,ind_fstim));
-    %
-    %                 deltaphi  = (phase - phase_delay + pi);
-    %                     % -phase_delay = Shift positive of the fluorescence
-    %                     % +pi = because of the fourier transform is done against a cosinus
-    %
-    %                 % fills buffer
-    %                 for label = labels
-    %                     BUFFER.(label{:})(i) = eval(label{:}); % a buffer for the layer
-    %                 end
-    %
-    %         end
-    %
-    %         %%%%%%%%%%%%%%%%%%%%%%%%
     
     % write buffers in binary files
     for label = labels
         fwrite(out.(label{:}), BUFFER.(label{:}), 'single');
     end
-    
-    toc;
-    
+    toc;    
 end
 
 %% close binary files and write info (.mat and .nhdr)
+PhaseMapNeuronM = [];
+for iz = sort(Zlay,'ascend')
+    PhaseMapNeuronM = [ PhaseMapNeuronM; PhaseMapNeuron{iz} ];
+end
+
+% close binary files and write info (.mat and .nhdr)
 space = 'RAS';
 pixtype = 'single';
 z = length(Zlay); Z = Zlay; % Zlay prevents overwriting by Z
@@ -225,5 +189,6 @@ for label = labels
     % TODO write info and nhdr (/!\ on single)
     writeNHDR(F, fulltag);
 end
+save( fullfile(F.dir('PhaseMapDFFNeuron') , 'PhaseMapNeuron.mat'),'PhaseMapNeuronM' );
 
 end

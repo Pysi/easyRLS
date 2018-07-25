@@ -72,7 +72,8 @@ exportToHDF5(F);
 %% get zBrain contour in graystack space
 mapToRefBrain(F, 'getZBrainContour', 'warp', 'graystack');
 %% Reformat phase map
-reformatPhasemap(F,'warp',20)
+reformatPhasemap(F,'warp',70)
+PlotPhaseMapRegistred(F,'wrap', 70)
 %% Overlay zBrain labels on registered phase map
 zBrainLabelsOnPhaseMap(F,0,'','warp'); %'Avg' to overlay on average phase map
 

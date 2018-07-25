@@ -1,4 +1,4 @@
-function averagePhaseMaps(Flist,trans_mode)
+function averagePhaseMaps(Flist,trans_mode, max)
 % average reformated phasemaps for the focus in flist
 trans_mode
 manip = Flist; % this is a list of focus
@@ -59,7 +59,7 @@ Ib_mean = Ib/size(manip, 2);
 % Ib_mean = mean(Ib,4);
 
 % Save RGB images
-v_max = 20;
+v_max = max;
 clear imhsv
 for l = 1:198
     imhsv(:,:,1) =   mod(atan2(Ib_mean(:,:,l),Ia_mean(:,:,l)) , 2*pi) / (2*pi);
