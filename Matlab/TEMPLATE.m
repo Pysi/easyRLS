@@ -197,10 +197,10 @@ disp(L)
 averagePhaseMaps(Flist, 'warp', 100)
 
 %% ===== Paralysed - Eyes =====
-root = '/media/RED/ljp/Science/Projects/RLS1P/';
+root = '/media/RED/Science/Projects/RLS1P/';
 
 date = '2018-06-21' % select date
-RUNS = [ 7 12 28 24 9  ] % select a set of runs 
+RUNS = [ 28 24 9  ] % select a set of runs 
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto
 

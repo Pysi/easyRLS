@@ -13,6 +13,9 @@ mkdir(outdir_mg);
 outdir_rc = [F.get.regPath(F), '/', trans_mode, '_phasemap_ON_zBrain_Elavl3-H2BRFP_198layers_RGB_red-cyan'];
 mkdir(outdir_rc);
 
+outdir_rmcg = [F.get.regPath(F), '/', trans_mode, '_phasemap_ON_zBrain_Elavl3-H2BRFP_198layers_RGB_redmag-cyangreen'];
+mkdir(outdir_rmcg);
+
 % get path
 regPath = [F.get.regPath(F), '/WARP_phasemap_ON_zBrain_Elavl3-H2BRFP_198layers/'];
 
@@ -39,24 +42,27 @@ for l = 1:198
 
 % == yellow and blue
     value_yb = value;
-    value_yb(find(and(  ~and(deltaphi*2*pi > 9/8*pi ,deltaphi*2*pi < 11/8*pi) ,  ~and(deltaphi*2*pi > pi/8 ,deltaphi*2*pi < 3/8*pi) ))) = 0;
+    value_yb(find(and(  ~and(deltaphi*2*pi > 5/4*pi ,deltaphi*2*pi < 3/2*pi) ,  ~and(deltaphi*2*pi > pi/4 ,deltaphi*2*pi < pi/2) ))) = 0;
     imhsv(:,:,3) =  value_yb;
     imwrite(hsv2rgb(imhsv),[outdir_yb filesep 'layer' num2str(l,'%02d') '.tif']);
 
 % == red and cyan
-    value_rc_tmp = value;
-    value_rc_tmp(find(and(  ~and(deltaphi*2*pi > 7/8*pi ,deltaphi*2*pi < 9/8*pi) ,  ~and(deltaphi*2*pi > 15/8*pi ,deltaphi*2*pi < 16/8*pi) ))) = 0;
     value_rc = value;
-    value_rc(find( ~and(deltaphi*2*pi > 0/8*pi ,deltaphi*2*pi < 1/8*pi))) = 0;
-    value_rc = value_rc_tmp+value_rc;
+    value_rc(find(and(  ~and(deltaphi*2*pi > 0*pi ,deltaphi*2*pi < 1/4*pi) ,  ~and(deltaphi*2*pi > pi ,deltaphi*2*pi < 5/4*pi) ))) = 0;
     imhsv(:,:,3) =  value_rc;
     imwrite(hsv2rgb(imhsv),[outdir_rc filesep 'layer' num2str(l,'%02d') '.tif']);
     
 % == magenta and green
     value_mg = value;
-    value_mg(find(and(  ~and(deltaphi*2*pi > 5/8*pi ,deltaphi*2*pi < 7/8*pi) ,  ~and(deltaphi*2*pi > 13/8*pi ,deltaphi*2*pi < 15/8*pi) ))) = 0;
+    value_mg(find(and(  ~and(deltaphi*2*pi > 3/2*pi ,deltaphi*2*pi < 7/4*pi) ,  ~and(deltaphi*2*pi > pi/2 ,deltaphi*2*pi < 3/4*pi) ))) = 0;
     imhsv(:,:,3) =  value_mg;    
     imwrite(hsv2rgb(imhsv),[outdir_mg filesep 'layer' num2str(l,'%02d') '.tif']);
+    
+% == redmag and cyangreen
+    value_rmcg = value;
+    value_rmcg(find(and(  ~and(deltaphi*2*pi > 3/4*pi ,deltaphi*2*pi < pi) ,  ~and(deltaphi*2*pi > 7/4*pi ,deltaphi*2*pi < 2*pi) ))) = 0;
+    imhsv(:,:,3) =  value_rmcg;
+    imwrite(hsv2rgb(imhsv),[outdir_rmcg filesep 'layer' num2str(l,'%02d') '.tif']);
 end
 
 end
