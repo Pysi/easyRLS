@@ -4,6 +4,7 @@
 
 - [install instructions](./install.md)
 - [quickstart](./quickstart.md)
+- [general](./general.md)
 
 ## Organisation and principles
 - [folder architecture](./folder-architecture.md)
