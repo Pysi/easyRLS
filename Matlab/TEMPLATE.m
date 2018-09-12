@@ -24,10 +24,12 @@ F = NT.Focus(root, study, date, run);
 
 % sample parameters
 
+clear Analysis
+
 Analysis.Layers = 1:20;         % Layers to analyse
 Analysis.RefLayers = 8:10;       % reference layers for drift correction
 Analysis.RefIndex = 10;         % index of the reference frame for drift correction
-Analysis.RefStack = 'refStack';         % external reference stack if exists
+Analysis.RefStack = '';         % external reference stack if exists
 Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
 Analysis.BaselinePercentile = 10;       % percentile for baseline computation
 Analysis.DriftBox = [ 53 552 45 888 ];  % bounding box for drift correction
@@ -82,12 +84,12 @@ Focused.stackViewer(F, 'source');
 Focused.stackViewer(F, 'ROImask');
 seeDriftCorrection(F);
 Focused.stackViewer(F, 'corrected');
-Focused.stackViewer(F, 'graystack')
+Focused.stackViewer(F, 'graystack');
 stackViewer2D(F, 'BaselineNeuron');
 stackViewer2D(F, 'DFFNeuron');
-Focused.phaseMapViewer(F, 'signal pixel')
-Focused.phaseMapViewer(F, 'dff pixel',5)
-Focused.phaseMapViewer(F, 'dff neuron')
+Focused.phaseMapViewer(F, 'signal pixel');
+Focused.phaseMapViewer(F, 'dff pixel',5);
+Focused.phaseMapViewer(F, 'dff neuron');
 
 %% sample workflow (prepare runs)
 
