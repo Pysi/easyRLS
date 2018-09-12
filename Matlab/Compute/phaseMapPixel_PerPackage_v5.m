@@ -30,13 +30,24 @@ clearvars filename delimiter formatSpec fileID dataArray ans;
 %Time = (Time - Time(1)) + 0.14;  % time in seconds   % the added constant is the time when the first motor position is recorded. The motor is acquired at 10Hz. The extra 40ms were added to best overlay the motor signal with a -cos function, which is our control signal
 
 fstim = F.Analysis.StimulusFrequency; % frequency of stimulus
-Motor_time_offset = acos( Motor(1) / min(Motor))*(1/(2*pi*fstim) ); % Compute the time motor offset, when the first motor position is recorded.
+Motor_time_offset = acos( Motor(1) / -10)*(1/(2*pi*fstim) ); % Compute the time motor offset, when the first motor position is recorded.
 Time = (Time - Time(1)) + Motor_time_offset;  % time in seconds   % The added constant is the time when the first motor position is recorded. The motor is acquired at 10Hz. The extra 40ms were added to best overlay the motor signal with a -cos function, which is our control signal
 
+% If the Time vector has two equal values
+for i = 2:size(Time,1)
+    if Time(i) == Time(i-1)
+        Time(i) = Time(i) + 0.001;
+    end
+end
+
 Tq = linspace(0.012,1199.988,60000);
+if Motor(1) > -10
 Time2 = [0; Time]; % We add the fisrt time point in order to get a motor trace which begin at time 0, as the recording of the activity.
 Motor2 = [-10; Motor]; % We add the fisrt time point in order to get a motor trace which begin at time 0, as the recording of the activity.
 Motor_inter = interp1(Time2,Motor2,Tq,'spline');
+else
+   Motor_inter = interp1(Time,Motor,Tq,'spline'); 
+end
 clear Tq;
 %%
 % get the layers on which compute phasemap in the RAS order (inferior → superior)
@@ -79,9 +90,10 @@ for iz = Zlay
     index = indices';
     
     % Time Windows
-    Windows{1} = [51:950];
-    Windows{2} = [1051:1950];
-    Windows{3} = [2051:2950];
+     Windows{1} = [51:950];
+     Windows{2} = [1051:1950];
+     Windows{3} = [2051:2950];
+%    Windows{1} = [1:3000];
     
     for k = 1 : packageSize
         
