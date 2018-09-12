@@ -20,9 +20,9 @@ function handle = stackViewer(F, tag)
         
     switch tag
         case 'source'
-            minmax = [400 1200];
+            minmax = [400 4000];
         case 'corrected'
-            minmax = [400 1200];
+            minmax = [400 3000];
         case 'graystack'
             minmax = [400 1000];
         case 'refStack'

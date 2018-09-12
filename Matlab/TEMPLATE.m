@@ -14,32 +14,27 @@ addPrograms('/home/ljp/');
 % root = '/home/ljp/'
 %% sample focus
 
-root = '/home/ljp/Science/Projects/RLS/';
+root = '/home/ljp/Science/Hugo/RLS1P/';
 %root = '/media/RED/Science/Projects/RLS1P/';
 study = '';
-date = '2018-05-24';
-run = 7;
+date = '2018-09-11';
+run = 8;
 
 F = NT.Focus(root, study, date, run);
 
 % sample parameters
 
-Analysis.Layers = 3:20;         % Layers to analyse
-Analysis.RefLayers = 20;% 8:10;       % reference layers for drift correction
+Analysis.Layers = 1:20;         % Layers to analyse
+Analysis.RefLayers = 8:10;       % reference layers for drift correction
 Analysis.RefIndex = 10;         % index of the reference frame for drift correction
-% refStackpath = '/home/ljp/Science/Projects/RLS/Data/2018-05-24/Run 08/Analysis/graystack.stack/graystack.nhdr';   
-% try mkdir(F.dir('refStack'))
-% catch 'Warning: Folder exists and gets overwritten'
-% end
-% copyfile F.dir('graystack') F.dir('refStack')
 Analysis.RefStack = 'refStack';         % external reference stack if exists
 Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
 Analysis.BaselinePercentile = 10;       % percentile for baseline computation
-Analysis.DriftBox = [ 53 555 45 888 ];  % bounding box for drift correction
+Analysis.DriftBox = [ 53 552 45 888 ];  % bounding box for drift correction
 Analysis.Lineage = 'Nuclear';           % possible values : 'Nuclear', 'Cytoplasmic'
 Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
-Analysis.Overwrite = true;              % defines if it has tpo be overwritten
+Analysis.Overwrite = false;              % defines if it has tpo be overwritten
 % TODO correct the phasemap function to take into account other frequencies
 
 Analysis.RefBrain = 'zBrain_Elavl3-H2BRFP_198layers.nhdr'; % choose refbrain to map onto

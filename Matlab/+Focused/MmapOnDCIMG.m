@@ -3,15 +3,15 @@ function m = MmapOnDCIMG(F)
 % it creates the info file automatically
     
     % replace default values by exisiting if exist
+    dcimgMatfile = [F.tag('dcimg') '.mat'];
     
     try % if mat file already existing (ex: manually created)
-        load([F.tag('dcimg') '.mat'], 'x','y','z','t','Z','T','byteskip','clockskip','origSpace');
+        load(dcimgMatfile, 'x','y','z','t','Z','T','byteskip','clockskip','origSpace');
         
-    catch M % else, write it
-        warning(M.message); % no file is not an error, but a warning
-        warning('no file found, creating one')
+    catch % M % else, write it
+        warning('dcimgMatfile not found, generating one');
          
-        % define default values
+        % define default values (will be replaced if more info is collected)
         byteskip = 808;
         clockskip = 8;
         origSpace = 'ARIT';
@@ -21,20 +21,24 @@ function m = MmapOnDCIMG(F)
         z = 20;
         t = F.param.NCycles;
 
-        [~, ~, ord] = getTransformation(origSpace, space);
+%         [~, ~, ord] = getTransformation(origSpace, space);
 
         % replace by focus values if available
         if isfield(F.IP, 'width') % if values available
-            if ord(1) == 2 % if x and y inverted TODO more robust  
-                x = F.IP.height;
-                y = F.IP.width;
-                % t = F.param.NCycles;
-            else  
+%             if ord(1) == 2 % if x and y inverted, TODO: more robust  
+%                 y = F.IP.height;
+%                 x = F.IP.width;
+%             else  
                 x = F.IP.width;
                 y = F.IP.height;            
-            end
+%             end
         else
             warning('no tif file found, using default parameters (adjust them manually)');
+        end
+        if isfield(F.extra, 'sourceSpace')
+            origSpace = F.extra.sourceSpace;
+        else
+            warning('no space provided, using default (%s)', origSpace)
         end
     
         % create necessary variables
