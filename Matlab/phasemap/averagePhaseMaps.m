@@ -66,6 +66,37 @@ for l = 1:198
     imhsv(:,:,2) =   Ia_mean(:,:,l,1)*0+1;
     imhsv(:,:,3) =   sqrt( Ia_mean(:,:,l).^2 + Ib_mean(:,:,l).^2 )/v_max;
     imwrite(hsv2rgb(imhsv),[outdir filesep 'layer' num2str(l,'%02d') '.tif']);
+
+    value = imhsv(:,:,3);
+    deltaphi = imhsv(:,:,1);
+    
+% == yellow and blue
+    value_yb = value;
+    value_yb(find(and(  ~and(deltaphi*2*pi > 5/4*pi ,deltaphi*2*pi < 3/2*pi) ,  ~and(deltaphi*2*pi > pi/4 ,deltaphi*2*pi < pi/2) ))) = 0;
+    imhsv(:,:,3) =  value_yb;
+    mkdir([outdir, '/yb', filesep]);
+    imwrite(hsv2rgb(imhsv),[outdir, '/yb', filesep 'layer' num2str(l,'%02d') '.tif']);
+
+% == red and cyan
+    value_rc = value;
+    value_rc(find(and(  ~and(deltaphi*2*pi > 0*pi ,deltaphi*2*pi < 1/4*pi) ,  ~and(deltaphi*2*pi > pi ,deltaphi*2*pi < 5/4*pi) ))) = 0;
+    imhsv(:,:,3) =  value_rc;
+    mkdir([outdir, '/rc', filesep]);
+    imwrite(hsv2rgb(imhsv),[outdir, '/rc', filesep 'layer' num2str(l,'%02d') '.tif']);
+    
+% == magenta and green
+    value_mg = value;
+    value_mg(find(and(  ~and(deltaphi*2*pi > 3/2*pi ,deltaphi*2*pi < 7/4*pi) ,  ~and(deltaphi*2*pi > pi/2 ,deltaphi*2*pi < 3/4*pi) ))) = 0;
+    imhsv(:,:,3) =  value_mg; 
+    mkdir([outdir, '/mg', filesep]);
+    imwrite(hsv2rgb(imhsv),[outdir, '/mg', filesep 'layer' num2str(l,'%02d') '.tif']);
+    
+% == redmag and cyangreen
+    value_rmcg = value;
+    value_rmcg(find(and(  ~and(deltaphi*2*pi > 3/4*pi ,deltaphi*2*pi < pi) ,  ~and(deltaphi*2*pi > 7/4*pi ,deltaphi*2*pi < 2*pi) ))) = 0;
+    imhsv(:,:,3) =  value_rmcg;
+    mkdir([outdir, '/rmcg', filesep]);
+    imwrite(hsv2rgb(imhsv),[outdir, '/rmcg', filesep 'layer' num2str(l,'%02d') '.tif']);
 end
 
 fclose(runs);
