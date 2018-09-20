@@ -1,4 +1,4 @@
-function handle = stackViewer(F, tag)
+function handle = stackViewer(F, tag, minmax)
 %Focused.stackViewer is the focused wrapper for stackViewer
 % it creates the memory map and optionally loads the mask
 
@@ -18,23 +18,25 @@ function handle = stackViewer(F, tag)
             m = adapted4DMatrix(F, tag);
     end
         
-    switch tag
-        case 'source'
-            minmax = [400 4000];
-        case 'corrected'
-            minmax = [400 3000];
-        case 'graystack'
-            minmax = [400 5000];
-        case 'refStack'
-            minmax = [400 4000];
-        case 'pmpsig_amplitude'
-            minmax = [0 1];
-        case 'pmpdff_amplitude'
-            minmax = [0 80];
-        case 'pmpdff_realpart'
-            minmax = [-15 15];
-        otherwise
-            minmax = [400 3000];
+    if ~exist('minmax', 'var')
+        switch tag
+            case 'source'
+                minmax = [400 5000];
+            case 'corrected'
+                minmax = [400 5000];
+            case 'graystack'
+                minmax = [400 5000];
+            case 'refStack'
+                minmax = [400 4000];
+            case 'pmpsig_amplitude'
+                minmax = [0 1];
+            case 'pmpdff_amplitude'
+                minmax = [0 80];
+            case 'pmpdff_realpart'
+                minmax = [-15 15];
+            otherwise
+                minmax = [400 3000];
+        end
     end
 
     % call stackViewer

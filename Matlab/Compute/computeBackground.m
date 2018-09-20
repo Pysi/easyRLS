@@ -19,10 +19,10 @@ function computeBackground(F)
     end
     
     % /!\ background verification
-    THRESHOLD = 430;
+    THRESHOLD = 500;
     if max(background) > THRESHOLD % very unlikely value for background
         miniBackground = min(background);
-        warning('very unlikely high value for background :\n%s\nsetting values above %d to min (%f)\n', num2str(background), THRESHOLD, miniBackground);
+        warning('unlikely high value for background :\n%s\nsetting values above %d to min (%f)\n', num2str(background), THRESHOLD, miniBackground);
         for z = m.Z
             if background(z) > THRESHOLD
                 background(z) = miniBackground;
