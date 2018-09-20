@@ -7,19 +7,13 @@ function rescalestack(inPathTag,outPathTag, factor)
 
     x = ceil(m.x*factor);
     y = ceil(m.y*factor);
-    z = m.z;
-    t = m.t;
-    Z = m.Z;
-    T = m.T;
-    space = m.space;
-    pixtype = m.pixtype;
 
-    save([outPathTag '.mat'], 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
+    writeINFO([outPathTag '.mat'], x, y, m.z, m.t, m.Z, m.T, m.space, m.pixtype)
 
-    for it = T
-        for iz = Z
+    for it = m.T
+        for iz = m.Z
             img = imresize(m(:,:,iz,it), [x y]);
-            fwrite(fid, img, pixtype);
+            fwrite(fid, img, m.pixtype);
         end
         disp(it);
     end
