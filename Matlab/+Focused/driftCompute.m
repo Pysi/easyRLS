@@ -1,10 +1,15 @@
-function driftCompute(F)
+function driftCompute(F, barycentre)
 %+Focused version of driftCompute
+
+    % check which version to use
+    if ~exist('barycentre', 'var')
+        barycentre = false;
+    end
 
     % Layers = in.Results.Layers;
     RefStack = F.Analysis.RefStack;
     RefIndex = F.Analysis.RefIndex;
-    RefLayers = F.Analysis.RefLayers;
+    RefLayers = NaN; %F.Analysis.RefLayers;
 
     % create wrapper object
     m = adapted4DMatrix(F,'source');
@@ -16,6 +21,10 @@ function driftCompute(F)
         RefIndex = false;
     end
 
-    driftCompute(F, m, mRef, RefLayers, RefIndex);
+    if ~barycentre
+        driftCompute(F, m, mRef, RefLayers, RefIndex);
+    else
+        driftComputeBarycentre(F, m);
+    end
     
 end
