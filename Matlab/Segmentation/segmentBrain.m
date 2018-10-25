@@ -1,5 +1,6 @@
 function segmentBrain(F, tag,algorithm)
 %segmentBrain segments the brain layer by layer using segmentNeuron
+% algorithm = RC ou VB (Hugo)
 
     m = Focused.Mmap(F, tag); % get gray stack
     load(F.tag('mask'), 'mask'); % get mask

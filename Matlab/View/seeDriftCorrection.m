@@ -1,5 +1,10 @@
-function seeDriftCorrection(F)
+function seeDriftCorrection(F, z)
 %seeDriftCorrection computes and display translated images in real time
+
+% Z
+if ~exist('z', 'var')
+    z = 5;
+end
 
     driftPath = fullfile(F.dir('Drift'), 'Drifts.mat');
     load(driftPath, 'dx', 'dy')
@@ -7,10 +12,10 @@ function seeDriftCorrection(F)
     m = adapted4DMatrix(F, 'source');
     
     figure
-    h = imshow(m(:,:,5,1), [400 800]);
+    h = imshow(m(:,:,z,1), [400 800]);
     inc = 2;
     for t = 1:inc:m.t
-        img = imtranslate(m(:,:,5,t), [-dy(t), -dx(t)]);
+        img = imtranslate(m(:,:,z,t), [-dy(z, t), -dx(z, t)]);
         try
             set(h, 'Cdata', img);
             title(num2str(t))
