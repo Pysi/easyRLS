@@ -15,16 +15,12 @@ end
 t = F.Analysis.RefIndex;
 for z = m.Z % for each z
     pass = 0;
-    f = figure;
-    imshow(m(:,:,z,t), [300 2000]);
-    plotRegions(f, POINTS{z});
+    figure;
+    h = imshow(m(:,:,z,t), [300 2000]);
     while ~pass % while adding points
+        plotRegions(h, POINTS, z);
         try % try to get point, else pass
-            try % try to get POINT{z} size, else create
-                l = length(POINTS{z});
-            catch
-                l = 0;
-            end
+            l = getLength(POINTS, z);
             [y,x] = ginput(1);
             X = floor(x-maxDrift):floor(x+maxDrift);
             Y = floor(y-maxDrift):floor(y+maxDrift);
@@ -33,7 +29,7 @@ for z = m.Z % for each z
             POINTS{z}(l+1) = struct(...
                 'X', X, 'Y', Y, 'x', x, 'y', y);
         catch ME
-            if ME.identifier == 'MATLAB:ginput:FigureDeletionPause'
+            if strcmp(ME.identifier, 'MATLAB:ginput:FigureDeletionPause')
                 fprintf("layer %d end (%d points)\n", z, l);
             else
                 warning(ME.message);
@@ -48,11 +44,21 @@ save(fullfile(F.dir('Drift'), 'DriftPoints.mat'), 'POINTS');
 
 end
 
-function plotRegions(f, Pz)
+function l = getLength(p, z)
+    try % try to get POINT{z} size, else 0
+        l = length(p{z});
+    catch
+        l = 0;
+    end
+end
+
+function plotRegions(h, p, z)
 % plot already selected regions
 
-figure(f);
+l = getLength(p, z);
 
-
+    for i = 1 : l
+       h.CData(p{z}(i).X, p{z}(i).Y) = h.CData(p{z}(i).X, p{z}(i).Y) + 200;
+    end
 
 end

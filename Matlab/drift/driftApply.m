@@ -25,7 +25,7 @@ function driftApply(F)
         for z = Z % along z
             fwrite(fid,...
                 imtranslate(m(:,:,z,t),...
-                [-dy(t), -dx(t)]),... %  'x' of a matlab image is 'y'
+                [-dy(z,t), -dx(z,t)]),... %  'x' of a matlab image is 'y'
                 'uint16'); % apply dy on rows (y) and dx on columns (x)
         end
         waitbar(t/m.t, w, {'Applying computed drift', ['frame ' num2str(t) '/' num2str(m.t)]})

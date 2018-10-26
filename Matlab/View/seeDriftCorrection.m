@@ -3,8 +3,9 @@ function seeDriftCorrection(F, z)
 
 % Z
 if ~exist('z', 'var')
-    z = 5;
+    z = 3;
 end
+uselayer = z;
 
     driftPath = fullfile(F.dir('Drift'), 'Drifts.mat');
     load(driftPath, 'dx', 'dy')
@@ -15,7 +16,7 @@ end
     h = imshow(m(:,:,z,1), [400 800]);
     inc = 2;
     for t = 1:inc:m.t
-        img = imtranslate(m(:,:,z,t), [-dy(z, t), -dx(z, t)]);
+        img = imtranslate(m(:,:,z,t), [-dy(uselayer, t), -dx(uselayer, t)]);
         try
             set(h, 'Cdata', img);
             title(num2str(t))

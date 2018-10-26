@@ -2,7 +2,7 @@ function driftComputeBarycentre(F, m)
 % computes drift using barycentre of isolated neurons
 
 F.Analysis.drift.maxDrift = 8;
-F.Analysis.drift.threshold = 490;
+F.Analysis.drift.threshold = 500;
 
 % creates dir
 Focused.mkdir(F, 'Drift', true);
@@ -16,7 +16,7 @@ dx = zeros(F.param.NLayers, m.t);
 dy = zeros(F.param.NLayers, m.t);
 
 for t = m.T % along t
-    disp(t);
+    fprintf("%d\n", t);
     for z = m.Z % along z
         [dxi, dyi] = getDriftBarycentre(F, m, z, t, POINTS);
         dx(z,t) = dxi;
