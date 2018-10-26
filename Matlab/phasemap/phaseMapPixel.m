@@ -24,7 +24,7 @@ function phaseMapPixel(F)
     dffPath = F.dir('DFFPixel');
 
     % create phasemap folder
-    Focused.mkdir(F, 'PhaseMapPixel');
+    Focused.mkdir(F, 'PhaseMapDFFPixel');
 
     % get path to record data (defines what should be output)
     prefix = 'pmpdff_';
@@ -84,6 +84,7 @@ function phaseMapPixel(F)
             i = i + 1;
             % Calculate fourier transformation
             Y = fft(mdff.Data.bit(:, i));
+            
 
             % extract peak from dff
             amplitude = max(abs(Y));
