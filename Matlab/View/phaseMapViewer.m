@@ -27,7 +27,7 @@ function phaseMapViewer(mAmplitude, mPhase, titleFig, maximum)
     % ----- ----- -----
     
         f.Visible = 'on';
-        set(f, 'Position',[20 -20 600 1080]);        
+        set(f, 'Position',[20 -20 980 1080]);        
     
     % ----- FUNCTIONS -----
     function actualize_z(source, ~)

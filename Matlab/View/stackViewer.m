@@ -43,7 +43,7 @@ function f = stackViewer(m, titleFig, mask, minmax)
     % ----- ----- -----
     
         f.Visible = 'on';
-        set(f, 'Position',[20 -20 600 1080]);
+        set(f, 'Position',[20 -20 980 1080]);
         if viewMask; hold on; [~,cont] = contour(mask(:,:,z),'r'); end
         
     
