@@ -4,7 +4,7 @@ function driftComputeAndApply(F,Visible)
     % setup
     RefStack = F.Analysis.RefStack;
     RefIndex = F.Analysis.RefIndex;
-    RefLayers = F.Analysis.RefLayers;
+%     RefLayers = F.Analysis.RefLayers;
 
     % create wrapper object
     m = adapted4DMatrix(F,'source');

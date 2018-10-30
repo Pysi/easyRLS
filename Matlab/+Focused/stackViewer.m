@@ -21,11 +21,11 @@ function handle = stackViewer(F, tag, minmax)
     if ~exist('minmax', 'var')
         switch tag
             case 'source'
-                minmax = [400 5000];
+                minmax = [400 1000];
             case 'corrected'
-                minmax = [400 5000];
+                minmax = [400 1000];
             case 'graystack'
-                minmax = [400 5000];
+                minmax = [400 2000];
             case 'refStack'
                 minmax = [400 4000];
             case 'pmpsig_amplitude'

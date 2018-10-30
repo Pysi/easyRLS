@@ -78,7 +78,7 @@ for z = Z % for each layer of concern
                 
                 [B, L] = bwboundaries(tmp0);
                 tmp0(L == 0) = 0;
-                tmp2 = bwareaopen(tmp0,(size(img,1)*size(img,2))/4);
+                tmp2 = bwareaopen(tmp0,floor((size(img,1)*size(img,2))/4));
                 count = 4;
                 while mean2(tmp2) == 0
                     count = count+1;
@@ -87,7 +87,7 @@ for z = Z % for each layer of concern
                 end
                 H = fspecial('disk',30);
                 tmp2 = imfilter(tmp2,H,'replicate');
-                tmp2 = bwareaopen(tmp2,(size(img,1)*size(img,2))/4);
+                tmp2 = bwareaopen(tmp2,floor((size(img,1)*size(img,2))/4));
                 count = 4;
                 while mean2(tmp2) == 0
                     count = count+1;
