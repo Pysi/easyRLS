@@ -15,15 +15,8 @@ function phaseMapPixel_PerPackage(F)
 % % % % % % % THIS IS A DRAFT VERSION % % % % % % % % %
 
 %% Load stimulus data
-filename = fullfile( F.dir('Run'), 'Stimulus.txt') ;%'/home/ljp/Science/Projects/RLS/Data/2018-06-14/Run 19/Stimulus.txt';
-delimiter = '\t';
-formatSpec = '%*q%f%f%[^\n\r]';
-fileID = fopen(filename,'r');
-dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
-fclose(fileID);
-Time = dataArray{:, 1};
-Motor = dataArray{:, 2};
-clearvars filename delimiter formatSpec fileID dataArray ans;
+%'/home/ljp/Science/Projects/RLS/Data/2018-06-14/Run 19/Stimulus.txt';
+[Time, Motor] = getStimulusData(fullfile( F.dir('Run'), 'Stimulus.txt'));
 
 % Interpolate and plot stimulus data
 % interpolate Stimulus signal at the image acquisition frequency (for example 50Hz)
@@ -40,7 +33,8 @@ for i = 2:size(Time,1)
     end
 end
 
-Tq = linspace(0.012,1199.988,60000);
+%Tq = linspace(0.012,1199.988,60000);
+Tq = (F.param.Exposure + F.param.Delay)/1000 : (F.param.Exposure + F.param.Delay)/1000 : F.param.CycleTime; 
 if Motor(1) > -10
 Time2 = [0; Time]; % We add the fisrt time point in order to get a motor trace which begin at time 0, as the recording of the activity.
 Motor2 = [-10; Motor]; % We add the fisrt time point in order to get a motor trace which begin at time 0, as the recording of the activity.
@@ -90,9 +84,9 @@ for iz = Zlay
     index = indices';
     
     % Time Windows
-     Windows{1} = [51:950];
-     Windows{2} = [1051:1950];
-     Windows{3} = [2051:2950];
+     Windows{1} = [1:1000];
+%      Windows{2} = [1051:1950];
+%      Windows{3} = [2051:2950];
 %    Windows{1} = [1:3000];
     
     for k = 1 : packageSize
@@ -115,7 +109,7 @@ for iz = Zlay
             realStim_fft = abs(Stim_fft);
             
             % Find the pic of the frequency of the stimulus on the fourier spectrum
-            [pks fw_index] = findpeaks(realStim_fft(1:end/2),'MinPeakHeight',2000);
+            [pks fw_index] = findpeaks(realStim_fft(1:end/2),'MinPeakHeight',1200);
             if size(fw_index,1) > 1
                 disp(['##### WARNING: There is not one pic (', num2str(size(fw_index,1)), ' pics) in the time window selected, select an other time window. #####']);
             end
@@ -136,9 +130,10 @@ for iz = Zlay
             
             % Compute the Ampliture with the deniosing
             Y1 = abs(DFF_fft);
+%             figure; plot(fftshift(Y1));
             %window_noise = [200:650];
             %window_noise = [40:60 80:110];
-            window_noise = [200:300];
+            window_noise = [80:200];
             %window_noise = [100:200 300:400];
             %window_noise = [100:200 300:400 550:650];
             Y1m = mean(Y1(window_noise,:),1);
