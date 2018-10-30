@@ -2,6 +2,7 @@ function m = adapted4DMatrix(F, tag)
 %adapted4DMatrix returns Mmap, MmapOnDCIMG, TifAsMatrix depending on the tag
 
     bin = false;
+    perLayer = false;
     dcimg = false;
     tif = false;
     
@@ -19,6 +20,8 @@ function m = adapted4DMatrix(F, tag)
                 dcimg = true;
             case 'tif' % if tif
                 tif = true;
+            case {'DFFPixel', 'BaselinePixel'}
+                perLayer = true;
             otherwise % regular case
                 bin = true; 
         end
@@ -30,6 +33,8 @@ function m = adapted4DMatrix(F, tag)
         m = Focused.MmapOnDCIMG(F);      
     elseif tif % if tif is true, do it on tif
         m = TifAsMatrix(F);     
+    elseif perLayer
+        m = Focused.MmapPerLayer(F, tag);
     else
         error('%s tag not implemented', tag); % should not happen anymore
     end
