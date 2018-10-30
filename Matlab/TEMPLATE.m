@@ -14,11 +14,13 @@ addPrograms('/home/ljp/');
 % root = '/home/ljp/'
 %% sample focus
 
-root = '/home/ljp/Science/Hugo/RLS1P/';
-%root = '/media/RED/Science/Projects/RLS1P/';
+% root = '/home/ljp/Science/Hugo/RLS1P/';
+root = '/home/ljp/Science/Hugo/RLS2P/';
+% root = '/home/ljp/Science/Projects/RLS/';
+% root = '/media/RED/Science/Projects/RLS1P/';
 study = '';
-date = '2018-09-11';
-run = 8;
+date = '2018-10-24';
+run = 7;
 
 F = NT.Focus(root, study, date, run);
 
@@ -26,15 +28,15 @@ F = NT.Focus(root, study, date, run);
 
 clear Analysis
 
-Analysis.Layers = 1:20;         % Layers to analyse
-Analysis.RefLayers = 8:10;       % reference layers for drift correction
-Analysis.RefIndex = 10;         % index of the reference frame for drift correction
+Analysis.Layers = 2:8;         % Layers to analyse
+% Analysis.RefLayers = 8:10;       % reference layers for drift correction
+Analysis.RefIndex = 1;         % index of the reference frame for drift correction
 Analysis.RefStack = '';         % external reference stack if exists
 Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
 Analysis.BaselinePercentile = 10;       % percentile for baseline computation
-Analysis.DriftBox = [ 53 552 45 888 ];  % bounding box for drift correction
+Analysis.DriftBox = [ 1 730 1 1024 ];  % bounding box for drift correction
 Analysis.Lineage = 'Nuclear';           % possible values : 'Nuclear', 'Cytoplasmic'
-Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
+Analysis.StimulusFrequency = 0.12;       % frequency of stimulus (Hz) for phasemap computation
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
 Analysis.Overwrite = false;              % defines if it has tpo be overwritten
 % TODO correct the phasemap function to take into account other frequencies
@@ -46,10 +48,25 @@ F.Analysis = Analysis;
 
 %% quick focus
 
-F = NT.Focus(root, study, '2018-06-21', 28, Analysis);         % define focus
-Flist{1} = NT.Focus(root, study, '2018-06-21', 9, Analysis);         % define focus
-Flist{2} = NT.Focus(root, study, '2018-06-21', 24, Analysis);         % define focus
-Flist{3} = NT.Focus(root, study, '2018-06-21', 28, Analysis);         % define focus
+F = NT.Focus(root, study, '2018-06-21', 28, Analysis);         
+Flist{1} = NT.Focus(root, study, '2018-06-21', 9, Analysis);
+Flist{2} = NT.Focus(root, study, '2018-06-21', 24, Analysis);
+Flist{3} = NT.Focus(root, study, '2018-06-21', 28, Analysis);
+
+%% sample viewer (collection of all viewer functions)
+
+Focused.stackViewer(F, 'source');
+Focused.stackViewer(F, 'ROImask');
+seeDriftCorrection(F);
+Focused.stackViewer(F, 'corrected');
+Focused.stackViewer(F, 'graystack');
+stackViewer2D(F, 'BaselineNeuron');
+stackViewer2D(F, 'DFFNeuron');
+stackViewer2D(F, 'BaselinePixel');
+stackViewer2D(F, 'DFFPixel');
+Focused.phaseMapViewer(F, 'signal pixel');
+Focused.phaseMapViewer(F, 'dff pixel',10);
+Focused.phaseMapViewer(F, 'dff neuron');
 
 %% sample functions (to run the analysis function by function)
 
@@ -58,10 +75,10 @@ semiAutoROI(F);
 % --- preparatory stuff
 Focused.driftCompute(F);
 driftApply(F);
-        driftComputeAndApply(F) % calculates the drift for every layer independently
+    driftComputeAndApply(F, 'on') % calculates the drift for every layer independently
 computeBackground(F);
-createGrayStack(F)
-segmentBrain(F, 'graystack');
+createGrayStack(F);%500
+segmentBrain(F, 'graystack','RC');
 % --- per neuron
 computeBaseline(F, 'neuron');
 computeDFF(F, 'neuron');
@@ -77,19 +94,6 @@ mapToRefBrain(F, 'convertcoord', 'affine', 'graystack');
 exportToHDF5(F);
 
 % --- reformat phasemap
-
-%% sample viewer (collection of all viewer functions)
-
-Focused.stackViewer(F, 'source');
-Focused.stackViewer(F, 'ROImask');
-seeDriftCorrection(F);
-Focused.stackViewer(F, 'corrected');
-Focused.stackViewer(F, 'graystack');
-stackViewer2D(F, 'BaselineNeuron');
-stackViewer2D(F, 'DFFNeuron');
-Focused.phaseMapViewer(F, 'signal pixel');
-Focused.phaseMapViewer(F, 'dff pixel',5);
-Focused.phaseMapViewer(F, 'dff neuron');
 
 %% sample workflow (prepare runs)
 
