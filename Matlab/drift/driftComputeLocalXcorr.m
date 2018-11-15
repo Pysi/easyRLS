@@ -1,8 +1,8 @@
-function driftComputeBarycentre(F, m)
-% computes drift using barycentre of isolated neurons
+function driftComputeLocalXcorr(F, m)
+%driftComputeLocalXcorr computes drift on local regions cross correlation
 
-F.Analysis.drift.boxSize = 8;
-F.Analysis.drift.threshold = 500;
+F.Analysis.drift.boxSize = 32;
+F.Analysis.drift.threshold = 400;
 
 % creates dir
 Focused.mkdir(F, 'Drift', true);
@@ -18,7 +18,7 @@ dy = zeros(F.param.NLayers, m.t);
 for t = m.T % along t
     fprintf("%d\n", t);
     for z = m.Z % along z
-        [dxi, dyi] = getDriftBarycentre(F, m, z, t, POINTS);
+        [dxi, dyi] = getDrifts(F, m, z, t, POINTS, @getDrift);
         dx(z,t) = dxi;
         dy(z,t) = dyi;
     end
@@ -29,3 +29,9 @@ save(fullfile(F.dir('Drift'), 'Drifts.mat'), 'dx', 'dy');
 
 end
             
+function [dx, dy] = getDrift(F, img, refimg)
+% returns drift for one point
+nt_img = NT.Image(img - F.Analysis.drift.threshold);
+nt_ref = NT.Image(refimg - F.Analysis.drift.threshold);
+[dx, dy] = nt_ref.fcorr(nt_img);
+end

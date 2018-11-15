@@ -1,8 +1,8 @@
 function POINTS = getPoints(F, m)
 %getPoints prompts gui to get points or load previous from drift
 
-maxDrift = F.Analysis.drift.maxDrift;
-threshold = F.Analysis.drift.threshold;
+boxSize = F.Analysis.drift.boxSize;
+% threshold = F.Analysis.drift.threshold;
 
 try
     load(fullfile(F.dir('Drift'), 'DriftPoints.mat'), 'POINTS');
@@ -16,16 +16,17 @@ t = F.Analysis.RefIndex;
 for z = m.Z % for each z
     pass = 0;
     figure;
-    h = imshow(m(:,:,z,t), [300 2000]);
+    h = imshow(m(:,:,z,t), [300 1000]);
     while ~pass % while adding points
-        plotRegions(h, POINTS, z);
+        h.CData = m(:,:,z,t); % refresh view
+        plotRegions(h, POINTS, z); % plot all modified regions
         try % try to get point, else pass
             l = getLength(POINTS, z);
             [y,x] = ginput(1);
-            X = floor(x-maxDrift):floor(x+maxDrift);
-            Y = floor(y-maxDrift):floor(y+maxDrift);
+            X = floor(x-boxSize):floor(x+boxSize);
+            Y = floor(y-boxSize):floor(y+boxSize);
             img = m(X,Y,z,t);
-            [x,y] = centerOfMass(img, threshold);
+%             [x,y] = centerOfMass(img, threshold);
             POINTS{z}(l+1) = struct(...
                 'X', X, 'Y', Y, 'x', x, 'y', y);
         catch ME

@@ -35,7 +35,7 @@ function handle = stackViewer(F, tag, minmax)
             case 'pmpdff_realpart'
                 minmax = [-15 15];
             otherwise
-                minmax = [400 3000];
+                minmax = [400 1000];
         end
     end
 

@@ -3,6 +3,7 @@ function driftApply(F)
 
     % get layers to analyse and put them in inferior to superior order
     Z = F.Analysis.Layers;
+%     Z = 7:8; % !!!!!!!!!!
     Z = sort(Z, 'descend');
 
     % load drift

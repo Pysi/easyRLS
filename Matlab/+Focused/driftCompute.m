@@ -1,10 +1,12 @@
-function driftCompute(F, barycentre)
+function driftCompute(F, method, layers)
 %+Focused version of driftCompute
+% kind: barycenter, globalXcorr, localXcorr
 
-    % check which version to use
-    if ~exist('barycentre', 'var')
-        barycentre = false;
+    % default layers
+    if ~exist('layers', 'var')
+        layers = F.Analysis.Layers;
     end
+
 
     % Layers = in.Results.Layers;
     RefStack = F.Analysis.RefStack;
@@ -21,10 +23,20 @@ function driftCompute(F, barycentre)
         RefIndex = false;
     end
 
-    if ~barycentre
-        driftCompute(F, m, mRef, RefLayers, RefIndex);
-    else
-        driftComputeBarycentre(F, m);
+    switch method
+        case 'globalXcorr'
+            driftCompute(F, m, mRef, RefLayers, RefIndex);
+        case 'barycenter'
+            driftComputeBarycentre(F, m);
+        case 'localXcorr'
+            driftComputeLocalXcorr(F, m);
+        case 'consecutive'
+            driftComputeConsecutive(F, m);
+        case 'fast'
+            F.Analysis.drift.method = 'slow';
+            drift(F, m, layers)
+        otherwise
+            fprintf("%s not implemented\n", method);
     end
     
 end
