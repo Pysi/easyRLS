@@ -3,11 +3,7 @@ function [dx, dy] = getDriftsCum(F, m, z, t, POINTS, getDrift)
 % for one layer, one time (all points)
 % getDrift is the function used to get the drift
 
-try % try if exists
-    l = length(POINTS{z}); % number of points to average
-catch
-    l = 0;
-end
+l = length(POINTS{z}); % number of points to average
 
 if l > 0
     % init all drifts
@@ -24,7 +20,7 @@ if l > 0
             POINTS{z}(i).X,...
             POINTS{z}(i).Y,...
             z,...
-            minusOrSame(t,F.Analysis.drift.frameDelay));
+            minusOrSame(t));
         [driftX(i), driftY(i)] = getDrift(F, img, refimg);
     end
 
@@ -38,7 +34,8 @@ end
 
 end
 
-function r = minusOrSame(t, m)
+function r = minusOrSame(t)
+m = 1;
 r = t-m;
 if r<=0
     r=1;

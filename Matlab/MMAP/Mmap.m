@@ -17,7 +17,7 @@ classdef Mmap < handle
     end
     methods
         % --- constructor ---
-        function self = Mmap(inPathTag)
+        function self = Mmap(inPathTag, writable)
         %Mmap constructor takes the bin file and the info file
         %inputFile is the input file (without extension)
         
@@ -27,12 +27,18 @@ classdef Mmap < handle
             load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
             self.pixtype = pixtype; % get type
             self.space = space; % ex: RAS or RAST
+            
+            if strcmp(writable, 'new')
+                % allocate a file
+                writable = fallocate(binFile, sizeof(pixtype)*x*y*z*t);
+            end            
+            
             self.mmap = ...
                 memmapfile(binFile,'Format',{self.pixtype,[x,y,z,t],'bit'}, ...
-                    'Repeat', 1); % repeat option might prevent from detecting errors (such on t)
+                    'Repeat', 1, 'Writable', writable); % repeat option might prevent from detecting errors (such on t)
             self.mmaplin = ...
                 memmapfile(binFile,'Format',{self.pixtype,[x*y,z,t],'bit'}, ...
-                    'Repeat', 1);
+                    'Repeat', 1, 'Writable', writable);
             self.x = x; 
             self.y = y; 
             self.z = z; 
@@ -41,30 +47,37 @@ classdef Mmap < handle
             self.T = T; 
         end
         
+        % redefine substruct
+        function newSub = subStruct(self, S)
+        % corrects the z    
+        
+            switch length(S(1).subs)
+                case 4 % 4D
+                    zpos = 3; % position of the z coordinate in the subscript
+                case 3 % 3D with xy as index
+                    zpos = 2; % position of the z coordinate in the subscript
+                otherwise
+                    error('NUMBER OF SUBSCRIPT NOT COMPATIBLE possible calls : m(x,y,z,t) or m(index,z,t)')
+            end
+            % corrects the z
+            old_z = S.subs{zpos}; % values asked ex layers [4 5 6]
+            new_z = self.zCorrect(old_z, self.Z); % values corrected ex index [2 3 4]
+            new_S = S; % (avoid illegal use of subscript parameter)
+            new_S(1).subs{zpos} = new_z; % replace the z in the subscript
+            
+            newSub = new_S;            
+        end
+        
         % --- defining '()' subsref ---
-        function out = subsref(self, S)
-        %subsref calls the mmap with the correct z index
+        function out = subsref(self, S)        
             switch S(1).type
                 case '()'
-                    switch length(S(1).subs)
-                        case 4 % 4D
-                            zpos = 3; % position of the z coordinate in the subscript
-                        case 3 % 3D with xy as index
-                            zpos = 2; % position of the z coordinate in the subscript
-                        otherwise
-                            error('NUMBER OF SUBSCRIPT NOT COMPATIBLE possible calls : m(x,y,z,t) or m(index,z,t)')
-                    end
-                    % corrects the z
-                    old_z = S.subs{zpos}; % values asked ex layers [4 5 6]
-                    new_z = self.zCorrect(old_z, self.Z); % values corrected ex index [2 3 4]
-                    new_S = S; % (avoid illegal use of subscript parameter)
-                    new_S(1).subs{zpos} = new_z; % replace the z in the subscript
-                    
+                    new_S = self.subStruct(S);
                     % calls the right mmap
                     switch length(S(1).subs)
                         case 4 % 4D
                             out = subsref(self.mmap.Data.bit, new_S);
-                            
+
                             % if not RAS, return RAS instead !
                             switch self.space
                                 case {'RAS', 'RAST'}
@@ -93,6 +106,46 @@ classdef Mmap < handle
                 otherwise
                     error('subsref other than () or . are not implemented')
             end        
+        end
+        
+        % --- defining subs assign ---
+        function obj = subsasgn(self, S, V)
+        
+            switch S(1).type
+                case '()'
+                    new_S = self.subStruct(S);
+                    % calls the right mmap
+                    switch length(S(1).subs)
+                        case 4 % 4D
+                            % if not RAS not implementend
+                            switch self.space
+                                case {'RAS', 'RAST'}
+                                    % nothing
+                                otherwise
+                                    error('non RAS 4D assignment not implemented')
+                            end
+                            [~] = subsasgn(self.mmap, [substruct('.', 'Data', '.', 'bit'), new_S], V);
+                            obj = self;
+                            
+                        case 3 % 3D with xy as index                            
+                            % if not RAS, return RAS instead !
+                            switch self.space
+                                case {'RAS', 'RAST'}
+                                    % nothing
+                                otherwise
+                                    RAST = 'RAST';
+                                    dim = 2; % only work on linear index
+                                    [~,i,o] = getTransformation(self.space(1:dim), RAST(1:dim));
+                                    new_S(1).subs{1} = indTransform(new_S(1).subs{1}, [self.x, self.y], i, o);
+                            end
+                            [~] = subsasgn(self.mmaplin, [substruct('.', 'Data', '.', 'bit'), new_S], V);
+                            obj = self;
+                    end
+                case '.'
+                    obj = builtin('subsasgn', self, S, V);
+                otherwise
+                    error('subsasgn other than () or . are not implemented')
+            end
         end
     end
     

@@ -1,4 +1,4 @@
-function [dx, dy] = computeSlowDrift(F, m, dx, dy, getDrift)
+function [dx, dy] = driftSlow(F, m, dx, dy, getDrift)
 %correctSlowDrift creates mini gray stacks in binned full frame and corrects dx&dy on interpolation
 
 % params

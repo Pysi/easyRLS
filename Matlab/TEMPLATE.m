@@ -15,12 +15,13 @@ addPrograms('/home/ljp/');
 %% sample focus
 
 % root = '/home/ljp/Science/Hugo/RLS1P/';
-root = '/home/ljp/Science/Hugo/RLS2P/';
+% root = '/home/ljp/Science/Hugo/RLS2P/';
+root = '/home/ljp/SSD/';
 % root = '/home/ljp/Science/Projects/RLS/';
 % root = '/media/RED/Science/Projects/RLS1P/';
 study = '';
-date = '2018-11-08_ssd';
-run = 'Run 03 bis';
+date = '2018-11-08';
+run = 3;
 
 F = NT.Focus(root, study, date, run);
 
@@ -58,7 +59,7 @@ F = NT.Focus(root, study, '2018-10-24', 7); % static 2P
 Focused.stackViewer(F, 'source');
 Focused.stackViewer(F, 'ROImask');
 seeDriftCorrection(F);
-Focused.stackViewer(F, 'corrected');
+Focused.stackViewer(F, 'corrected', [400 800]);
 Focused.stackViewer(F, 'graystack');
 stackViewer2D(F, 'BaselineNeuron');
 stackViewer2D(F, 'DFFNeuron');
@@ -73,9 +74,7 @@ Focused.phaseMapViewer(F, 'dff neuron');
 % --- manual part
 semiAutoROI(F); 
 % --- preparatory stuff
-Focused.driftCompute(F);
-Focused.driftCompute(F, 'barycenter');
-Focused.driftCompute(F, 'consecutive');
+Focused.driftCompute(F, 'both')
     driftApply(F);
 driftComputeAndApply(F, 'on') % calculates the drift for every layer independently
 % ---
