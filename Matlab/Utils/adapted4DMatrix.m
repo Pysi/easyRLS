@@ -1,4 +1,4 @@
-function m = adapted4DMatrix(F, tag)
+function m = adapted4DMatrix(F, tag, writable)
 %adapted4DMatrix returns Mmap, MmapOnDCIMG, TifAsMatrix depending on the tag
 
     bin = false;
@@ -28,7 +28,11 @@ function m = adapted4DMatrix(F, tag)
     end
 
     if bin % if standard binary stack
-        m = Focused.Mmap(F, tag); % get the memory map        
+        % default is read only
+        if ~exist('writable', 'var')
+             writable = false;
+        end
+        m = Focused.Mmap(F, tag, writable); % get the memory map        
     elseif dcimg % if dcimg is true, do it on dcimg
         m = Focused.MmapOnDCIMG(F);      
     elseif tif % if tif is true, do it on tif

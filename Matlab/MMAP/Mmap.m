@@ -28,9 +28,12 @@ classdef Mmap < handle
             self.pixtype = pixtype; % get type
             self.space = space; % ex: RAS or RAST
             
-            if strcmp(writable, 'new')
-                % allocate a file
-                writable = fallocate(binFile, sizeof(pixtype)*x*y*z*t);
+            if writable
+                if ~exist(binFile, 'file')
+                    % allocate a file if does not exist (else edit existing file)
+                    writable = fallocate(binFile, sizeof(pixtype)*x*y*z*t);
+                    % if fallocate failed, fallback to read only
+                end
             end            
             
             self.mmap = ...

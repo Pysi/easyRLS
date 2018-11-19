@@ -88,6 +88,7 @@ computePhaseMap(F, 'neuron');
 % --- per pixel
 computeBaseline(F, 'pixel');
 computeDFF(F, 'pixel');
+phaseMapPixel(F);
 computePhaseMap(F, 'pixel', 'signal');
 computePhaseMap(F, 'pixel', 'dff');
 % --- export
