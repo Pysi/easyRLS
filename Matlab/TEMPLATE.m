@@ -15,12 +15,13 @@ addPrograms('/home/ljp/');
 %% sample focus
 
 % root = '/home/ljp/Science/Hugo/RLS1P/';
-root = '/home/ljp/Science/Hugo/RLS2P/';
+% root = '/home/ljp/Science/Hugo/RLS2P/';
+root = '/home/ljp/SSD/';
 % root = '/home/ljp/Science/Projects/RLS/';
 % root = '/media/RED/Science/Projects/RLS1P/';
 study = '';
-date = '2018-10-24';
-run = 7;
+date = '2018-11-08';
+run = 3;
 
 F = NT.Focus(root, study, date, run);
 
@@ -36,7 +37,7 @@ Analysis.BaselineWindow = 50;           % time in seconds of the baseline window
 Analysis.BaselinePercentile = 10;       % percentile for baseline computation
 Analysis.DriftBox = [ 1 730 1 1024 ];  % bounding box for drift correction
 Analysis.Lineage = 'Nuclear';           % possible values : 'Nuclear', 'Cytoplasmic'
-Analysis.StimulusFrequency = 0.12;       % frequency of stimulus (Hz) for phasemap computation
+Analysis.StimulusFrequency = 0.2;       % frequency of stimulus (Hz) for phasemap computation
 Analysis.Stimulus = 'sinus';            % type of stimulus (step/sinus)
 Analysis.Overwrite = false;              % defines if it has tpo be overwritten
 % TODO correct the phasemap function to take into account other frequencies
@@ -48,17 +49,17 @@ F.Analysis = Analysis;
 
 %% quick focus
 
-F = NT.Focus(root, study, '2018-06-21', 28, Analysis);         
-Flist{1} = NT.Focus(root, study, '2018-06-21', 9, Analysis);
-Flist{2} = NT.Focus(root, study, '2018-06-21', 24, Analysis);
-Flist{3} = NT.Focus(root, study, '2018-06-21', 28, Analysis);
+F = NT.Focus(root, study, '2018-10-24', 4); % static 1P     
+F = NT.Focus(root, study, '2018-10-24', 5); % rot 1P
+F = NT.Focus(root, study, '2018-10-24', 6); % rot 2P
+F = NT.Focus(root, study, '2018-10-24', 7); % static 2P
 
 %% sample viewer (collection of all viewer functions)
 
 Focused.stackViewer(F, 'source');
 Focused.stackViewer(F, 'ROImask');
 seeDriftCorrection(F);
-Focused.stackViewer(F, 'corrected');
+Focused.stackViewer(F, 'corrected', [400 800]);
 Focused.stackViewer(F, 'graystack');
 stackViewer2D(F, 'BaselineNeuron');
 stackViewer2D(F, 'DFFNeuron');
@@ -73,9 +74,10 @@ Focused.phaseMapViewer(F, 'dff neuron');
 % --- manual part
 semiAutoROI(F); 
 % --- preparatory stuff
-Focused.driftCompute(F);
-driftApply(F);
-    driftComputeAndApply(F, 'on') % calculates the drift for every layer independently
+Focused.driftCompute(F, 'both')
+    driftApply(F);
+driftComputeAndApply(F, 'on') % calculates the drift for every layer independently
+% ---
 computeBackground(F);
 createGrayStack(F);%500
 segmentBrain(F, 'graystack','RC');
@@ -86,6 +88,7 @@ computePhaseMap(F, 'neuron');
 % --- per pixel
 computeBaseline(F, 'pixel');
 computeDFF(F, 'pixel');
+phaseMapPixel(F);
 computePhaseMap(F, 'pixel', 'signal');
 computePhaseMap(F, 'pixel', 'dff');
 % --- export
@@ -366,5 +369,7 @@ function addPrograms(root)
     else
         disp('Platform not supported')
     end
+    
+    cd(root);
     disp('done');
 end

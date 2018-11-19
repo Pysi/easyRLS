@@ -1,64 +1,25 @@
 function POINTS = getPoints(F, m)
 %getPoints prompts gui to get points or load previous from drift
 
-maxDrift = F.Analysis.drift.maxDrift;
-threshold = F.Analysis.drift.threshold;
+boxSize = F.Analysis.drift.boxSize;
+% threshold = F.Analysis.drift.threshold;
+
+Focused.mkdir(F, 'Drift', true);
 
 try
     load(fullfile(F.dir('Drift'), 'DriftPoints.mat'), 'POINTS');
     disp('point loaded')
 catch
     disp('creating new set of points')
-    POINTS = {};
+    POINTS = cell(10,1);
 end
 
 t = F.Analysis.RefIndex;
 for z = m.Z % for each z
-    pass = 0;
-    figure;
-    h = imshow(m(:,:,z,t), [300 2000]);
-    while ~pass % while adding points
-        plotRegions(h, POINTS, z);
-        try % try to get point, else pass
-            l = getLength(POINTS, z);
-            [y,x] = ginput(1);
-            X = floor(x-maxDrift):floor(x+maxDrift);
-            Y = floor(y-maxDrift):floor(y+maxDrift);
-            img = m(X,Y,z,t);
-            [x,y] = centerOfMass(img, threshold);
-            POINTS{z}(l+1) = struct(...
-                'X', X, 'Y', Y, 'x', x, 'y', y);
-        catch ME
-            if strcmp(ME.identifier, 'MATLAB:ginput:FigureDeletionPause')
-                fprintf("layer %d end (%d points)\n", z, l);
-            else
-                warning(ME.message);
-            end
-            pass = 1;
-        end
-    end
+    POINTS{z} = getRegion(m, z, t, boxSize, POINTS{z});
 end
 
 % save points
 save(fullfile(F.dir('Drift'), 'DriftPoints.mat'), 'POINTS');
-
-end
-
-function l = getLength(p, z)
-    try % try to get POINT{z} size, else 0
-        l = length(p{z});
-    catch
-        l = 0;
-    end
-end
-
-function plotRegions(h, p, z)
-% plot already selected regions
-
-l = getLength(p, z);
-
-    for i = 1 : l
-       h.CData(p{z}(i).X, p{z}(i).Y) = h.CData(p{z}(i).X, p{z}(i).Y) + 200;
-    end
 
 end

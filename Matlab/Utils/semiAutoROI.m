@@ -6,7 +6,7 @@ function semiAutoROI(F)
 %     - the name of a dcimg if you want to work on a dcimg (Run00.dcimg for instance)
 
 % set local parameters
-minmax = [400 1200]; % minmax values for display
+minmax = [400 900]; % minmax values for display
 discretize = 50; % lower values means more point on contour
 
 % get global parameters

@@ -14,7 +14,7 @@ uselayer = z;
     
     figure
     h = imshow(m(:,:,z,1), [400 800]);
-    inc = 2;
+    inc = 1;
     for t = 1:inc:m.t
         img = imtranslate(m(:,:,z,t), [-dy(uselayer, t), -dx(uselayer, t)]);
         try
