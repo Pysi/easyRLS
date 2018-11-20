@@ -2,20 +2,30 @@ function m = MmapOnDCIMG(F)
 %+Focused MmapOnDCIMG is the focused wrapper for MmapOnDCIMG
 % it creates the info file automatically
 
+    help = @() fprintf('you can find help on <a href="https://github.com/LaboJeanPerrin/wiki/blob/master/easyRLS-doc/dcimgTOML.md">the doc</a> about how to fill this file\n');;
+
     file = dir(fullfile(F.dir('Images'), '*.toml'));
+    
+    try % try to get x and y from focus (if img found)
+        x = F.IP.height;
+        y = F.IP.width;
+    catch
+        x = 0;
+        y = 0;
+    end
     
     if isempty(file) % no info found, creating one
         fprintf('no info found about dcimg, generating a file\n')
         
         info.filename = 'rec00001.dcimg'; % TODO automatic name detection
-        info.size.x = F.IP.height;
-        info.size.y = F.IP.width;
+        info.size.x = x;
+        info.size.y = y;
         info.size.z = F.param.NLayers;
         info.size.t = F.param.NCycles;
         
         info.byte.depth = 'uint16';
-        info.byte.header = 1206;
-        info.byte.clock = 32;
+        info.byte.header = 0;
+        info.byte.clock = 0;
         info.byte.endianness = 'little';
         
         info.meta.space = '----';
@@ -23,18 +33,25 @@ function m = MmapOnDCIMG(F)
         
         toml.write(fullfile(F.dir('Images'), 'info.toml'), info)
         
+        help();
         error('sample info file generated, please correct it');
-        
-    else
-        infoFile = fullfile(file(1).folder, file(1).name);
-        
-        l = length(file);
-        if l>1
-            fprintf('multiple files found, using first :\n\t%s\n', infoFile);
-        end
-        
-        m = MmapOnDCIMG(infoFile);
-        
     end
+    
+    infoFile = fullfile(file(1).folder, file(1).name);
 
+    l = length(file);
+    if l>1 % tells if several toml files found
+        fprintf('multiple files found, using first :\n\t%s\n', infoFile);
+    end
+    
+    % read info from existing file
+    info = toml.read(infoFile);
+    
+    if info.meta.space == '----'
+        help();
+        error('please edit sample file !')
+    end
+    
+    m = MmapOnDCIMG(infoFile);
+    
 end
