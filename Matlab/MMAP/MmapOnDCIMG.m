@@ -21,25 +21,31 @@ classdef MmapOnDCIMG < handle
     end
     
     methods
-        function self = MmapOnDCIMG(inputPathTag)
+        function self = MmapOnDCIMG(infoFile)
         %Mmap constructor takes the bin file and the info file
         %inputFile is the input file (without extension)    
             
-            binFile = [inputPathTag '.dcimg'];
-            inputInfo = [inputPathTag '.mat'];
+            info = toml.read(infoFile);
             
-            load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'byteskip', 'clockskip','origSpace');
-            self.mmaplin = dcimgToMmap(binFile, x, y, z, t, byteskip, clockskip);
+            d = dir(infoFile);
+            basedir = d.folder;
+            binFile = fullfile(basedir, info.filename);
+            
             self.space = 'RAST';
-            %#ok<*PROPLC>
-            self.x = x; 
-            self.y = y; 
-            self.z = z; 
-            self.t = t; 
-            self.Z = Z; 
-            self.T = T; 
-            self.origSpace = origSpace;
-           
+            self.x = info.size.x; 
+            self.y = info.size.y; 
+            self.z = info.size.z; 
+            self.t = info.size.t; 
+            self.Z = info.meta.layers; 
+            self.T = 1:self.t; 
+            self.origSpace = info.meta.space;
+            
+            self.mmaplin = dcimgToMmap(...
+                binFile,...
+                self.x, self.y, self.z, self.t,...
+                info.byte.header,...
+                info.byte.clock);
+
             % generate transformations
             [self.f, self.inv, self.ord] = getTransformation(self.origSpace, self.space);
         end
