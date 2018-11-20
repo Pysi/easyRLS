@@ -56,6 +56,7 @@ F = NT.Focus(root, study, '2018-10-24', 7); % static 2P
 
 %% sample viewer (collection of all viewer functions)
 
+m = Focused.MmapOnDCIMG(F) % call first time to generate info file for dcimg
 Focused.stackViewer(F, 'source');
 Focused.stackViewer(F, 'ROImask');
 seeDriftCorrection(F);
