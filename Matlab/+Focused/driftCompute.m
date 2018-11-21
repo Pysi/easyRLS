@@ -36,15 +36,15 @@ function driftCompute(F, method, layers)
         case 'fast'
             F.Analysis.drift.boxSize = 80;
             modifyRegions(F,m,layers);
-            driftFast(F, m, layers)
+            driftFast(F, m, layers);
         case 'slow'
-            driftSlow(F, m, layers)
-            driftPlotAndSave(F)
+            driftSlow(F, m, layers);
+            driftPlotAndSave(F);
         case 'both'
-            F.Analysis.drift.boxSize = 64;
+            F.Analysis.drift.boxSize = 80;
             driftFast(F,m,layers);
             driftSlow(F,m,layers);
-            driftPlotAndSave(F)
+            driftPlotAndSave(F);
         case 'getPoints'
             getPoints(F, m);
         otherwise

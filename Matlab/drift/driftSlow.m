@@ -1,5 +1,13 @@
-function [dx, dy] = driftSlow(F, m, dx, dy, getDrift)
+function [dx, dy] = driftSlow(F, m, layers)
 %correctSlowDrift creates mini gray stacks in binned full frame and corrects dx&dy on interpolation
+
+% load existing dx and dy or create new
+try 
+    load(fullfile(F.dir('Drift'), 'Drifts.mat'), 'dx', 'dy');
+catch
+    dx = zeros(F.param.NLayers, m.t);
+    dy = zeros(F.param.NLayers, m.t);
+end
 
 % params
 F.Analysis.drift.chunkSize = 64;
@@ -29,9 +37,9 @@ Dy = zeros(m.z, chunkNumber);
 % get correction for chunks
 fprintf("computing slow drift\n");
 for chunk = 1:chunkNumber
-    if ~mod(chunk, 10); fprintf("chunk: %d/%d\n", chunk, chunkNumber); end
+    if ~mod(chunk-1, 10); fprintf("chunk: %d/%d\n", chunk, chunkNumber); end
     T = (1:chunkSize) + (chunk-1)*chunkSize; % correspondig t
-    for z = F.Analysis.Layers
+    for z = layers
         for t = T
             % pre-drift correction on small images
             binned = double(m(bX,bY,z,t)); % bin
@@ -61,3 +69,10 @@ dy = Ddy;
 
 end
     
+
+function [dx, dy] = getDrift(F, img, refimg)
+% returns drift for one point
+nt_img = NT.Image(double(img));
+nt_ref = NT.Image(double(refimg));
+[dx, dy] = nt_ref.fcorr(nt_img);
+end

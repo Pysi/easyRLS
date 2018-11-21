@@ -7,7 +7,7 @@ F.Analysis.drift.frameDelay = 1;
 try
     load(fullfile(F.dir('Drift'), 'DriftPoints.mat'), 'POINTS');
 catch
-    getPoints(F, m)
+    POINTS = getPoints(F, m);
 end
 
 % load existing dx and dy or create new
