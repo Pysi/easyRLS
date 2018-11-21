@@ -5,6 +5,7 @@ function driftComputeAndApply(F,Visible)
     RefStack = F.Analysis.RefStack;
     RefIndex = F.Analysis.RefIndex;
 %     RefLayers = F.Analysis.RefLayers;
+    F.Analysis.DriftBox = [ 1 612 1 1024 ];  % bounding box for drift correction
 
     % create wrapper object
     m = adapted4DMatrix(F,'source');
@@ -142,7 +143,7 @@ end
     writeNHDR(F, 'corrected');
    
     % save bbox and drifts
-    Focused.mkdir(F, 'Drift');
+    Focused.mkdir(F, 'Drift', true);
     save(fullfile(F.dir('Drift'), 'DriftBox.mat'), 'bbox');
     save(fullfile(F.dir('Drift'), 'Drifts.mat'), 'dx', 'dy');
     savefig(seeDrift,fullfile(F.dir('Drift'), 'driftCorrection.fig'));

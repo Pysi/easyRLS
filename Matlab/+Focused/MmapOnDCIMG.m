@@ -2,8 +2,6 @@ function m = MmapOnDCIMG(F)
 %+Focused MmapOnDCIMG is the focused wrapper for MmapOnDCIMG
 % it creates the info file automatically
 
-    help = @() fprintf('you can find help on <a href="https://github.com/LaboJeanPerrin/wiki/blob/master/easyRLS-doc/dcimgTOML.md">the doc</a> about how to fill this file\n');;
-
     file = dir(fullfile(F.dir('Images'), '*.toml'));
     
     try % try to get x and y from focus (if img found)
@@ -16,6 +14,7 @@ function m = MmapOnDCIMG(F)
     
     if isempty(file) % no info found, creating one
         fprintf('no info found about dcimg, generating a file\n')
+        infoFile = fullfile(F.dir('Images'), 'info.toml');
         
         info.filename = 'rec00001.dcimg'; % TODO automatic name detection
         info.size.x = x;
@@ -31,9 +30,9 @@ function m = MmapOnDCIMG(F)
         info.meta.space = '----';
         info.meta.layers = 1:info.size.z;
         
-        toml.write(fullfile(F.dir('Images'), 'info.toml'), info)
+        toml.write(infoFile, info)
         
-        help();
+        help(infoFile);
         error('sample info file generated, please correct it');
     end
     
@@ -48,10 +47,20 @@ function m = MmapOnDCIMG(F)
     info = toml.read(infoFile);
     
     if info.meta.space == '----'
-        help();
+        help(infoFile);
         error('please edit sample file !')
     end
     
     m = MmapOnDCIMG(infoFile);
     
+end
+
+
+function help(infoFile)
+
+    helpLink = 'https://github.com/LaboJeanPerrin/wiki/blob/master/easyRLS-doc/dcimgTOML.md';
+    fprintf('you can find help on <a href="%s">the doc</a> about how to fill this file\n', helpLink);
+    if isunix
+        unix(sprintf('gedit "%s"', infoFile));
+    end 
 end

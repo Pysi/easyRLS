@@ -14,7 +14,7 @@ function phaseMapPixelSignal(F)
 
 % % % % % % % THIS IS A DRAFT VERSION % % % % % % % % %
     % Load signal stack
-    m = Focused.Mmap(F, 'corrected');
+    m = Focused.Mmap(F, 'corrected', false);
     x = m.x;
     y = m.y;
     z = m.z;
@@ -56,6 +56,17 @@ function phaseMapPixelSignal(F)
     % Finds the peak at the given frequency
     f_round = round(f,3);
     ind_fstim = find(f_round==fstim);
+    fprintf("found index of fstim : %d\n", ind_fstim);
+    
+    picWidth = 3;
+    windowWidth = 20;
+    wsm = ind_fstim - picWidth; % window start minus
+    wsp = ind_fstim + picWidth; % window start plus
+    wem = wsm - windowWidth; % window end minus
+    wep = wsp + windowWidth; % window end plus
+    noiseWindow = [wsm:-1:wem, wsp:1:wep];
+    fprintf("noise window between %d - %d and %d %d\n", wem, wsm, wsp, wep);
+
 
     % Phase shift
     phi_GCaMP = 0;%-0.6916;
@@ -64,7 +75,7 @@ function phaseMapPixelSignal(F)
 % % % % % % LOOP % % % % % 
     % run across the layers
     for iz = Zlay
-        fprintf('phasemap per pixel on signal stack for layer %d\t', iz);tic;
+        fprintf('phasemap per pixel on signal for layer %d\t', iz);tic;
 
         % focus on the current layer
         % F.select(iz); % this is not useful anymore, and does not work when no tif
@@ -89,9 +100,12 @@ function phaseMapPixelSignal(F)
             % calculate response amplitude
             %     [pxx_p,f_p] = periodogram(DFF_pix(:,1:L)',hamming(L),[fstim fstim*2]',fs,'power');
             %     amplitude = sqrt(pxx_p(1,:)*2*2);
-            [pxx,ff] = periodogram(single(squeeze(m(i,iz,:)))',hamming(m.t),m.t,fs,'power');
-            pxx_p = pxx((single(ff) == single(fstim)),:);
-            amplitude = sqrt(pxx_p(1,:)*2)*2; % amplitude peak-to-peak
+%             [pxx,ff] = periodogram(single(squeeze(m(i,iz,:)))',hamming(m.t),m.t,fs,'power');
+%             pxx_p = pxx((single(ff) == single(fstim)),:);
+%             amplitude = sqrt(pxx_p(1,:)*2)*2; % amplitude peak-to-peak
+            
+            amplitude = abs(Y(ind_fstim,:));
+
 
             % extract peak from dff
 %             amplitude = abs(Y(ind_fstim));
@@ -101,6 +115,10 @@ function phaseMapPixelSignal(F)
             deltaphi  = (phase - phase_delay + pi);
                 % -phase_delay = Shift positive of the fluorescence
                 % +pi = because of the fourier transform is done against a cosinus
+            
+            % noise correction
+            noise = mean(abs(Y(noiseWindow)));
+            amplitude = (amplitude - noise);
                 
             % fills buffer
             for label = labels
@@ -118,15 +136,12 @@ function phaseMapPixelSignal(F)
     end 
         
     % close binary files and write info (.mat and .nhdr)
-    space = 'RAS';
-    pixtype = 'single';
     z = length(Zlay); Z = Zlay; % Zlay prevents overwriting by Z
     t = 1; T = 1;
     for label = labels
         fulltag = [prefix label{:}];
         fclose(out.(label{:}));
-        save(outInfo.(label{:}),'x','y','z','t','Z','T','space','pixtype')
-        % TODO write info and nhdr (/!\ on single)
+        writeINFO(outInfo.(label{:}), x, y, z, t, Z, T, 'RAS', 'single')
         writeNHDR(F, fulltag);
     end
     

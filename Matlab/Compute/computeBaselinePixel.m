@@ -1,9 +1,11 @@
-function computeBaselinePixel(F)
+function computeBaselinePixel(F, Layers)
 %computeBaselinePixel computes running quantile using caTools runquantile
 
     % layers to analyse % Layers are the layers you want to compute the baseline on
-    Layers = F.Analysis.Layers;
-
+    if ~exist('Layers', 'var')
+        Layers = F.Analysis.Layers;
+    end
+    
     % window
     window = F.Analysis.BaselineWindow; % window is the window span in seconds (ex 50 sec)
     dt = F.dt / 1000 * F.param.NLayers ; % time between two frames of one layer in seconds (ex 0.02 * 20)
