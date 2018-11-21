@@ -1,7 +1,7 @@
 function showDrift(F, d)
 
 if ~exist('d', 'var')
-    d = 'x'
+    d = 'x';
 end
 
 % load drift if not given
