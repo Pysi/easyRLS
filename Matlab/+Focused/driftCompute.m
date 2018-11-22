@@ -2,16 +2,20 @@ function driftCompute(F, method, layers)
 %+Focused version of driftCompute
 % kind: barycenter, globalXcorr, localXcorr
 
+    % create wrapper object
+    m = adapted4DMatrix(F,'source');
+    
     % default layers
     if ~exist('layers', 'var')
+        if F.Analysis.Layers == ':' % if all, replace
+            F.Analysis.Layers = m.Z;
+        end
         layers = F.Analysis.Layers;
     end
     
-    % create wrapper object
-    m = adapted4DMatrix(F,'source');
 
     switch method
-        case 'globalXcorr'
+        case 'Xcorr'
             getbboxes(F, m, layers);
             driftCompute(F, m, layers);
             % driftPlotAndSave(F);
