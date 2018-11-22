@@ -22,32 +22,33 @@ classdef Mmap < handle
         %inputFile is the input file (without extension)
         
             binFile = [inPathTag '.bin'];
-            inputInfo = [inPathTag '.mat'];
+            tomlFile = [inPathTag '.toml'];
             
-            load(inputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
-            self.pixtype = pixtype; % get type
-            self.space = space; % ex: RAS or RAST
+            info = toml.read(tomlFile);
+            
+            self.pixtype = info.meta.bytedepth; % get type
+            self.space = info.meta.space; % ex: RAS or RAST
+            self.x = info.size.x; 
+            self.y = info.size.y; 
+            self.z = info.size.z; 
+            self.t = info.size.t; 
+            self.Z = info.meta.layers; 
+            self.T = 1:self.t; 
             
             if writable
                 if ~exist(binFile, 'file')
                     % allocate a file if does not exist (else edit existing file)
-                    writable = fallocate(binFile, sizeof(pixtype)*x*y*z*t);
+                    writable = fallocate(binFile, sizeof(self.pixtype)*self.x*self.y*self.z*self.t);
                     % if fallocate failed, fallback to read only
                 end
             end            
             
             self.mmap = ...
-                memmapfile(binFile,'Format',{self.pixtype,[x,y,z,t],'bit'}, ...
+                memmapfile(binFile,'Format',{self.pixtype,[self.x,self.y,self.z,self.t],'bit'}, ...
                     'Repeat', 1, 'Writable', writable); % repeat option might prevent from detecting errors (such on t)
             self.mmaplin = ...
-                memmapfile(binFile,'Format',{self.pixtype,[x*y,z,t],'bit'}, ...
+                memmapfile(binFile,'Format',{self.pixtype,[self.x*self.y,self.z,self.t],'bit'}, ...
                     'Repeat', 1, 'Writable', writable);
-            self.x = x; 
-            self.y = y; 
-            self.z = z; 
-            self.t = t; 
-            self.Z = Z; 
-            self.T = T; 
         end
         
         % redefine substruct
