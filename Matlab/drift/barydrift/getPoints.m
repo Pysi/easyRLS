@@ -2,7 +2,6 @@ function POINTS = getPoints(F, m)
 %getPoints prompts gui to get points or load previous from drift
 
 boxSize = F.Analysis.drift.boxSize;
-% threshold = F.Analysis.drift.threshold;
 
 Focused.mkdir(F, 'Drift', true);
 
@@ -11,11 +10,11 @@ try
     disp('point loaded')
 catch
     disp('creating new set of points')
-    POINTS = cell(10,1);
+    POINTS = cell(m.z,1);
 end
 
 t = F.Analysis.RefIndex;
-for z = m.Z % for each z
+for z = F.Analysis.Layers % for each z of interest
     POINTS{z} = getRegion(m, z, t, boxSize, POINTS{z});
 end
 

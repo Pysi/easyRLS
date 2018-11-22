@@ -40,6 +40,9 @@ classdef Mmap < handle
                     % allocate a file if does not exist (else edit existing file)
                     writable = fallocate(binFile, sizeof(self.pixtype)*self.x*self.y*self.z*self.t);
                     % if fallocate failed, fallback to read only
+                    if ~writable
+                        warning('falling back to read only');
+                    end
                 end
             end            
             

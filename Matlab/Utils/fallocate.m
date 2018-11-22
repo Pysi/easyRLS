@@ -4,9 +4,9 @@ function success = fallocate(file, size)
 cmd = sprintf('fallocate -l %d "%s"', size, file);
 [status, cmdout] = unix(cmd);
 
-success = logical(status);
+success = ~logical(status);
 
-if status
+if ~success
     error('Failed to allocate file (is it NTFS ?)\n\t%s', cmdout)
 end
 

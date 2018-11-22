@@ -6,7 +6,7 @@ function m = Mmap(F, tag, writable)
          writable = false;
     end
     
-    tomlFile = fullfile(F.tag(tag), '.toml');
+    tomlFile = [F.tag(tag) '.toml'];
     
     if ~exist(tomlFile, 'file')
         error('toml file needed for memory map')

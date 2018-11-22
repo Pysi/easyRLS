@@ -40,7 +40,7 @@ function phaseMapPixelSignal(F)
         fulltag = [prefix label{:}];
         [~,~] = mkdir(F.dir(fulltag)); % create corresponding directory
         out.(label{:}) = fopen([F.tag(fulltag) '.bin'], 'wb');
-        outInfo.(label{:}) = [F.tag(fulltag) '.mat'];
+        outInfo.(label{:}) = [F.tag(fulltag) '.toml'];
     end
     
     % Define stimulation parameters
@@ -119,6 +119,7 @@ function phaseMapPixelSignal(F)
             % noise correction
             noise = mean(abs(Y(noiseWindow)));
             amplitude = (amplitude - noise);
+            amplitude(amplitude<0) = 0; % amplitude is null for too high noise            
                 
             % fills buffer
             for label = labels
@@ -141,8 +142,7 @@ function phaseMapPixelSignal(F)
     for label = labels
         fulltag = [prefix label{:}];
         fclose(out.(label{:}));
-        writeINFO(outInfo.(label{:}), x, y, z, t, Z, T, 'RAS', 'single')
-        writeNHDR(F, fulltag);
+        writeINFO(outInfo.(label{:}), x, y, z, t, Z, 'RAS', 'single')
     end
     
 end

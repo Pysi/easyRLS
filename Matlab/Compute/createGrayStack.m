@@ -4,30 +4,13 @@ function createGrayStack(F)
     m = Focused.Mmap(F, 'corrected');
 
     Focused.mkdir(F, 'graystack');
-    output = [F.tag('graystack') '.bin'];
-    outputInfo = [F.tag('graystack') '.mat'];
+    outputInfo = [F.tag('graystack') '.toml'];
+    
+    writeINFO(outputInfo, m.x, m.y, length(F.Analysis.Layers), 1, m.Z, m.space, 'uint16');
 
-    fid = fopen(output, 'wb');
+    mcorr = adapted4DMatrix(F, 'graystack', true); % create writable memory map
 
     for z = m.Z
-        fwrite(fid, mean(m(:,:,z,1:77:m.t), 4), 'uint16');
+        mcorr(:,:,z,1) = mean(m(:,:,z,1:77:m.t), 4);
     end
-
-    fclose(fid);
-    
-    % data
-    x = m.x;
-    y = m.y;
-    z = m.z;
-    t = 1; %#ok<NASGU>
-    Z = m.Z;
-    T = 1; %#ok<NASGU>
-    space = 'RAS'; % (not m.space because mmap always returns RAS)
-    pixtype = m.pixtype;
-
-    % create corresponding info
-    save(outputInfo, 'x', 'y', 'z', 't', 'Z', 'T', 'space','pixtype');
-    
-    writeNHDR(F,'graystack');
-
 end
