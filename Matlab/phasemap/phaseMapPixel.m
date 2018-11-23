@@ -123,13 +123,11 @@ function phaseMapPixel(F)
         
     % close binary files and write info (.mat and .nhdr)
     z = length(Zlay); Z = Zlay; % Zlay prevents overwriting by Z
-    t = 1; T = 1;
+    t = 1;
     for label = labels
         fulltag = [prefix label{:}];
         fclose(out.(label{:}));
-        writeINFO(outInfo.(label{:}), m.x, m.y, z, t, Z, T, 'RAS', 'single')
-        % TODO write info and nhdr (/!\ on single)
-        writeNHDR(F, fulltag);
+        writeINFO(outInfo.(label{:}), m.x, m.y, z, t, Z, 'RAS', 'single')
     end
     
 end
