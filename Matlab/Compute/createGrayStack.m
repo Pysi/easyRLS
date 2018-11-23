@@ -13,4 +13,7 @@ function createGrayStack(F)
     for z = m.Z
         mcorr(:,:,z,1) = mean(m(:,:,z,1:77:m.t), 4);
     end
+    
+    % write nrrd header
+    writeNHDR(F, 'graystack');
 end
