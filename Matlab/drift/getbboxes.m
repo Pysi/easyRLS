@@ -12,7 +12,7 @@ catch
 end
 
 for z = layers % for each z of interest
-    f = imshow(m(:,:,z,F.Analysis.RefIndex), [400 800]);
+    f = imshow(m(:,:,z,F.Analysis.RefIndex), [F.Analysis.Display.min F.Analysis.Display.max]);
     plotPreviousRegion(f, POINTS{z})
     
     try

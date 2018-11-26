@@ -142,7 +142,8 @@ function phaseMapPixelSignal(F)
     for label = labels
         fulltag = [prefix label{:}];
         fclose(out.(label{:}));
-        writeINFO(outInfo.(label{:}), x, y, z, t, Z, 'RAS', 'single')
+        writeINFO(outInfo.(label{:}), x, y, z, t, Z, 'RAS', 'single');
+        writeNHDR(F, fulltag);
     end
     
 end
