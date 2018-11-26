@@ -6,7 +6,7 @@ function createGrayStack(F)
     Focused.mkdir(F, 'graystack');
     outputInfo = [F.tag('graystack') '.toml'];
     
-    writeINFO(outputInfo, m.x, m.y, length(F.Analysis.Layers), 1, m.Z, m.space, 'uint16');
+    writeINFO(outputInfo, m.x, m.y, length(F.Analysis.Layers), 1, m.Z, m.space(1:3), 'uint16'); % make sure it's 3D
 
     mcorr = adapted4DMatrix(F, 'graystack', true); % create writable memory map
 
