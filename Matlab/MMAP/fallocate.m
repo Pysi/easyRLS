@@ -7,7 +7,7 @@ cmd = sprintf('fallocate -l %d "%s"', size, file);
 success = ~logical(status);
 
 if ~success
-    error('Failed to allocate file (is it NTFS ?)\n\t%s', cmdout)
+    error('%s', cmdout) % can not allocate on NTFS
 end
 
 
