@@ -35,7 +35,7 @@ function phaseMapPixel(F)
         fulltag = [prefix label{:}]; 
         mkdir(F.dir(fulltag)); % create corresponding directory
         out.(label{:}) = fopen([F.tag(fulltag) '.bin'], 'wb');
-        outInfo.(label{:}) = [F.tag(fulltag) '.mat'];
+        outInfo.(label{:}) = [F.tag(fulltag) '.toml'];
     end
     
     % Define stimulation parameters
