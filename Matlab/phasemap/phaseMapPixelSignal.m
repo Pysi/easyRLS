@@ -118,7 +118,7 @@ function phaseMapPixelSignal(F)
             
             % noise correction
             noise = mean(abs(Y(noiseWindow)));
-            amplitude = (amplitude - noise);
+            amplitude = (amplitude - noise)/noise;
             amplitude(amplitude<0) = 0; % amplitude is null for too high noise            
                 
             % fills buffer
