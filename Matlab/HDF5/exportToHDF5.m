@@ -11,11 +11,10 @@ function exportToHDF5(F)
 
     % load coordinates, reference coordinates, and initialize data
     load(fullfile(F.dir('Segmentation'), 'coordinates.mat'), 'coordinates', 'numberNeuron');
-    load(fullfile(F.dir('Registration'), refBrainName, ['coordinates_' refBrainName '.mat']), 'refCoordinates');
+%     load(fullfile(F.dir('Registration'), refBrainName, ['coordinates_' refBrainName '.mat']), 'refCoordinates');
     NCycles = F.param.NCycles;
     calciumActivity = [];
     
-  
     
     % create delay vector
     n_layers = 18; % ground truth!
@@ -39,12 +38,12 @@ function exportToHDF5(F)
         calciumActivity = [calciumActivity; mdff.Data.bit(:,:)'];
     end
 
-    % === load and interpolate stimulus according to image acquisition time points
-    load(fullfile(F.dir('Run'), 'Stimulus.txt')); % loads a text file
-    time_exp = Stimulus(:, 2);
-    Stimulus = Stimulus(:, 3);
-    time_range = linspace(min(time_exp), max(time_exp), NCycles);
-    Stimulus = interp1(time_exp, Stimulus, time_range);
+%     % === load and interpolate stimulus according to image acquisition time points
+%     load(fullfile(F.dir('Run'), 'Stimulus.txt')); % loads a text file
+%     time_exp = Stimulus(:, 2);
+%     Stimulus = Stimulus(:, 3);
+%     time_range = linspace(min(time_exp), max(time_exp), NCycles);
+%     Stimulus = interp1(time_exp, Stimulus, time_range);
     
     % === write to HDF5 file
     h5create(fileName,'/Data/Coordinates', [numberNeuron 3], 'Datatype', 'single'); % xyz = 3 coordinates
@@ -52,8 +51,8 @@ function exportToHDF5(F)
     h5writeatt(fileName,'/Data/Coordinates','unit', 'mm')
     h5writeatt(fileName,'/Data/Coordinates','orientation', 'RAS')
     
-    h5create(fileName,'/Data/TimeDelays',[n_cells, 1], 'Datatype', 'single');
-    h5write(fileName,'/Data/TimeDelays', single(delays_neurons));
+%     h5create(fileName,'/Data/TimeDelays',[n_cells, 1], 'Datatype', 'single');
+%     h5write(fileName,'/Data/TimeDelays', single(delays_neurons));
     
     
     % load PhaseMap
@@ -66,10 +65,10 @@ function exportToHDF5(F)
         'Warning: Phase map for neurons not calculated'
     end
     
-    h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3], 'Datatype', 'single');
-    h5write(fileName, '/Data/RefCoordinates', single(refCoordinates ./ 1000));
-    h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
-    h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')
+%     h5create(fileName,'/Data/RefCoordinates', [numberNeuron 3], 'Datatype', 'single');
+%     h5write(fileName, '/Data/RefCoordinates', single(refCoordinates ./ 1000));
+%     h5writeatt(fileName,'/Data/RefCoordinates','unit', 'mm')
+%     h5writeatt(fileName,'/Data/RefCoordinates','orientation', 'RAS')
 
     h5create(fileName,'/Data/Times', [1 NCycles], 'Datatype', 'single');
     dtframe = F.dt / 1000 * F.param.NLayers ;
@@ -83,14 +82,14 @@ function exportToHDF5(F)
     h5write(fileName,'/Data/Values', single(calciumActivity));
     h5writeatt(fileName,'/Data/Values','type', 'DFF, single')
 
-    h5create(fileName,'/Data/Stimulus', [1 , NCycles], 'Datatype', 'single');
-    h5write(fileName,'/Data/Stimulus', single(Stimulus));
+%     h5create(fileName,'/Data/Stimulus', [1 , NCycles], 'Datatype', 'single');
+%     h5write(fileName,'/Data/Stimulus', single(Stimulus));
 
     % return label from zbrain coordinate space for RAS data
-    labels = addLabels(refCoordinates ./ 1000);
+%     labels = addLabels(refCoordinates ./ 1000);
     
-    h5create(fileName,'/Data/Labels', size(labels), 'Datatype', 'single');
-    h5write(fileName,'/Data/Labels', single(labels));
+%     h5create(fileName,'/Data/Labels', size(labels), 'Datatype', 'single');
+%     h5write(fileName,'/Data/Labels', single(labels));
     % h5create(fileName, '/Data/ZBrainAtlas_Labels', [NCells, labels_size(2)]);
     % h5write(fileName, '/Data/ZBrainAtlas_Labels', Labels);
 
