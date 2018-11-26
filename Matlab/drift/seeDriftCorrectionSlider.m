@@ -45,7 +45,7 @@ uselayer = z;
             title([num2str(t) ' Ay=' num2str(Ay) ' Aphi=' num2str(Aphi)])
             drawnow
         catch
-            disp('is it ok ?');
+            fprintf('returned: Ay=%.03f, Aphi=%.03f\n', Ay, Aphi);
             return
         end
     end
