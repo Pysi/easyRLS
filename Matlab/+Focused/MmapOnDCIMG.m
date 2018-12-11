@@ -23,11 +23,11 @@ function m = MmapOnDCIMG(F)
         info.size.t = F.param.NCycles;
         
         info.byte.depth = 'uint16';
-        info.byte.header = 0;
-        info.byte.clock = 0;
+        info.byte.header = 1206;
+        info.byte.clock = 32;
         info.byte.endianness = 'little';
         
-        info.meta.space = '----';
+        info.meta.space = 'PLIT';
         info.meta.layers = 1:info.size.z;
         
         toml.write(infoFile, info)

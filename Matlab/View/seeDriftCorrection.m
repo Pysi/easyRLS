@@ -13,7 +13,7 @@ uselayer = z;
     m = adapted4DMatrix(F, 'source');
     
     figure
-    h = imshow(m(:,:,z,1), [400 800]);
+    h = imshow(m(:,:,z,1), [F.Analysis.Display.min F.Analysis.Display.max]);
     inc = 1;
     for t = 1:inc:m.t
         img = imtranslate(m(:,:,z,t), [-dy(uselayer, t), -dx(uselayer, t)]);
