@@ -1,5 +1,9 @@
-function createGrayStack(F)
+function createGrayStack(F, step)
 %createGrayStack creates a gray stack (mean along t all 77 frames)
+
+    if ~exist('step', 'var')
+        step = 77;
+    end
 
     m = Focused.Mmap(F, 'corrected');
 
@@ -11,7 +15,7 @@ function createGrayStack(F)
     mcorr = adapted4DMatrix(F, 'graystack', true); % create writable memory map
 
     for z = m.Z
-        mcorr(:,:,z,1) = mean(m(:,:,z,1:77:m.t), 4);
+        mcorr(:,:,z,1) = mean(m(:,:,z,1:step:m.t), 4);
     end
     
     % write nrrd header
